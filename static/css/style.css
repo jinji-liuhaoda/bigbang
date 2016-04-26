@@ -1,0 +1,67 @@
+* { margin:0; padding:0; -webkit-box-sizing: border-box; -moz-box-sizing:border-box; box-sizing:border-box;} 
+article,section,nav,address,aside,header,hgroup,footer,time { display:block;}
+h1,h2,h3,h4,h5,h6 { color:#303233; text-align: center; font-weight: bold;}
+h1{font-size: 21px; }
+h2{font-size: 19px; }
+h3{font-size: 15px; }
+h4{font-size: 14px; }
+h5{font-size: 12px; letter-spacing:4px; color: #ababab;}
+ul,ol,li {list-style: none;}
+body { font:12px Arial; background-color:#fff; color:#303233; height:100%; }
+html { -webkit-text-size-adjust: none; height: 100%;}
+img { border:0; display:inline-block;}
+a { color:#bbbbbc; text-decoration:none;}
+
+
+.index{ width: 100% ; height: 100%; background: url(../images/background.png) no-repeat 0 0 ; background-size:100% 100%;}
+.nav{height: 52px; background: #303133; position: fixed; width: 100%;}
+.nav li{height: 52px; float: left;color: #bbbbbc;}
+.nav a{margin:0 22px 0 18px; padding: 18px 0 15px 0; font-size: 15px; font-weight:bold; display: block;}
+.nav a.action{color: #edb30d; border-bottom: 3px solid #edb30d; }
+.user{width: 45px;height:52px; box-shadow: -2px -5px 10px #000; position: absolute; right:0px; background: #303133;}
+.user img{margin-top: 14px; margin-left: 10px;}
+.logo {text-align: center;}
+.logo img{margin-top: 465px;}
+.about{height: 34px; width: 115px; border-radius: 40px; border: 2px solid #fbbc05; margin: 0 auto; text-align: center; margin-top: 30px;}
+.about span{color:#fbbc05; line-height: 32px; }
+.temple-box{padding:75px 20px 65px; }
+.content h1{ margin-top: 15px;}
+.line{height: 2px; width: 35px; background: #fbbc05; margin:0 auto; margin-top: 17px; margin-bottom: 2px;}
+.content p{margin-top: 33px; font-size: 14px; color: #797979;letter-spacing:1px; line-height: 21px;}
+.content img{margin-top: 33px;}
+.abbot-box{padding:50px 20px 74px; background: #f7f7f7;}
+.introduce-abbot .born{text-align: center;}
+.introduce-abbot h2{margin-top: 20px; text-align: left;}
+.introduce-abbot h4{margin-top: 10px; font-weight: normal; text-align: left;}
+.more{height: 34px; width: 115px; border-radius: 40px; border: 2px solid #fbbc05; margin: 0 auto; text-align: center; margin-top: 40px; }
+.more span{color:#fbbc05; line-height: 32px; }
+
+.beneficence{height: 750px; background: #f7f7f7;}
+.good-work {text-align: center;}
+.good-work h1{margin-top: 86px; display: inline-block; }
+.good-work h5{ margin-top: 12px; }
+.good-work .picture{margin-top: 35px;}
+.pic{margin:0 auto;  height: 120px; width:120px;}
+.pic img{height: 120px; width: 120px; border-radius: 50%;}
+.amount-of-money{height: 39px; width: 323px; border: 1px solid #d7d7d7; border-radius: 20px; margin:0 auto; margin-top: 37px;}
+.amount-of-money .icon{width: 52px; height: 39px; background:#d7d7d7; border-radius: 20px 0 0 20px; text-align: center; float: left;}
+.amount-of-money .icon span{font-size: 20px; font-weight: bold; color: #fff; line-height: 40px;}
+.amount-of-money h3{ margin-left: 62px; line-height: 40px; text-align: left;color: #ababab;}
+.button01{height: 39px; width: 323px; background: #1b1c20; border-radius: 20px; margin:0 auto; margin-top: 25px;text-align: center;}
+.button01 h3{color: #fff; line-height: 40px;}
+.click{margin: 58px 43px 90px; height: 167px; text-align: center; }
+.click .left{ float: left; }
+.click .right{ float: right;}
+.click h3{margin-top: 12px;}
+.click h5{margin-top: 6px;}
+.kind{ text-align: center; padding-top:45px; padding-bottom: 90px;}
+.title h5{margin-bottom: 5px; margin-top: 12px; }
+.goods li{margin: 30px 0 0 45px; text-align: center; float: left;}
+.goods h3{margin-top: 12px;}
+.goods h5{color:#46b2eb; margin-top: 6px; letter-spacing: 0;}
+.clear{clear: both;}
+.contribution,.sculpture{background: #f7f7f7;padding-top: 50px;  padding-bottom: 90px;}
+.box .click{margin: 35px 45px 0; }
+.box .click h5{color:#46b2eb; margin-top: 6px; letter-spacing: 0;}
+.sculpture{background: #fff; height: 592px;}
+.center{clear: both; padding-top: 30px;}
