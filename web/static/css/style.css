@@ -68,8 +68,8 @@ a { color:#bbbbbc; text-decoration:none;}
 
 
 .detail{background: #f7f7f7; height: 100%;}
-.provide-box{text-align: center; background: #fff;}
-.provide{margin:0 20px; background: #fff;}
+.provide-box{text-align: center; background: #fff; border-bottom: 1px solid #eee;}
+.provide{margin:0 20px 35px; background: #fff;}
 .provide h2{font-size:17px; margin-top: 69px; margin-bottom: 19px; display: inline-block;}
 .provide-hd{height: 105px;  border-bottom: #dddcdb solid 1px;} 
 .provide-pic{margin-top: 10px;}
@@ -80,12 +80,12 @@ a { color:#bbbbbc; text-decoration:none;}
 .provide-btn{padding: 40px 25px;}
 
 .no-nav{height:52px; background: #f7f7f7;}
-.thanks-box{height: 309px;  background: #fff; text-align: center;}
+.thanks-box{height: 309px;  background: #fff; text-align: center; border-bottom:1px solid #eee; }
 .thanks-hd{padding-top: 38px;}
 .thanks-hd{font-size: 17px;}
 .thanks-box .pic{margin-top: 25px;}
 .thanks-box h3{padding-top: 12px;}
-.thanks-pay{color:#c9c9cf; padding-top: 25px;}
+.thanks-pay{color:#c9c9cf; padding-top: 25px;font-size: 15px;}
 .pray-hd{padding-top:84px;}
 .pray-box{box-shadow: 0 2px 10px #d4c7c3; }
 .pray-nav{height: 28px; }
@@ -98,7 +98,7 @@ a { color:#bbbbbc; text-decoration:none;}
 .pray-nav .select h4{color: #fbbc05;}
 .pray-bd{padding: 20px 22px 30px; background: #f7f7f7;}
 .pray-bd .pray-bd-pic{float: left;}
-.pray-bd .pray-bd-pic img{ height: 52px; width: 52px; border-radius: 50%; }
+.pray-bd-pic img{ height: 52px; width: 52px; border-radius: 50%; }
 .pray-bd .pray-bd-content{margin-left: 64px; margin-top: 10px;  background: #fff; height: 86px; border-radius: 0 15px; }
 .pray-bd .pray-bd-content .data{padding: 0 12px;}
 .pray-bd .pray-bd-content h4{text-align: left; line-height: 16px; padding: 15px 10px 11px;}
@@ -120,7 +120,7 @@ a { color:#bbbbbc; text-decoration:none;}
 .news-text h4{font-size:13px; color: #959595;text-align: left; line-height: 20px;}
 
 .news-detail{padding: 70px 20px 41px;}     
-.news-detail .news-info{padding-bottom: 40px; border-bottom: #eee solid 1px;}
+.news-detail .news-info{padding-bottom: 40px; border-bottom: #eee solid 1px; }
 .news-detail .news-pic{ margin-top:20px; }
 .news-detail .news-pic p{ padding: 20px 0 33px; font-size: 14px; color: #797979; line-height:21px; }
 
@@ -135,8 +135,68 @@ a { color:#bbbbbc; text-decoration:none;}
 .start{height: 34px; width: 115px; border-radius: 40px; border: 1px solid #fbbc05; text-align: center; float: right; }
 .start span{color:#fbbc05; line-height: 32px; }
 
-
-.thanks-financing{padding:69px 20px 0; }
-.thanks-financing .hd h2{text-align: center; }
-.thanks-financing .hd{padding-bottom: 18px;border-bottom: #eee solid 1px;}
+.thanks-financing-box{padding: 69px 20px 38px; border-bottom: #eee solid 1px; background: #fff;}
+.thanks-financing-box h2{text-align: center;}
+.thanks-financing{padding-top: 20px; border-top: #eee solid 1px;}
+.thanks-financing .hd{padding-bottom: 18px;}
 .thanks-financing-bd{padding-top: 20px;}
+.provide-content p{padding-bottom: 0;}
+
+.financing-detail-box{padding-top:70px;}
+.financing-detail-box .hd { padding-bottom: 20px; border-bottom: 1px solid #eee;}
+.financing-detail-box .hd img,span{padding-top: 10px; color: #999;}
+.financing-detail-box .Progress{margin-top: 0;}
+.img-box img{display: block;}
+.financing-detail-box .amount-of-money{ margin-top: 25px; }
+.model1{padding-bottom:50px; border-bottom: 1px solid #eee; margin: 0 20px;}
+.model1 .donation{margin: 0;}
+.model2{padding:0 20px 90px;}
+.model2 li{ border-bottom: 1px solid #eee; padding:20px 0 ; }
+.model2 h2{text-align: left; font-size: 17px;}
+.model2 h3{font-size: 13px; color: #999; margin-top:15px; }
+.model2 .left{float: left; border-bottom: 0; padding: 0;}
+.model2 .right{float: right; border-bottom: 0; padding: 0;}
+.model2 .right .start{margin-top: 15px;}
+.model3{background: #f7f7f7;}
+.model4{ padding: 50px 0 10px; }
+.model4-hd{padding-bottom: 35px; border-bottom: 1px solid #eee;}
+.model4 .model4-box{height: 82px; padding: 15px 28px 14px 37px; border-bottom: 1px solid #eee;}
+.model4-box li{float: left;}
+.model4-box .text{ padding-left:10px }
+.model4-box .text h3{text-align: left;}
+.model4-box .text h5{letter-spacing: 0;}
+.model4-box .right{float: right; padding-top:31px; }
+.model4-box .right span{color: #fbbc05;}
+
+.news .left{float: left; border-bottom: 0; padding: 0;}
+.news .left h5{letter-spacing: 0; margin-top: 22px;}
+.news .right{float: right; border-bottom: 0; padding: 0;}
+
+.event{padding: 70px 0 5px;}
+.event .hd{padding:0 20px 20px;}
+.form{padding-bottom: 90px;}
+.form table{width:100%; }
+.form tr{height: 43px; }
+.form td{ font-size: 15px; color: #4A4A4A; font-weight: bold;border:1px solid #eee;}
+.form td.title{width: 66px;text-align: center; background: #f5f5f5;}
+.form td.text{ padding-left: 13px; }
+.event-content .abbot-box{padding-bottom: 88px;}
+.event-content h1{margin: 0;}
+
+.translucent{height: 100%; width: 100%; background: rgba(0,0,0,0.5); position: absolute; top: 0;left: 0;}
+.apply{margin-left: 5%;margin-right: 5% ;width: 90%; padding-bottom:  48px; position: absolute; top: 70px; background: #fff; border-radius: 6px;}
+.apply img{position: absolute; right: 9px; top: 9px;}
+.apply .apply-hd{ padding: 20px 0 20px 15px; border-bottom: 1px solid #eee;}
+.apply h2{text-align:left; font-size: 17px; color: #333;}
+.apply-info{ padding: 15px 0 15px 15px; border-bottom: 1px solid #eee; }
+.apply-info h3{color: #999; text-align: left; font-size: 15px;}
+.apply .provide-btn{padding-left:15px; padding-right: 15px;}
+.apply h4{font-size: 14px; color: #797979;text-align:left; padding-top: 8px;}
+.apply-info .vertica{height: 14px; width: 3px; background: #fbbc05; margin-top:2px;  margin-right: 10px;}
+.apply-info li{float: left;}
+.apply-info .grey h3{color: #1b1c20;}
+.sign-up{padding-bottom: 98px;}
+
+
+
+
