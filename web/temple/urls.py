@@ -42,20 +42,20 @@ urlpatterns = [
     url(r'^buddhismknowledge/(?P<buddhismknowledge_id>\d+)/$', temple_view.buddhismknowledge_detail, name='buddhismknowledge_detail'),
 
     # 捐赠
-    url(r'^donation/(?P<donation_type>\w+)/(?P<donation_amount>\w+)/add$', donation_view.donation_add, name='donation_add'),
+    url(r'^donation/(?P<donation_type>\w+)/(?P<donation_amount>\w+)/add$', temple_view.donation_add, name='donation_add'),
 
     # 主持详情
     url(r'^host/$', temple_view.host_detail, name='host_detail'),
 
     # 微信网页授权
-    url(r'^wechat/login/$', auth_views.wechat_login, name='wechat_login'),
-    url(r'^wechat/do_login/$', auth_views.wechat_do_login, name='wechat_do_login'),
+    # url(r'^wechat/login/$', auth_views.wechat_login, name='wechat_login'),
+    # url(r'^wechat/do_login/$', auth_views.wechat_do_login, name='wechat_do_login'),
 
     #支付
     url(r'^pay/(?P<pay_type>\d+)/(?P<donation_amount>\w+)/add$', temple_view.pay_add, name='pay_add'),
 
     # 后台
-    url(r'^admin/', admin_views.index),
+    # url(r'^admin/', admin_views.index),
     url(r'^superadmin/', admin.site.urls),
 
     # 后台上传

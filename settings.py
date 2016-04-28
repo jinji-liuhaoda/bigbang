@@ -104,3 +104,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'web', 'static')
 ]
+
+UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
+
+DOMAIN = 'http://zhb.duobaotime.com'
