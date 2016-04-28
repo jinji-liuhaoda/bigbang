@@ -3,25 +3,25 @@ from django.contrib import admin
 from .models import (
     Temple,
     Mage,
-    ProvideClassification,
+    Category,
     Provide,
     GoodRaise,
-    Goods,
+    Good,
     Activity,
-    ActivityUser,
+    ActivityAttendee,
     News,
-    Volunteers,
-    VolunteersUser,
+    Volunteer,
+    VolunteerUser,
     BuddhismKnowledge,
     User,
 )
 
 
 # 寺庙
-class ProvideAdmin(admin.ModelAdmin):
+class TempleAdmin(admin.ModelAdmin):
 
     list_display = (
-        'title', 'provideclassification', 'detail', 'price'
+        'name', 'title', 'detail', 'mage'
     )
 
     exclude = ('created', 'last_updated')
@@ -31,14 +31,14 @@ class ProvideAdmin(admin.ModelAdmin):
 class ProvideAdmin(admin.ModelAdmin):
 
     list_display = (
-        'title', 'provideclassification', 'detail', 'price'
+        'title', 'category', 'detail', 'price'
     )
 
     exclude = ('created', 'last_updated')
 
 
 # 供养分类
-class ProvideClassificationAdmin(admin.ModelAdmin):
+class CategoryAdmin(admin.ModelAdmin):
 
     list_display = (
         'name', 'detail',
@@ -49,13 +49,13 @@ class ProvideClassificationAdmin(admin.ModelAdmin):
 admin.site.register(Temple)
 admin.site.register(Mage)
 admin.site.register(GoodRaise)
-admin.site.register(Goods)
+admin.site.register(Good)
 admin.site.register(Activity)
-admin.site.register(ActivityUser)
+admin.site.register(ActivityAttendee)
 admin.site.register(News)
-admin.site.register(Volunteers)
-admin.site.register(VolunteersUser)
+admin.site.register(Volunteer)
+admin.site.register(VolunteerUser)
 admin.site.register(BuddhismKnowledge)
 admin.site.register(User)
 admin.site.register(Provide, ProvideAdmin)
-admin.site.register(ProvideClassification, ProvideClassificationAdmin)
+admin.site.register(Category, CategoryAdmin)

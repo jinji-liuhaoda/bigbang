@@ -39,7 +39,7 @@ class Temple(models.Model):
         return self.name
 
 
-class ProvideClassification(models.Model):
+class Category(models.Model):
 
     class Meta(object):
         verbose_name = "供养分类"
@@ -59,11 +59,11 @@ class Provide(models.Model):
         verbose_name_plural = "供养"
 
     title = models.CharField(max_length=128, verbose_name="标题")
-    provideclassification = models.ForeignKey(ProvideClassification, blank=True, null=True, verbose_name="所属分类")
+    category = models.ForeignKey(Category, blank=True, null=True, verbose_name="所属分类")
     detail = models.TextField(null=False, verbose_name="描述")
     cover = models.CharField(max_length=128, blank=False, verbose_name="封面图片")
     banner_cover = models.CharField(max_length=128, blank=False, verbose_name="banner图片")
-    price = models.CharField(max_length=128, blank=False, verbose_name="价格")
+    price = models.FloatField(default=0.0, verbose_name="价格")
     content = models.TextField(null=False, verbose_name="详情")
 
     def __unicode__(self):
@@ -82,13 +82,13 @@ class GoodRaise(models.Model):
     content = models.TextField(null=False, verbose_name="详情")
     total_price = models.FloatField(default=0.0, verbose_name="目标金额")
     start_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="开始时间")
-    start_end = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
+    end_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
 
     def __unicode__(self):
         return self.title
 
 
-class Goods(models.Model):
+class Good(models.Model):
 
     class Meta(object):
         verbose_name = "商品"
@@ -115,17 +115,17 @@ class Activity(models.Model):
     cover = models.CharField(max_length=128, verbose_name="封面")
     detail = models.TextField(null=False, verbose_name="简介")
     content = models.TextField(null=False, verbose_name="详情")
-    content = models.TextField(null=False, verbose_name="地址")
-    people_number = models.IntegerField(default=0, verbose_name="人数")
+    address = models.TextField(default='', null=False, verbose_name="地址")
+    people_number = models.IntegerField(default=0, verbose_name="活动允许报名人数")
     start_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="开始时间")
-    start_end = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
+    end_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
     views_count = models.IntegerField(default=0, verbose_name="浏览量")
 
     def __unicode__(self):
         return self.name
 
 
-class ActivityUser(models.Model):
+class ActivityAttendee(models.Model):
 
     class Meta(object):
         verbose_name = "活动报名"
@@ -150,14 +150,14 @@ class News(models.Model):
     detail = models.TextField(null=False, verbose_name="简介")
     content = models.TextField(null=False, verbose_name="详情")
     start_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="开始时间")
-    start_end = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
+    end_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
     views_count = models.IntegerField(default=0, verbose_name="浏览量")
 
     def __unicode__(self):
         return self.title
 
 
-class Volunteers(models.Model):
+class Volunteer(models.Model):
 
     class Meta(object):
         verbose_name = "义工"
@@ -167,17 +167,17 @@ class Volunteers(models.Model):
     cover = models.CharField(max_length=128, verbose_name="封面")
     detail = models.TextField(null=False, verbose_name="简述")
     content = models.TextField(null=False, verbose_name="详情")
-    content = models.TextField(null=False, verbose_name="地址")
+    address = models.TextField(null=False, verbose_name="地址")
     people_number = models.IntegerField(default=0, verbose_name="人数")
     start_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="开始时间")
-    start_end = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
+    end_time = models.DateTimeField(default=datetime.datetime.now, verbose_name="结束时间")
     views_count = models.IntegerField(default=0, verbose_name="浏览量")
 
     def __unicode__(self):
         return self.title
 
 
-class VolunteersUser(models.Model):
+class VolunteerUser(models.Model):
 
     class Meta(object):
         verbose_name = "义工报名"
@@ -185,7 +185,7 @@ class VolunteersUser(models.Model):
 
     name = models.CharField(max_length=128, verbose_name="姓名")
     mobile_phone = models.CharField(max_length=128, verbose_name="手机号码")
-    volunteers = models.ForeignKey(Volunteers, blank=True, null=True, verbose_name="所属义工")
+    volunteer = models.ForeignKey(Volunteer, blank=True, null=True, verbose_name="所属义工")
 
     def __unicode__(self):
         return self.name
@@ -199,7 +199,7 @@ class BuddhismKnowledge(models.Model):
 
     title = models.CharField(max_length=128, verbose_name="标题")
     cover = models.CharField(max_length=128, blank=False, verbose_name="封面图片")
-    detail = models.TextField(null=False, verbose_name="子标题")
+    subtitle = models.TextField(null=False, verbose_name="子标题")
     content = models.TextField(null=False, verbose_name="详情")
 
     def __unicode__(self):
@@ -221,7 +221,6 @@ class User(models.Model):
     gender = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="性别")
     openid = models.CharField(max_length=128, blank=True, verbose_name="微信OpenID")
     headimgurl = models.CharField(max_length=300, blank=True, verbose_name="微信头像")
-    scanner_id = models.CharField(max_length=128, blank=True, verbose_name="Scanner ID")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
 
     def __unicode__(self):
