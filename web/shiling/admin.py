@@ -46,6 +46,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
     exclude = ('created', 'last_updated')
 
+
 admin.site.register(Temple)
 admin.site.register(Mage)
 admin.site.register(GoodRaise)
