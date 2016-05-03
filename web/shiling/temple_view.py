@@ -1,6 +1,8 @@
 # coding: utf-8
 
 from django.shortcuts import render
+from django.template import loader
+from django.http import HttpResponse
 from .models import (
     Temple,
     Mage,
@@ -16,15 +18,21 @@ from .models import (
     BuddhismKnowledge,
     User,
 )
-from settings import DOMAIN, UPLOAD_DIR
+from settings import UPLOAD_DIR
 import os
 import datetime
 import time
 
 
 def index(request):
-    context = {}
-    template = loader.get_template('kikkik/login.html')
+    temple = Temple.objects.get(id=1)
+    mage = Mage.objects.get(Temple=temple)
+    context = {
+        'module': 'shouye',
+        'temple': temple,
+        'mage': mage,
+    }
+    template = loader.get_template('shiling/index.html')
     return HttpResponse(template.render(context, request))
 
 

@@ -6,22 +6,6 @@ from django.db import models
 import datetime
 
 
-class Mage(models.Model):
-
-    class Meta(object):
-        verbose_name = "法师"
-        verbose_name_plural = "法师"
-
-    name = models.CharField(max_length=128, verbose_name="法师名称")
-    mage_num = models.CharField(max_length=128, verbose_name="法号")
-    cover = models.CharField(max_length=128, verbose_name="头像")
-    detail = models.TextField(null=False, verbose_name="简介")
-    content = models.TextField(null=False, verbose_name="详情")
-
-    def __unicode__(self):
-        return self.name
-
-
 class Temple(models.Model):
 
     class Meta(object):
@@ -33,7 +17,23 @@ class Temple(models.Model):
     cover = models.CharField(max_length=128, verbose_name="寺庙封面")
     detail = models.TextField(null=False, verbose_name="简介")
     content = models.TextField(null=False, verbose_name="详情")
-    mage = models.ForeignKey(Mage, blank=True, null=True, verbose_name="主持")
+
+    def __unicode__(self):
+        return self.name
+
+
+class Mage(models.Model):
+
+    class Meta(object):
+        verbose_name = "法师"
+        verbose_name_plural = "法师"
+
+    name = models.CharField(max_length=128, verbose_name="法师名称")
+    mage_num = models.CharField(max_length=128, verbose_name="法号")
+    cover = models.CharField(max_length=128, verbose_name="头像")
+    detail = models.TextField(null=False, verbose_name="简介")
+    content = models.TextField(null=False, verbose_name="详情")
+    temple = models.ForeignKey(Temple, blank=True, null=True, verbose_name="所属寺庙")
 
     def __unicode__(self):
         return self.name

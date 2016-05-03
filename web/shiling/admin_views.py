@@ -16,7 +16,7 @@ from .models import (
     BuddhismKnowledge,
     User,
 )
-from settings import DOMAIN, UPLOAD_DIR
+from settings import UPLOAD_DIR
 import os
 import datetime
 import time
