@@ -1,28 +1,20 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
-<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
-<title>揭西石灵寺</title>   
-<link type="text/css" rel="stylesheet" href="css/style.css" />
-</head>
-<body>
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
 	<div class="index">
 		<div class="nav">
 			<ul class="text">
-				<li><a href="" class="action">首页</a></li>
+				<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
 				<li><a href="">供养</a></li>
 				<li><a href="">善筹</a></li>
 				<li><a href="">祈福</a></li>
 				<li><a href="">活动</a></li>
 			</ul>
 			<div class="user"><a href="">
-			<img src="images/user-icon.png" width="26">
+			<img src="static/images/user-icon.png" width="26">
 		</a></div>
 		</div>
 		<div class="logo">
-			<img src="images/logo.png" width="142">
+			<img src="static/images/logo.png" width="142">
 		</div>
 		<a href="">
 			<div class="about">
@@ -65,5 +57,4 @@
 			</a>
 		</div>
 	</div>
-</body>
-</html> 
+{% endblock %}
