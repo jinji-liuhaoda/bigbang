@@ -1,0 +1,57 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="index">
+		<div class="nav">
+			<ul class="text">
+				<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+				<li><a href="" {% if module == 'gongyang' %}class="action" {% endif %}>供养</a></li>
+				<li><a href="" {% if module == 'shanchou' %}class="action" {% endif %}>善筹</a></li>
+				<li><a href="" {% if module == 'qifu' %}class="action" {% endif %}>祈福</a></li>
+				<li><a href="" {% if module == 'huodong' %}class="action" {% endif %}>活动</a></li>
+			</ul>
+			<div class="user">
+				<a href="">
+				<img src="static/images/user-icon.png" width="26">
+				</a>
+			</div>
+		</div>
+		<div class="logo">
+			<img src="static/images/logo.png" width="142">
+		</div>
+		<a href="">
+			<div class="about">
+				<span>关于寺院</span>
+			</div>
+		</a>
+	</div>
+	<div class="content">
+		<div class="temple-box">
+			<div class="introduce-temple">
+				<h5>寺院介绍</h5>
+				<h1>{{temple.title}}</h1>
+				<div class="line"></div>
+				<div class="detail">
+					{{temple.content}}
+				</div>
+			</div>
+		</div>
+		<div class="abbot-box">
+			<div class="introduce-abbot">
+				<h5>住持介绍</h5>
+				<h1>{{mage.name}}</h1>
+				<div class="line"></div>
+				<p class="born">1919年出生。于饶平县海山隆福寺礼又哲大师剃度出家，法号觉就，外字新成。中国近代高僧虚云和尚座下受具足戒。</p>
+				<img src="images/abbot-xincheng.png" width="100%";>
+				<h2>新成法师</h2>
+				<h4>住持</h4>
+				<p>1980年宗教政策落实以后，新成和尚积极投入恢复重建光孝寺、六榕寺、海幢寺工作。为恢复重建大和尚积极奔走呼吁，积募善款，奔走政府，自1984年始大和尚相继担任光孝寺，六榕寺、海幢寺住持方丈。</p>
+				<p>新成和尚爱国爱教，严持戒律，广兴丛林，捐资助学，对外交流，培育僧才方面，均贡献卓越。1987年荣获广东省政府颁发的“两个文明建设贡献的先进个人”称号，“扶贫热心人”奖章，1999年赴京出席第三次全国民族团结表彰大会，并上天安门参加国庆50周年观礼阅兵。2011年获得“羊城慈善先进个人慈善之星”称号。</p>
+			</div>
+			<a href="">
+				<div class="more">
+					<span>更多介绍</span>
+				</div>
+			</a>
+		</div>
+	</div>
+{% endblock %}

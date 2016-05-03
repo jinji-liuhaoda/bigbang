@@ -56,7 +56,7 @@ urlpatterns = [
 
     # 后台
     # url(r'^admin/', admin_views.index),
-    url(r'^superadmin/', admin.site.urls),
+    url(r'^admin/', admin.site.urls),
 
     # 后台上传
     url(r'^admin/upload$', admin_views.upload, name='upload'),
