@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^register/$', auth_views.register, name='register'),
     url(r'^user/(?P<user_id>\d+)/$', auth_views.index, name='index'),
     url(r'^user/(?P<user_id>\d+)/pwdupdate$', auth_views.pwdupdate, name='pwdupdate'),
+    url(r'^phone/(?P<phone>\d+)$', auth_views.check_phone, name='check_phone'),
 
     # 后台
     # url(r'^admin/', admin_views.index),

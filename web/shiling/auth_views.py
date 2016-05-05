@@ -29,6 +29,7 @@ import time
 def index(request, user_id):
     user = User.objects.get(id=user_id)
     activityattendees = ActivityAttendee.objects.filter(mobile_phone=user.phone)
+    request.session['user_id'] = user.id
     context = {
         'title': '揭西石灵寺',
         'user': user,
@@ -39,13 +40,13 @@ def index(request, user_id):
 
 
 def login(request):
+    request.session.flush()
     error_msg = 0
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
         try:
             user = User.objects.get(phone=phone)
-            user.phone = phone
             is_pwd = check_password(pwd, user.pwd)
             if is_pwd:
                 is_t = 1
@@ -53,10 +54,11 @@ def login(request):
                 is_t = 0
         except User.DoesNotExist:
             is_t = 0
-            if is_t:
-                return HttpResponseRedirect('/user/{}'.format(user.id))
-            else:
-                error_msg = 1
+
+        if is_t:
+            return HttpResponseRedirect('/user/{}'.format(user.id))
+        else:
+            error_msg = 1
     context = {
         'title': '揭西石灵寺',
         'error_msg': error_msg,
@@ -101,3 +103,11 @@ def pwdupdate(request, user_id):
     }
     template = loader.get_template('shiling/pwdupdate.html')
     return HttpResponse(template.render(context, request))
+
+
+def check_phone(request, phone):
+    users = User.objects.filter(phone=phone)
+    if len(users) >= 1:
+        return HttpResponse(1)
+    else:
+        return HttpResponse(0)

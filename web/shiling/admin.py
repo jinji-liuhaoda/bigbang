@@ -51,7 +51,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
 
     list_display = (
-        'name', 'phone', 'pwd',
+        'phone', 'name', 'pwd',
     )
 
     exclude = ('created', 'last_updated')

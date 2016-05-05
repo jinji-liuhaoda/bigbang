@@ -45,6 +45,15 @@
 </script>
 <script>
 	$(function(){
+		//验证手机号码
+	    var checkphone = function(phone){
+			 var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;
+			 if (reg.test(phone)) {
+			      return true;
+			 }else{
+			      return false;
+			 }
+	    }
 		var login_status = function(){
 			var phone = $("#phone").val()
 			var pwd = $("#pwd").val()
@@ -62,6 +71,10 @@
 			var pwd = $("#pwd").val()
 			if (!phone || !pwd) {
 				alert("请输入完整信息")
+				return false
+			}
+			if (!checkphone(phone)) {
+				alert("请输入正确手机号")
 				return false
 			}
 			$("#formid").submit()
