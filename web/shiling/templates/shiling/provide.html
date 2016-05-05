@@ -1,0 +1,95 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text">
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+		</ul>
+		<div class="user">
+			<a href="/login">
+				<img src="/static/images/user-icon.png" width="26">
+			</a>
+		</div>
+	</div>
+	<div class="beneficence">
+		<div class="good-work">
+			<h1>日行一善</h1>
+			<h5>点击一次图标代表供养一次</h5>
+			<a href="" >
+				<div class="picture">
+					<div class="pic">
+						<img src="http://placehold.it/120x120">
+					</div>
+				</div>
+			</a>
+		</div>
+		<div class="donation">
+			<div class="amount-of-money">
+				<div class="icon">
+					<span>￥</span>	
+				</div>
+				<h3>输入随喜金额</h3> 
+			</div>
+			<div class="button01">
+				<a href=""><h3>确认</h3></a>
+			</div>
+		</div>
+		<div class="click">
+			<ul>
+				<li>
+					<div class="pic-box">
+						<a href="">
+							<div class="pic">
+								<img src="http://placehold.it/120x120">
+							</div>
+							<h3>点击捐赠一元</h3>
+							<h5>一元代表一心一意</h5>		
+						</a>
+					</div>		
+				</li>
+				<li>
+					<div class="pic-box">
+						<a href="">
+							<div class="pic">
+								<img src="http://placehold.it/120x120">
+							</div>
+							<h3>点击捐赠百元</h3>
+							<h5>一百代表百事百顺</h5>		
+						</a>
+					</div>
+				</li>
+			</ul>
+			<div class="clear"></div>
+		</div>
+	</div>
+
+	{% for item in pds %}
+	<div class="contribution {% if forloop.counter|divisibleby:2 %} bg-c {% endif %}">
+		<div class="contribution-hd">
+			<h1>{{item.category.name}}</h1>
+			<h5>{{item.category.detail}}</h5>
+		</div>
+		<div class="contribution-bd" >
+			<div class="goods">
+				<ul>
+					{% for provide in item.provides %}
+					<li {% if item.pr_is == 1 and forloop.last %} class="last"{% endif %}>
+						<a href="">
+							<div class="pic">
+								<img src="{{provide.cover}}">
+							</div>
+						</a>
+						<h3>{{provide.title}}</h3>
+						<a href="/provide/{{provide.id}}"><h5>查&nbsp看&nbsp详&nbsp情</h5></a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+	{% endfor %}
+{% endblock %}

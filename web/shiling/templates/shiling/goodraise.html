@@ -1,0 +1,47 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text">			
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+		</ul>
+		<div class="user"><a href="/login">
+			<img src="/static/images/user-icon.png" width="26">
+		</a></div>
+	</div>
+	<div class="financing-box">			
+		<div class="financing">
+			<ul>
+				{% for goodraise in goodraises %}
+				<li>
+					<a href="/goodraise/{{goodraise.id}}">
+						<div class="financing-pic">
+							<div class="img-box">
+								<img src="http://placehold.it/335x132" width="100%">
+							</div>
+						</div>
+						<div class="financing-content">
+							<div class="hd">
+								<h2>{{goodraise.title}}</h2>
+							</div>
+							<div class="Progress">	
+								<div class="Progress-bar">
+									<div class="Progress-accomplish"></div>
+									<h5>16100/{{goodraise.total_price}}</h5>
+								</div>
+							</div>
+							<div class="start">
+								<span>发起善心</span>
+							</div>
+							<div class="clear"></div>
+						</div>	
+					</a>
+				</li>
+				{% endfor %}
+			</ul>	
+		</div>
+	</div>
+{% endblock %}

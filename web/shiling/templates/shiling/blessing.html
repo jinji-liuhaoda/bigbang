@@ -1,0 +1,96 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text">
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+		</ul>
+		<div class="user"><a href="/login">
+			<img src="/static/images/user-icon.png" width="26">
+		</a></div>
+	</div>
+	<div class="pray-box">
+		<div class="pray-hd">
+			<div class="pray">
+				<div class="pic">
+					<img src="http://placehold.it/120x120">
+				</div>
+				<h1>{{mage.mage_num}}</h1>
+				<div class="pray-text">
+					<a href=""><span>人气&nbsp2030</span></a><span>&nbsp&nbsp｜&nbsp&nbsp</span><a href=""><span>佛法&nbsp12</span></a>
+				</div>
+				<div class="pray-nav">
+					<ul>
+						<li id="main">
+							<h4>主页</h4>
+						</li>
+						<li id="bless">
+							<h4>祈福墙</h4>
+						</li>
+					</ul>					
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="abbot-index">
+<!-- 	<div class="address">
+			<h4>{{temple.address}}</h4>
+		</div> -->
+		<div class="content">
+			<p>{{mage.detail}}</p>
+			<img src="http://placehold.it/335x144" width="100%">
+			<a href="/host_detail/{{mage.id}}">
+				<div class="more">
+					<span>更多介绍</span>
+				</div>
+			</a>
+		</div>
+	</div>
+	<div class="pray-bd">
+		<ul>
+			<li>
+				<div class="model">
+					<div class="pray-bd-pic">
+						<img src="http://placehold.it/52x52">
+					</div>
+					<div class="pray-bd-content">
+						<h4>日行一善,随喜供养!虔诚供养共计1.00元功德无量</h4>
+						<div class="data">
+							<div class="left">
+								<h5>上海市&nbsp匿名</h5>
+							</div>
+							<div class="right">
+								<h5>大约3小时前</h5>
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+{% endblock %}
+{% block script %}
+<script>
+	$(function(){
+		$(".abbot-index").hide()
+		$(".pray-bd").show()
+		$('#bless').addClass('select')
+		$("#main").on('click',function(){
+			$(".abbot-index").show()
+			$(".pray-bd").hide()
+			$("#bless").removeClass('select')
+			$(this).addClass('select')
+		})
+		$("#bless").on('click',function(){
+			$(".abbot-index").hide()
+			$(".pray-bd").show()
+			$("#main").removeClass('select')
+			$(this).addClass('select')
+		})
+	})
+</script>
+{% endblock %}

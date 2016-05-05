@@ -1,0 +1,40 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text">
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+		</ul>
+		<div class="user">
+			<a href="/login">
+				<img src="/static/images/user-icon.png" width="26">
+			</a>
+		</div>
+	</div>
+	<div class="detail">
+		<div class="provide-box">
+			<div class="provide">
+				<div class="provide-hd">
+					<h2>{{provide.category.name}}</h2>
+				</div>
+				<div class="provide-bd">
+					<div class="provide-pic">
+						<img src="http://placehold.it/335x132" width="100%">
+					</div>
+					<div class="provide-content">
+						<h1>￥{{provide.price}}元</h1>
+						<p>{{provide.detail}}</p>
+					</div>	
+				</div>
+			</div>
+		</div>
+		<div class="provide-btn">
+			<div class="button01">
+				<a href=""><h3>供养功德</h3></a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

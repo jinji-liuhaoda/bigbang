@@ -31,7 +31,7 @@ urlpatterns = [
 
     # 新闻
     url(r'^news/$', temple_view.news_list, name='news_list'),
-    url(r'^news/(?P<activity_id>\d+)/$', temple_view.news_detail, name='news_detail'),
+    url(r'^news/(?P<news_id>\d+)/$', temple_view.news_detail, name='news_detail'),
 
     # 义工
     url(r'^volunteer/$', temple_view.volunteer_detail, name='volunteer_detail'),
@@ -45,7 +45,7 @@ urlpatterns = [
     url(r'^donation/(?P<donation_type>\w+)/(?P<donation_amount>\w+)/add$', temple_view.donation_add, name='donation_add'),
 
     # 主持详情
-    url(r'^host/$', temple_view.host_detail, name='host_detail'),
+    url(r'^host_detail/(?P<host_id>\d+)$', temple_view.host_detail, name='host_detail'),
 
     # 微信网页授权
     # url(r'^wechat/login/$', auth_views.wechat_login, name='wechat_login'),
@@ -53,6 +53,12 @@ urlpatterns = [
 
     #支付
     url(r'^pay/(?P<pay_type>\d+)/(?P<donation_amount>\w+)/add$', temple_view.pay_add, name='pay_add'),
+
+    #用户中心
+    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^register/$', auth_views.register, name='register'),
+    url(r'^user/(?P<user_id>\d+)/$', auth_views.index, name='index'),
+    url(r'^user/(?P<user_id>\d+)/pwdupdate$', auth_views.pwdupdate, name='pwdupdate'),
 
     # 后台
     # url(r'^admin/', admin_views.index),

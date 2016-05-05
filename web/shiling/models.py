@@ -16,6 +16,7 @@ class Temple(models.Model):
     title = models.CharField(max_length=128, verbose_name="寺庙标题")
     cover = models.CharField(max_length=128, verbose_name="寺庙封面")
     detail = models.TextField(null=False, verbose_name="简介")
+    address = models.TextField(null=False, default='', verbose_name="地址")
     content = models.TextField(null=False, verbose_name="详情")
 
     def __unicode__(self):
@@ -32,6 +33,7 @@ class Mage(models.Model):
     mage_num = models.CharField(max_length=128, verbose_name="法号")
     cover = models.CharField(max_length=128, verbose_name="头像")
     detail = models.TextField(null=False, verbose_name="简介")
+    experience = models.TextField(null=False, default='', verbose_name="履历")
     content = models.TextField(null=False, verbose_name="详情")
     temple = models.ForeignKey(Temple, blank=True, null=True, verbose_name="所属寺庙")
 
@@ -220,7 +222,9 @@ class User(models.Model):
     name = models.CharField(max_length=128, verbose_name="姓名")
     gender = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="性别")
     openid = models.CharField(max_length=128, blank=True, verbose_name="微信OpenID")
+    phone = models.CharField(max_length=128, blank=True, verbose_name="手机号")
     headimgurl = models.CharField(max_length=300, blank=True, verbose_name="微信头像")
+    pwd = models.CharField(max_length=300, blank=True, verbose_name="密码")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
 
     def __unicode__(self):
