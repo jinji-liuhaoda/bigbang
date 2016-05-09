@@ -78,7 +78,7 @@
 									</div>
 									<div class="right">
 										<div class="arrows">
-										<a href="/user/{{user.id}}/pwdupdate">
+										<a href="/pwd_update">
 											<img src="/static/images/arrows.png"  width="9">
 										</a>
 										</div>
@@ -92,11 +92,8 @@
 			</div>
 		</div>
 		<div class="provide-btn">
-<!-- 			<div class="button01">
-				<a href=""><h3>保存</h3></a>
-			</div> -->
 			<div class="button02">
-				<a href="/login"><h3>退出</h3></a>
+				<a href="/login_out"><h3>退出</h3></a>
 			</div>
 		</div>
 	</div>
@@ -122,7 +119,7 @@
 			<h5>已报名的活动</h5>
 		</div>
 		<div class="form">
-			{% for activityattendee in activityattendees %}
+			{% for activity_attendee in activity_attendees %}
 				<table cellspacing="0" cellpadding="0">
 					<tr>
 	    				<td class="title">人数</td>
@@ -134,11 +131,11 @@
 					</tr>
 					<tr>
 						<td class="title">时间</td>
-						<td class="text">{{activityattendee.activity.end_time}}</td>
+						<td class="text">{{activity_attendee.activity.end_time}}</td>
 					</tr>
 					<tr>
 						<td class="title">地点</td>
-						<td class="text">{{activityattendee.activity.address}}</td>
+						<td class="text">{{activity_attendee.activity.address}}</td>
 					</tr>
 				</table>
 				<br>

@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
@@ -20,51 +20,62 @@ from .models import (
     BuddhismKnowledge,
     User,
 )
-from settings import UPLOAD_DIR
+from settings import UPLOAD_DIR, DOMAIN
+import simplejson
 import os
 import datetime
 import time
 
 
-def index(request, user_id):
-    user = User.objects.get(id=user_id)
-    activityattendees = ActivityAttendee.objects.filter(mobile_phone=user.phone)
+def index(request):
+    user = get_object_or_404(User, id=request.session['user_id'])
+    activity_attendees = ActivityAttendee.objects.filter(mobile_phone=user.phone)
     request.session['user_id'] = user.id
     context = {
         'title': '揭西石灵寺',
         'user': user,
-        'activityattendees': activityattendees,
+        'activity_attendees': activity_attendees,
     }
     template = loader.get_template('shiling/user.html')
     return HttpResponse(template.render(context, request))
 
 
 def login(request):
-    request.session.flush()
-    error_msg = 0
+    try:
+        request.session['user_id']
+        return HttpResponseRedirect('/user/')
+    except Exception, e:
+        is_login = False
+    error = 0
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
         try:
-            user = User.objects.get(phone=phone)
+            user = get_object_or_404(User, phone=phone)
             is_pwd = check_password(pwd, user.pwd)
             if is_pwd:
-                is_t = 1
+                is_validation = 1
             else:
-                is_t = 0
+                is_validation = 0
         except User.DoesNotExist:
-            is_t = 0
+            is_validation = 0
 
-        if is_t:
-            return HttpResponseRedirect('/user/{}'.format(user.id))
+        if is_validation:
+            request.session['user_id'] = user.id
+            return HttpResponseRedirect('/user/')
         else:
-            error_msg = 1
+            error = 1
     context = {
         'title': '揭西石灵寺',
-        'error_msg': error_msg,
+        'error': error,
     }
     template = loader.get_template('shiling/login.html')
     return HttpResponse(template.render(context, request))
+
+
+def login_out(request):
+    request.session.flush()
+    return HttpResponseRedirect('/login/')
 
 
 @csrf_exempt
@@ -77,37 +88,46 @@ def register(request):
         user.phone = phone
         user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
         user.save()
-        return HttpResponseRedirect('/user/{}'.format(user.id))
+        request.session['user_id'] = user.id
+        return HttpResponseRedirect('/user')
 
     context = {
         'title': '揭西石灵寺',
+        'DOMAIN': DOMAIN,
     }
     template = loader.get_template('shiling/register.html')
     return HttpResponse(template.render(context, request))
 
 
 @csrf_exempt
-def pwdupdate(request, user_id):
+def pwd_update(request):
     if request.method == 'POST':
         pwd = request.POST.get('pwd1', '')
-        u_id = request.POST.get('user_id', '')
-
-        user = User.objects.get(id=u_id)
-        user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
-        user.save()
-        return HttpResponseRedirect('/user/{}'.format(user.id))
-    user = User.objects.get(id=user_id)
+        try:
+            user = get_object_or_404(User, id=request.session['user_id'])
+            user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
+            user.save()
+            return HttpResponseRedirect('/user/')
+        except Exception, e:
+            return HttpResponseRedirect('/login')
     context = {
         'title': '揭西石灵寺',
-        'user': user,
     }
-    template = loader.get_template('shiling/pwdupdate.html')
+    template = loader.get_template('shiling/pwd_update.html')
     return HttpResponse(template.render(context, request))
 
 
-def check_phone(request, phone):
+def ch_phone(request, phone):
     users = User.objects.filter(phone=phone)
     if len(users) >= 1:
-        return HttpResponse(1)
+        return True
     else:
-        return HttpResponse(0)
+        return False
+
+
+def check_phone(request, phone):
+    cp = ch_phone(request, phone)
+    if cp:
+        return HttpResponse(simplejson.dumps({'error': 1, 'msg': '该手机号码已注册,请登录'}, ensure_ascii = False))
+    else:
+        return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))

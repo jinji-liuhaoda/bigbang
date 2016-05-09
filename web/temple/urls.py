@@ -15,23 +15,25 @@ urlpatterns = [
 
     # 供养
     url(r'^provide/$', temple_view.provide_list, name='provide_list'),
-    url(r'^provide/(?P<provide_id>\d+)/$', temple_view.provide_detail, name='provide_detail'),
+    url(r'^provide/(?P<provide_id>\d+)$', temple_view.provide_detail, name='provide_detail'),
+    url(r'^provide_pay/(?P<provide_id>\d+)$', temple_view.provide_pay, name='provide_pay'),
 
     # 善筹
     url(r'^goodraise/$', temple_view.goodraise_list, name='goodraise_list'),
-    url(r'^goodraise/(?P<goodraise_id>\d+)/$', temple_view.goodraise_detail, name='goodraise_detail'),
+    url(r'^goodraise/(?P<goodraise_id>\d+)$', temple_view.goodraise_detail, name='goodraise_detail'),
+    url(r'^good_pay/(?P<good_id>\d+)$', temple_view.good_pay, name='good_pay'),
 
     # 祈福
     url(r'^blessing/$', temple_view.blessing_list, name='blessing_list'),
 
     # 活动
     url(r'^activity/$', temple_view.activity_list, name='activity_list'),
-    url(r'^activity/(?P<activity_id>\d+)/$', temple_view.activity_detail, name='activity_detail'),
+    url(r'^activity/(?P<activity_id>\d+)$', temple_view.activity_detail, name='activity_detail'),
     url(r'^activity/(?P<activity_id>\d+)/signup$', temple_view.activity_signup, name='activity_signup'),
 
     # 新闻
     url(r'^news/$', temple_view.news_list, name='news_list'),
-    url(r'^news/(?P<news_id>\d+)/$', temple_view.news_detail, name='news_detail'),
+    url(r'^news/(?P<news_id>\d+)$', temple_view.news_detail, name='news_detail'),
 
     # 义工
     url(r'^volunteer/$', temple_view.volunteer_detail, name='volunteer_detail'),
@@ -39,7 +41,7 @@ urlpatterns = [
 
     # 佛教知识
     url(r'^buddhismknowledge/$', temple_view.buddhismknowledge_list, name='buddhismknowledge_list'),
-    url(r'^buddhismknowledge/(?P<buddhismknowledge_id>\d+)/$', temple_view.buddhismknowledge_detail, name='buddhismknowledge_detail'),
+    url(r'^buddhismknowledge/(?P<buddhismknowledge_id>\d+)$', temple_view.buddhismknowledge_detail, name='buddhismknowledge_detail'),
 
     # 捐赠
     url(r'^donation/(?P<donation_type>\w+)/(?P<donation_amount>\w+)/add$', temple_view.donation_add, name='donation_add'),
@@ -56,9 +58,10 @@ urlpatterns = [
 
     #用户中心
     url(r'^login/$', auth_views.login, name='login'),
+    url(r'^login_out/$', auth_views.login_out, name='login_out'),
     url(r'^register/$', auth_views.register, name='register'),
-    url(r'^user/(?P<user_id>\d+)/$', auth_views.index, name='index'),
-    url(r'^user/(?P<user_id>\d+)/pwdupdate$', auth_views.pwdupdate, name='pwdupdate'),
+    url(r'^user/$', auth_views.index, name='index'),
+    url(r'^pwd_update/$', auth_views.pwd_update, name='pwd_update'),
     url(r'^phone/(?P<phone>\d+)$', auth_views.check_phone, name='check_phone'),
 
     # 后台

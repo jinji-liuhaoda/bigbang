@@ -7,6 +7,9 @@
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
 			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
+			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
+			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
 		</ul>
 		<div class="user">
 			<a href="/login">
@@ -18,7 +21,7 @@
 		<div class="model1">
 			<div class="hd">
 				<h2>{{goodraise.title}}</h2>
-				<div><img src="images/clock.png" width="10"><span>{{goodraise.end_time}}</span></div>
+				<div><img src="/static/images/clock.png" width="10"><span>{{goodraise.end_time}}</span></div>
 			</div>
 			<div class="img-box"><img src="http://placehold.it/335x132" width="100%"></div>
 			<div class="Progress">
@@ -49,9 +52,11 @@
 							<h3>已有9人支持</h3>
 						</li>
 						<li class="right">
-						<a href=""><div class="start">
-							<span>支持{{good.support_price}}元</span>
-						</div></a>
+						<a href="/good_pay/{{good.id}}">
+							<div class="start">
+								<span>支持{{good.support_price}}元</span>
+							</div>
+						</a>
 						</li>
 						<div class="clear"></div>				
 					</ul>			
@@ -98,8 +103,6 @@
 						</ul>
 					</div>				
 				</li>
-\
-
 			</ul>
 		</div>
 	</div>

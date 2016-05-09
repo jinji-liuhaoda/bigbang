@@ -7,6 +7,9 @@
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
 			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
+			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
+			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
 		</ul>
 		<div class="user">
 			<a href="/login">
@@ -70,14 +73,14 @@
 	<div class="contribution {% if forloop.counter|divisibleby:2 %} bg-c {% endif %}">
 		<div class="contribution-hd">
 			<h1>{{item.category.name}}</h1>
-			<h5>{{item.category.detail}}</h5>
+			<h5>点击图标代表供养一次</h5>
 		</div>
 		<div class="contribution-bd" >
 			<div class="goods">
 				<ul>
 					{% for provide in item.provides %}
 					<li {% if item.pr_is == 1 and forloop.last %} class="last"{% endif %}>
-						<a href="">
+						<a href="/provide_pay/{{provide.id}}">
 							<div class="pic">
 								<img src="{{provide.cover}}">
 							</div>

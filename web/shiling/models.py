@@ -61,6 +61,7 @@ class Provide(models.Model):
         verbose_name_plural = "供养"
 
     title = models.CharField(max_length=128, verbose_name="标题")
+    subtitle = models.CharField(max_length=300, default='', verbose_name="子标题")
     category = models.ForeignKey(Category, blank=True, null=True, verbose_name="所属分类")
     detail = models.TextField(null=False, verbose_name="描述")
     cover = models.CharField(max_length=128, blank=False, verbose_name="封面图片")

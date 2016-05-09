@@ -1,7 +1,7 @@
 {% extends 'shiling/base.html' %}
 {% block mainbody %}
 <div class="detail">
-	<form role="form" method="POST" enctype="multipart/form-data" id="formid">
+	<form role="form" method="POST" id="formid">
 		{% csrf_token %}
 		<div class="retrieve-password">
 			<div class="retrieve-password-hd">
@@ -24,7 +24,6 @@
 		</div>
 		<div class="provide-btn">
 			<div class="button01">
-				<input type="hidden" name="user_id" value="{{user.id}}">
 				<a id="submit"><h3>确定</h3></a>
 			</div>
 		</div>
@@ -43,6 +42,10 @@
 			}
 			if (pwd1 != pwd2) {
 				alert("两次输入密码不一致")
+				return false
+			}
+			if (pwd1.length<6) {
+				alert("密码必须6位以上")
 				return false
 			}
 			$("#formid").submit()
