@@ -46,11 +46,11 @@ a { color:#bbbbbc; text-decoration:none;}
 .donation{margin: 0 25px;}
 .pic{margin:0 auto;  height: 120px; width:120px;}
 .pic img{height: 120px; width: 120px; border-radius: 50%;}
-.amount-of-money{height: 39px; width: 100%; border: 1px solid #d7d7d7; border-radius: 20px; margin:0 auto; margin-bottom: 15px; margin-top: 37px;}
+.amount-of-money{height: 41px; width: 100%; border: 1px solid #d7d7d7; border-radius: 20px; margin:0 auto; margin-bottom: 15px; margin-top: 37px;}
 .amount-of-money .icon{width: 52px; height: 39px; background:#d7d7d7; border-radius: 20px 0 0 20px; text-align: center; float: left;}
 .amount-of-money .icon span{font-size: 20px; font-weight: bold; color: #fff; line-height: 40px;}
 .amount-of-money h3{ margin-left: 62px; line-height: 40px; text-align: left;color: #ababab;}
-.button01{height: 39px; width: 100%; background: #1b1c20; border-radius: 20px; margin:6px auto; text-align: center;}
+.button01{height: 39px; width: 100%; background: #1b1c20; border-radius: 20px; margin:12px auto; text-align: center;}
 .button01 h3{color: #fff; line-height: 40px;}
 .click {padding: 58px 28px 90px; }
 .click li{float: left; width: 50%; text-align: center;}
@@ -66,7 +66,8 @@ li.last{ width: 100%; }
 .sculpture{background: #fff;}
 .sculpture .center{margin: 0 auto; clear: both;}
 .bg-c{background-color: #f7f7f7;}
-
+.amount-of-money .icon-bd{float: left; height: 39px; width: 80%;}
+.amount-of-money input{height:75%;width: 96%; font-size: 15px; margin-top: 1%; outline: none; border:0px; padding-left: 10px;}
 
 
 .detail{background: #f7f7f7; height: 100%;}
@@ -186,18 +187,21 @@ li.last{ width: 100%; }
 .event-content h1{margin: 0;}
 
 .pop{height: 100%; width: 100%; background: rgba(0,0,0,0.5); position: fixed; top: 0;left: 0;}
-.apply{margin:10% 5%;width: 90%; padding-bottom:  48px;background: #fff; border-radius: 6px;position: fixed;overflow-y:auto; height:60%;}
+.apply{margin:10% 5%;width: 90%; padding-bottom:  48px;background: #fff; border-radius: 6px;position: fixed; max-height:90%;min-height:300px; overflow: hidden;}
 .apply img{position: absolute; right: 9px; top: 9px;}
 .apply .apply-hd{ padding: 20px 20px 20px 15px; border-bottom: 1px solid #eee;}
 .apply h2{text-align:left; font-size: 17px; color: #333;}
-.apply-info{ padding: 15px 0 15px 15px; border-bottom: 1px solid #eee; }
-.apply-info h3{color: #999; text-align: left; font-size: 15px;}
+.apply-bd .sign-in{padding-left: 0px;}
+.apply-bd .sign-in .sign-in-info li{padding-left: 16px;}
 .apply .provide-btn{padding-left:15px; padding-right: 15px;}
 .apply h4{font-size: 14px; color: #797979;text-align:left; padding-top: 8px;}
+.apply-info{ padding: 15px 0 15px 15px; border-bottom: 1px solid #eee; }
+.apply-info h3{color: #999; text-align: left; font-size: 15px;}
 .apply-info .vertica{height: 14px; width: 3px; background: #fbbc05; margin-top:2px;  margin-right: 10px;}
 .apply-info li{float: left;}
 .apply-info .grey h3{color: #1b1c20;}
-.sign-up{padding-bottom: 98px;}
+.sign-up{padding-bottom: 10px; overflow-y:auto; max-height: 500px; }
+
 
 .knowledge{padding-top: 101px; }
 .knowledge li{float: left; width: 50%; text-align: center; margin-bottom:30px;}
@@ -248,7 +252,7 @@ li.last{ width: 100%; }
 
 .sign-in{height: 88px; padding-left: 16px;}
 .sign-in-info li{height: 46px; line-height: 46px; border-bottom: 1px solid #eee;}
-.sign-in-info span{font-size: 15px;}
+.sign-in-info input{height:75%;width: 96%; font-size: 15px;outline: none;}
 .sign-in .provide-btn{ padding: 0 16px 0 0 ; }
 .button03{height: 39px; width: 100%; border-radius: 20px; margin: 12px auto; text-align: center; background: #ddd;}
 .button03 h3{color: #fff; line-height: 40px;}
@@ -263,6 +267,7 @@ li.last{ width: 100%; }
 .retrieve-password-hd h5{ text-align: left; letter-spacing: 0; font-size: 13px;}
 .retrieve-password-bd{border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding-left: 15px; background: #fff;}
 .retrieve-password-bd h3{text-align: left; color: #9b9b9b; padding: 14px 0 14px ; }
+
 .security-code .left{float: left;}
 .security-code .right{float: right; padding:0 10px; border-left: 1px solid #eee;}
 .security-code .right h3{color: #525252;}
