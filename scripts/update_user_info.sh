@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo date
-source /home/jinji/envs/zhihuibao/bin/activate
+source /home/jinji/envs/temple/bin/activate
 export DJANGO_SETTINGS_MODULE=settings
-export PYTHONPATH=/home/jinji/workspace/zhihuibao/web/zhihuibao:/home/jinji/workspace/zhihuibao/web:/home/jinji/workspace/zhihuibao
-python /home/jinji/workspace/zhihuibao/scripts/update_user_info.py
+export PYTHONPATH=/home/jinji/workspace/temple/web/temple:/home/jinji/workspace/temple/web:/home/jinji/workspace/temple
+python /home/jinji/workspace/temple/scripts/update_user_info.py
 echo date, 'done'

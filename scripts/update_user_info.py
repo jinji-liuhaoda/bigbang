@@ -1,8 +1,8 @@
 # coding: utf-8
 
 import django;django.setup()
-from wechat.user_manager import user_manager
-from expo.models import (
+from ucenter.user_manager import user_manager
+from ucenter.models import (
     User,
 )
 
