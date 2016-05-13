@@ -29,7 +29,7 @@ import time
 
 
 def index(request):
-    user = get_object_or_404(User, id=request.session['user_id'])
+    user = get_object_or_404(User, id=1)
     activity_attendees = ActivityAttendee.objects.filter(mobile_phone=user.phone)
     request.session['user_id'] = user.id
     context = {

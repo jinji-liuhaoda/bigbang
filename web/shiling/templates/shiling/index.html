@@ -10,13 +10,13 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
+			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
 			</ul>
-			<div class="user">
-				<a href="/user/login">
-				<img src="/static/images/user-icon.png" width="26">
-				</a>
-			</div>
+		</div>
+		<div class="user">
+			<a href="/user/login">
+			<img src="/static/images/user-icon.png" width="26">
+			</a>
 		</div>
 		<div class="logo">
 			<img src="/static/images/logo.png" width="142">

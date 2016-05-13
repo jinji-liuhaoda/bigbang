@@ -1,7 +1,7 @@
 {% extends 'shiling/base.html' %}
 {% block mainbody %}
 	<div class="nav">
-		<ul class="text">			
+		<ul class="text special">			
 			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
 			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
@@ -9,13 +9,13 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
+			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
 		</ul>
-		<div class="user">
-			<a href="/user/login">
-				<img src="/static/images/user-icon.png" width="26">
-			</a>
-		</div>
+	</div>
+	<div class="user">
+		<a href="/user/login">
+			<img src="/static/images/user-icon.png" width="26">
+		</a>
 	</div>
 	<div class="event">
 		<div class="hd">
@@ -23,13 +23,13 @@
 			<div class="news-info">
 				<ul>
 					<li>
-						<img src="/static/images/look.png" width="14">&nbsp168						
+						<img src="/static/images/look.png" width="14">&nbsp;168						
 					</li>
 					<li>
-						<span>&nbsp&nbsp|&nbsp&nbsp</span>
+						<span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
 					</li>
 					<li>
-						<img src="/static/images/clock.png" width="10">{{activity.end_time}}
+						<img src="/static/images/clock.png" width="10">&nbsp;{{activity.end_time}}
 					</li>
 					<div class="clear"></div>
 				</ul>
@@ -43,15 +43,15 @@
 			<table cellspacing="0" cellpadding="0">
 				<tr>
     				<td class="title">人数</td>
-   					<td class="text">{{activityattendees|length}}/{{activity.people_number}}</td>
+   					<td class="title-bd">{{activityattendees|length}}/{{activity.people_number}}</td>
 				</tr>
  				<tr>
 					<td class="title">地址</td>
-					<td class="text">{{activity.address}}</td>
+					<td class="title-bd">{{activity.address}}</td>
 				</tr>
 				<tr>
 					<td class="title">时间</td>
-					<td class="text">{{activity.start_time}}～{{activity.end_time}}</td>
+					<td class="title-bd">{{activity.start_time}}～{{activity.end_time}}</td>
 				</tr>
 			</table>
 		</div>
@@ -77,8 +77,7 @@
 	
 <!-- 信息登记 -->
 
-<div class="pop1">
-	<div class="translucent"></div>
+<div class="pop pop1">
 	<div class="apply">
 		<div class="apply-hd">
 			<h2>信息登记</h2>
@@ -108,8 +107,7 @@
 
 <!-- 报名名单 -->
 
-<div class="pop2">
-	<div class="translucent"></div>
+<div class="pop pop2">
 	<div class="apply">
 		<div class="apply-hd">
 			<h2>{{activity.title}}</h2>
