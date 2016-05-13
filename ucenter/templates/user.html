@@ -146,37 +146,37 @@
 {% block script %}
 <script>
 	$(function(){
- 		$(".detail").show()
- 		$(".juanzhu").hide()
- 		$(".activity").hide()
+ 		$(".detail").show();
+ 		$(".juanzhu").hide();
+ 		$(".activity").hide();
 
  		$("#zhanghu").on('click',function(){
- 			$(this).addClass('action')
- 			$("#juanzhu").removeClass('action')
- 			$("#activity").removeClass('action')
-	 		$(".detail").show()
-	 		$(".juanzhu").hide()
-	 		$(".activity").hide()
+ 			$(this).addClass('action');;
+ 			$("#juanzhu").removeClass('action');
+ 			$("#activity").removeClass('action');
+	 		$(".detail").show();
+	 		$(".juanzhu").hide();
+	 		$(".activity").hide();
  		})
 
   		$("#juanzhu").on('click',function(){
- 			$(this).addClass('action')
- 			$("#zhanghu").removeClass('action')
- 			$("#activity").removeClass('action')
+ 			$(this).addClass('action');
+ 			$("#zhanghu").removeClass('action');
+ 			$("#activity").removeClass('action');
 
-	 		$(".detail").hide()
-	 		$(".juanzhu").show()
-	 		$(".activity").hide()
+	 		$(".detail").hide();
+	 		$(".juanzhu").show();
+	 		$(".activity").hide();
  		})
 
   		$("#activity").on('click',function(){
- 			$(this).addClass('action')
- 			$("#zhanghu").removeClass('action')
- 			$("#juanzhu").removeClass('action')
+ 			$(this).addClass('action');
+ 			$("#zhanghu").removeClass('action');
+ 			$("#juanzhu").removeClass('action');
  			
-	 		$(".detail").hide()
-	 		$(".juanzhu").hide()
-	 		$(".activity").show()
+	 		$(".detail").hide();
+	 		$(".juanzhu").hide();
+	 		$(".activity").show();
  		})
 	})
 </script>

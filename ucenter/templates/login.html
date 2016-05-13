@@ -45,17 +45,16 @@
 </script>
 <script>
 	$(function(){
-		var is_login = false
+		var is_login = false;
 		var login_status = function(){
 			var phone = $("#phone").val();
 			var pwd = $("#pwd").val();
 			if (phone && pwd && !is_login) {
-				is_login = true
-				// alert(phone && pwd && !is_login)
+				is_login = true;
 				$("#login").parent().removeClass('button03');
 				$("#login").parent().addClass('button01');
 				$("#login").on('click',function(){
-					login_check()
+					login_check();
 				})
 			}else if(!phone || !pwd){
 				$("#login").off();
@@ -63,7 +62,7 @@
 				$("#login").parent().removeClass('button01');
 			}
 		}
-		setInterval(login_status,50)
+		setInterval(login_status,50);
 
 		var login_check =  function(){
 			var phone = $("#phone").val();
@@ -78,7 +77,7 @@
 			}
 			if (pwd.length<6) {
 				alert("密码必须6位以上")
-				return false
+				return false;
 			}
 			$("#formid").submit();
 		}

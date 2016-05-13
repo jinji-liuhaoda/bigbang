@@ -142,28 +142,28 @@
 {% block script %}
 <script>
 	$(function(){
-		$('.pop1').hide()
-		$('.pop2').hide()
+		$('.pop1').hide();
+		$('.pop2').hide();
 		$(".provide-btn").on('click',function(){
-			$(".pop1").show()
-			$(".pop2").hide()
+			$(".pop1").show();
+			$(".pop2").hide();
 		})
 		$(".start").on('click',function(){
-			$(".pop1").hide()
-			$(".pop2").show()
+			$(".pop1").hide();
+			$(".pop2").show();
 		})
 		$("#close1").on('click',function(){
-			$(".pop1").hide()
+			$(".pop1").hide();
 		})
 		$("#close2").on('click',function(){
-			$(".pop2").hide()
+			$(".pop2").hide();
 		})
 		$("#pop1-btn").on('click',function(){
-			var name = $("#name").val()
-			var phone = $("#phone").val()
+			var name = $("#name").val();
+			var phone = $("#phone").val();
 			if (!checkphone(phone)) {
-				alert("请输入正确手机号")
-				return false
+				alert("请输入正确手机号");
+				return false;
 			}
 			$.ajax({
 				url:"{{DOMAIN}}/volunteer/{{volunteer.id}}/signup",

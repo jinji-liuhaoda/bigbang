@@ -73,35 +73,33 @@
 			<a ><h3>参加活动</h3></a>
 		</div>
 	</div>
-
 	
 <!-- 信息登记 -->
 
-<div class="pop1">
-	<div class="translucent"></div>
+<div class="pop pop1">
 	<div class="apply">
 		<div class="apply-hd">
 			<h2>信息登记</h2>
-			<a id="close1"><img src="/static/images/close.png" width="14"></a>
+			<a href=""><img src="/static/images/close.png" width="14"></a>
 		</div>
-		<div>
-			<ul>
-				<li>
-					<div class="apply-info">
-						<input type="text" name="name" id="name" placeholder="姓名" class="text-style" />
-					</div>
-				</li>
-				<li>
-					<div class="apply-info">
-						<input type="text" name="phone" id="phone" placeholder="电话" class="text-style" />
-					</div>
-				</li>
-			</ul>
-		</div>
-		<div class="provide-btn" id="pop1-btn">
-			<div class="button01">
-				<a><h3>报名</h3></a>
+		<div class="apply-bd">	
+			<div class="sign-in">
+			<div class="sign-in-info">
+				<ul>
+					<li>
+					<input type="text" name="name" id="name" placeholder="姓名" />
+					</li>
+					<li>
+					<input type="text" name="phone" id="phone" placeholder="电话" />
+					</li>
+				</ul>
 			</div>
+			</div>
+		</div>
+		<div class="provide-btn">
+		<div class="button01">
+			<a href=""><h3>报名</h3></a>
+		</div>
 		</div>
 	</div>
 </div>
@@ -142,21 +140,21 @@
 {% block script %}
 <script>
 	$(function(){
-		$('.pop1').hide()
-		$('.pop2').hide()
+		$('.pop1').hide();
+		$('.pop2').hide();
 		$(".provide-btn").on('click',function(){
-			$(".pop1").show()
-			$(".pop2").hide()
+			$(".pop1").show();
+			$(".pop2").hide();
 		})
 		$(".start").on('click',function(){
-			$(".pop1").hide()
-			$(".pop2").show()
+			$(".pop1").hide();
+			$(".pop2").show();
 		})
 		$("#close1").on('click',function(){
-			$(".pop1").hide()
+			$(".pop1").hide();
 		})
 		$("#close2").on('click',function(){
-			$(".pop2").hide()
+			$(".pop2").hide();
 		})
 		$("#pop1-btn").on('click',function(){
 			var name = $("#name").val();
