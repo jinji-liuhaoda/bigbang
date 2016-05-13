@@ -18,10 +18,10 @@
 				<a id="login"><h3>登录</h3></a>
 			</div>
 			<div class="button01">
-				<a href="/register"><h3>注册</h3></a>
+				<a href="/user/register"><h3>注册</h3></a>
 			</div>
 			<div class="button04">
-				<a href="/wxlogin"><h3>微信登录</h3></a>
+				<a href="/user/wx_login"><h3>微信登录</h3></a>
 			</div>
 		</div>
 		<div class="key">
@@ -40,7 +40,7 @@
 {% block script %}
 <script>
 	if ({{error}}) {
-		alert("用户名或密码错误")
+		alert("用户名或密码错误");
 	}
 </script>
 <script>
@@ -62,7 +62,6 @@
 				$("#login").parent().addClass('button03');
 				$("#login").parent().removeClass('button01');
 			}
-
 		}
 		setInterval(login_status,50)
 

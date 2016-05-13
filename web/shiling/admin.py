@@ -13,7 +13,6 @@ from .models import (
     Volunteer,
     VolunteerUser,
     BuddhismKnowledge,
-    User,
 )
 
 
@@ -47,15 +46,6 @@ class CategoryAdmin(admin.ModelAdmin):
     exclude = ('created', 'last_updated')
 
 
-# 用户
-class UserAdmin(admin.ModelAdmin):
-
-    list_display = (
-        'phone', 'name', 'pwd',
-    )
-
-    exclude = ('created', 'last_updated')
-
 admin.site.register(Temple)
 admin.site.register(Mage)
 admin.site.register(GoodRaise)
@@ -66,6 +56,5 @@ admin.site.register(News)
 admin.site.register(Volunteer)
 admin.site.register(VolunteerUser)
 admin.site.register(BuddhismKnowledge)
-admin.site.register(User, UserAdmin)
 admin.site.register(Provide, ProvideAdmin)
 admin.site.register(Category, CategoryAdmin)

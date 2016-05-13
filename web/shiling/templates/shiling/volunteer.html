@@ -11,7 +11,7 @@
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
 			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
 		</ul>
-		<div class="user"><a href="/login">
+		<div class="user"><a href="/user/login">
 			<img src="/static/images/user-icon.png" width="26">
 		</a></div>
 	</div>
@@ -42,7 +42,7 @@
 			<table cellspacing="0" cellpadding="0">
 				<tr>
     				<td class="title">人数</td>
-   					<td class="text">{{volunteerusers|length}}/{{volunteer.people_number}}</td>
+   					<td class="text">{{volunteer_users|length}}/{{volunteer.people_number}}</td>
 				</tr>
  				<tr>
 					<td class="title">地址</td>
@@ -111,13 +111,13 @@
 	<div class="translucent"></div>
 	<div class="apply">
 		<div class="apply-hd">
-			<h2>{{volunteer.title}}</h2>
-			<h4>({{ volunteerusers|length }}/{{volunteer.people_number}})</h4>
+			<h2>{{ volunteer.title }}</h2>
+			<h4>({{ volunteer_users|length }}/{{volunteer.people_number}})</h4>
 		</div>
 		<a id="close2"><img src="/static/images/close.png" width="14"></a>
 		<div class="sign-up">
 			<ul>
-				{% for volunteeruser in volunteerusers %}
+				{% for volunteeruser in volunteer_users %}
 				<li>
 					<div class="apply-info">
 						<ul>
@@ -170,10 +170,10 @@
 				method:'POST',
 				data:{ name:name, phone:phone},
 				success:function(jsonobj){
-					jsonobj = JSON.parse(jsonobj)
-					alert(jsonobj.msg)
+					jsonobj = JSON.parse(jsonobj);
+					alert(jsonobj.msg);
 					if (jsonobj.error == 0) {
-						window.location.reload()
+						window.location.reload();
 					}
 				},
 			})

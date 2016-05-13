@@ -2,8 +2,10 @@
 
 from django.shortcuts import render, get_object_or_404
 from django.template import loader
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from ucenter.wx_config import get_wx_config
+from ucenter.models import User
 from .models import (
     Temple,
     Mage,
@@ -17,7 +19,6 @@ from .models import (
     Volunteer,
     VolunteerUser,
     BuddhismKnowledge,
-    User,
 )
 from settings import UPLOAD_DIR, DOMAIN
 import simplejson
@@ -72,12 +73,23 @@ def provide_detail(request, provide_id):
     return HttpResponse(template.render(context, request))
 
 
+@csrf_exempt
 def provide_pay(request, provide_id):
+    user_id = request.session.get('user_id', '')
+    openid = request.session.get('openid', '')
+    if request.method == 'POST':
+        if openid == False:
+            # 设置登录后回调地址
+            request.session['redirest'] = request.get_raw_uri()
+            return HttpResponseRedirect('/user/wx_login')
     provide = get_object_or_404(Provide, id=provide_id)
     context = {
+        'wx_config': get_wx_config(request.get_raw_uri()),
         'title': '揭西石灵寺',
         'module': 'provide',
         'provide': provide,
+        'user_id': user_id,
+        'openid': openid,
     }
     template = loader.get_template('shiling/provide_pay.html')
     return HttpResponse(template.render(context, request))
@@ -170,17 +182,17 @@ def activity_signup(request, activity_id):
     phone = request.POST.get('phone', '')
     activity = get_object_or_404(Activity, id=activity_id)
 
-    ActivityAttendees1 = ActivityAttendee.objects.filter(
+    activity_attendees1 = ActivityAttendee.objects.filter(
         mobile_phone=phone,
         activity=activity,
     )
     #义工报名人数
-    ActivityAttendees2 = ActivityAttendee.objects.filter(
+    activity_attendees2 = ActivityAttendee.objects.filter(
         activity=activity,
     )
-    if len(ActivityAttendees1) >= 1:
+    if len(activity_attendees1):
         msg_json = {'error': 1, 'msg': '该手机号码已报名'}
-    elif len(ActivityAttendees2) >= activity.people_number:
+    elif len(activity_attendees2) >= activity.people_number:
         msg_json = {'error': 2, 'msg': '报名人数已满'}
     else:
         activityattendee = ActivityAttendee()
@@ -223,17 +235,17 @@ def volunteer_detail(request):
         end_time__gte=cur_time,
     )
     volunteer = {}
-    volunteerusers = {}
+    volunteer_users = {}
     if volunteers:
         volunteer = volunteers[0]
-        volunteerusers = VolunteerUser.objects.filter(
+        volunteer_users = VolunteerUser.objects.filter(
             volunteer=volunteer,
         ).order_by('-id')
     context = {
         'title': '揭西石灵寺',
         'module': 'volunteer',
         'volunteer': volunteer,
-        'volunteerusers': volunteerusers,
+        'volunteer_users': volunteer_users,
         'DOMAIN': DOMAIN,
     }
     template = loader.get_template('shiling/volunteer.html')
@@ -246,17 +258,17 @@ def volunteer_signup(request, volunteer_id):
     phone = request.POST.get('phone', '')
     volunteer = get_object_or_404(Volunteer, id=volunteer_id)
 
-    volunteerusers1 = VolunteerUser.objects.filter(
+    volunteer_users1 = VolunteerUser.objects.filter(
         mobile_phone=phone,
         volunteer=volunteer,
     )
     #义工报名人数
-    volunteerusers2 = VolunteerUser.objects.filter(
+    volunteer_users2 = VolunteerUser.objects.filter(
         volunteer=volunteer,
     )
-    if len(volunteerusers1) >= 1:
+    if len(volunteer_users1):
         msg_json = {'error': 1, 'msg': '该手机号码已报名'}
-    elif len(volunteerusers2) >= volunteer.people_number:
+    elif len(volunteer_users2) >= volunteer.people_number:
         msg_json = {'error': 2, 'msg': '报名人数已满'}
     else:
         volunteeruser = VolunteerUser()
@@ -288,12 +300,6 @@ def buddhismknowledge_detail(request, buddhismknowledge_id):
 
     }
     template = loader.get_template('shiling/buddhismknowledge_detail.html')
-    return HttpResponse(template.render(context, request))
-
-
-def donation_add(request):
-    context = {}
-    template = loader.get_template('kikkik/login.html')
     return HttpResponse(template.render(context, request))
 
 

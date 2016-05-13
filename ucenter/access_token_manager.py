@@ -1,0 +1,65 @@
+# coding: utf-8
+
+import requests
+import time
+
+from .constants import WX_APP_ID, WX_SECRET
+import redis
+import simplejson
+
+
+WX_ACCESS_TOKEN_REFRESH_URL = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={}&secret={}'
+
+
+class AccessTokenManager(object):
+
+    instance = None
+
+    def __init__(self, app_id, app_secret):
+        self.app_id = app_id
+        self.app_secret = app_secret
+        self.redis_conn = redis.Redis()
+
+    @staticmethod
+    def get_instance():
+        if AccessTokenManager.instance is None:
+            AccessTokenManager.instance = AccessTokenManager(WX_APP_ID, WX_SECRET)
+
+        return AccessTokenManager.instance
+
+    def refresh_token(self):
+        r = requests.get(WX_ACCESS_TOKEN_REFRESH_URL.format(
+            self.app_id,
+            self.app_secret,
+        ))
+
+        obj = r.json()
+        if obj.get('errcode', None):
+            raise Exception('Failed to get the access token, code:{}'.format(obj.get('errcode')))
+
+        obj = {
+            'access_token': obj['access_token'],
+            'expired': int(time.time()) + obj['expires_in'],
+        }
+
+        self.redis_conn.set('wechat_access_token', simplejson.dumps(obj))
+
+    def get_token(self):
+        obj = self._get_token()
+        if not obj:
+            obj = self.refresh_token()
+
+        now = int(time.time())
+        if now >= obj['expired']:
+            self.refresh_token()
+
+        return obj['access_token']
+
+    def _get_token(self):
+        data = self.redis_conn.get('wechat_access_token')
+        if not data:
+            return None
+
+        return simplejson.loads(data)
+
+access_token_manager = AccessTokenManager.get_instance()

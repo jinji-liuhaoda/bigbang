@@ -5,7 +5,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
-from .models import (
+from shiling.models import (
     Temple,
     Mage,
     Category,
@@ -18,8 +18,9 @@ from .models import (
     Volunteer,
     VolunteerUser,
     BuddhismKnowledge,
-    User,
 )
+from .models import User
+from wx_auth import web_webchat_check_login
 from settings import UPLOAD_DIR, DOMAIN
 import simplejson
 import os
@@ -36,16 +37,17 @@ def index(request):
         'user': user,
         'activity_attendees': activity_attendees,
     }
-    template = loader.get_template('shiling/user.html')
+    template = loader.get_template('user.html')
     return HttpResponse(template.render(context, request))
 
 
+@csrf_exempt
 def login(request):
     try:
         request.session['user_id']
-        return HttpResponseRedirect('/user/')
+        return HttpResponseRedirect('/user/index')
     except Exception, e:
-        is_login = False
+        print e
     error = 0
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
@@ -63,40 +65,61 @@ def login(request):
         if is_validation:
             request.session['user_id'] = user.id
             request.session['openid'] = user.openid
-            return HttpResponseRedirect('/user/')
+            #获取用户ip
+            if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+                user_ip = request.META['HTTP_X_FORWARDED_FOR']
+            else:
+                user_ip = request.META['REMOTE_ADDR']
+            request.session['user_ip'] = user_ip
+            # 其他页登录需要回调
+            redirest = request.session.get('redirest', '')
+            if redirest:
+                return HttpResponseRedirect(redirest)
+            return HttpResponseRedirect('/user/index')
         else:
             error = 1
     context = {
         'title': '揭西石灵寺',
         'error': error,
     }
-    template = loader.get_template('shiling/login.html')
+    template = loader.get_template('login.html')
     return HttpResponse(template.render(context, request))
 
 
 def login_out(request):
     request.session.flush()
-    return HttpResponseRedirect('/login/')
+    return HttpResponseRedirect('/user/login')
 
 
-@csrf_exempt
-def register(request):
+@web_webchat_check_login
+def register_do(request):
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
 
-        user = User.objects.get_object_or_404(id=request.session.get('user_id', ''))
+        user = User.objects.get(id=request.session.get('user_id', ''))
         user.phone = phone
         user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
         user.save()
-        return HttpResponseRedirect('/user')
+        #获取用户ip
+        if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+            user_ip = request.META['HTTP_X_FORWARDED_FOR']
+        else:
+            user_ip = request.META['REMOTE_ADDR']
+        request.session['user_ip'] = user_ip
+        return HttpResponseRedirect('/user/index')
 
     context = {
         'title': '揭西石灵寺',
         'DOMAIN': DOMAIN,
     }
-    template = loader.get_template('shiling/register.html')
+    template = loader.get_template('register.html')
     return HttpResponse(template.render(context, request))
+
+
+def register(request):
+    request.session['register'] = 1
+    return HttpResponseRedirect('/user/register_do')
 
 
 @csrf_exempt
@@ -107,14 +130,23 @@ def pwd_update(request):
             user = get_object_or_404(User, id=request.session['user_id'])
             user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
             user.save()
-            return HttpResponseRedirect('/user/')
+            return HttpResponseRedirect('/user/index')
         except Exception, e:
-            return HttpResponseRedirect('/login')
+            return HttpResponseRedirect('/user/login')
     context = {
         'title': '揭西石灵寺',
     }
-    template = loader.get_template('shiling/pwd_update.html')
+    template = loader.get_template('pwd_update.html')
     return HttpResponse(template.render(context, request))
+
+
+@web_webchat_check_login
+def wx_login():
+    return HttpResponseRedirect('/user/login')
+
+
+def wx_pay():
+    return 1
 
 
 def ch_phone(request, phone):

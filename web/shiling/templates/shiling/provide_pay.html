@@ -1,39 +1,91 @@
 {% extends 'shiling/base.html' %}
 {% block mainbody %}
-<div class="nav">
-	<ul class="text">
-		<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
-		<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
-		<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
-		<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
-		<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
-		<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
-		<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-		<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
-	</ul>
-	<div class="user">
-		<a href="/login">
-			<img src="/static/images/user-icon.png" width="26">
-		</a>
-	</div>
-</div>
-<div class="detail">
-	<div class="thanks-box">
-		<div class="thanks-hd">
-			<h2>{{provide.detail}}</h2>
-		</div>
-		<div class="pic">
-			<img src="http://placehold.it/120x120">
-		</div>
-		<h3>{{provide.title}}</h3>
-		<div class="thanks-pay">
-			<input type="radio">&nbsp&nbsp匿名支付，金额：{{provide.price}}元</input>
-		</div>
-	</div>	
-	<div class="provide-btn">
-		<div class="button01">
-			<a href=""><h3>确认</h3></a>
+	<div class="nav">
+		<ul class="text">
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
+			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
+			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
+		</ul>
+		<div class="user">
+			<a href="/user/login">
+				<img src="/static/images/user-icon.png" width="26">
+			</a>
 		</div>
 	</div>
-</div>
+	<form role="form" method="POST" id="formid">
+		<div class="detail">
+			<div class="thanks-box">
+				<div class="thanks-hd">
+					<h2>{{provide.detail}}</h2>
+				</div>
+				<div class="pic">
+					<img src="http://placehold.it/120x120">
+				</div>
+				<h3>{{provide.title}}</h3>
+				<div class="thanks-pay">
+					<input type="radio" name="anonymous"/>&nbsp&nbsp匿名支付，金额：{{provide.price}}元
+				</div>
+			</div>	
+			<div class="provide-btn">
+				<div class="button01">
+					<input type="hidden" name="openid" id="openid" value="{{openid}}" />
+					<a id="confirm"><h3>确认</h3></a>
+				</div>
+			</div>
+		</div>
+	</form>
+{% endblock %}
+{% block script %}
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script type="text/javascript">
+    wx.config({
+        debug: false,
+        appId: '{{wx_config.appId}}',
+        timestamp: '{{wx_config.timestamp}}',
+        nonceStr: '{{wx_config.noncestr}}',
+        signature: '{{wx_config.signature}}',
+		jsApiList: ['chooseWXPay']
+    });
+</script>
+<script>
+	$(function(){
+		var wx_pay = function(prepay_id, paySign){
+			wx.chooseWXPay({
+			    timestamp: '{{wx_config.timestamp}}', // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+			    nonceStr: '{{wx_config.noncestr}}', // 支付签名随机串，不长于 32 位
+			    package: 'prepay_id='+prepay_id, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+			    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+			    paySign: paySign, // 支付签名
+			    success: function (res) {
+			        // 支付成功后的回调函数
+			    }
+			})
+		}
+		$("#confirm").on('click',function(){
+			var openid = $("#openid").val();
+			if (!openid) {
+				$("#formid").submit();
+				return
+			}
+			$.ajax({
+				url:"{{DOMAIN}}/user/wx_create_order",
+				method:'POST',
+				data:{ body:'{{provide.subtitle}}', detail:'{{provide.content}}', total_fee:'{{provide.price}}'},
+				success:function(jsonobj){
+					jsonobj = JSON.parse(jsonobj);
+					if (jsonobj.error == 0) {
+						wx_pay(jsonobj.prepay_id, jsonobj.signB);
+					}else{
+						alert(jsonobj.msg);
+					}
+				},
+			})
+		})		
+	})
+</script>
 {% endblock %}

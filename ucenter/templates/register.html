@@ -68,13 +68,13 @@
 			}
 			//校验手机是否已注册
 			$.ajax({
-				url:"{{DOMAIN}}/phone/"+phone,
+				url:"{{DOMAIN}}/user/phone/"+phone,
 				method:'GET',
 				success:function(jsonobj){
-					var jsonobj = JSON.parse(jsonobj)
+					var jsonobj = JSON.parse(jsonobj);
 					if (jsonobj.error == 1) {
-						alert(jsonobj.msg)
-						window.location.href = '{{DOMAIN}}/login';
+						alert(jsonobj.msg);
+						window.location.href = '{{DOMAIN}}/user/login';
 					}else{
 						$("#formid").submit();
 					}

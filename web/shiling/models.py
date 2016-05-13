@@ -207,26 +207,3 @@ class BuddhismKnowledge(models.Model):
 
     def __unicode__(self):
         return self.title
-
-
-class User(models.Model):
-
-    class Meta(object):
-        verbose_name = "用户"
-        verbose_name_plural = "用户"
-
-    GENDER_CHOICES = (
-        (0, '男'),
-        (1, '女'),
-    )
-
-    name = models.CharField(max_length=128, verbose_name="姓名")
-    gender = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="性别")
-    openid = models.CharField(max_length=128, blank=True, verbose_name="微信OpenID")
-    phone = models.CharField(max_length=128, blank=True, verbose_name="手机号")
-    headimgurl = models.CharField(max_length=300, blank=True, verbose_name="微信头像")
-    pwd = models.CharField(max_length=300, blank=True, verbose_name="密码")
-    created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
-
-    def __unicode__(self):
-        return self.name

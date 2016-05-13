@@ -11,9 +11,11 @@
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
 			<li><a href="/buddhismknowledge" {% if module == 'buddhismknowledge' %}class="action" {% endif %}>佛教知识</a></li>
 		</ul>
-		<div class="user"><a href="/login">
-			<img src="/static/images/user-icon.png" width="26">
-		</a></div>
+		<div class="user">
+			<a href="/user/login">
+				<img src="/static/images/user-icon.png" width="26">
+			</a>
+		</div>
 	</div>
 	<div class="event">
 		<div class="hd">
@@ -157,21 +159,21 @@
 			$(".pop2").hide()
 		})
 		$("#pop1-btn").on('click',function(){
-			var name = $("#name").val()
-			var phone = $("#phone").val()
+			var name = $("#name").val();
+			var phone = $("#phone").val();
 			if (!checkphone(phone)) {
-				alert("请输入正确手机号")
-				return false
+				alert("请输入正确手机号");
+				return false;
 			}
 			$.ajax({
 				url:"{{DOMAIN}}/activity/{{activity.id}}/signup",
 				method:'POST',
 				data:{ name:name, phone:phone},
 				success:function(jsonobj){
-					jsonobj = JSON.parse(jsonobj)
-					alert(jsonobj.msg)
+					jsonobj = JSON.parse(jsonobj);
+					alert(jsonobj.msg);
 					if (jsonobj.error == 0) {
-						window.location.reload()
+						window.location.reload();
 					}
 				},
 			})

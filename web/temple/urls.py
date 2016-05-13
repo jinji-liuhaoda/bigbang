@@ -1,11 +1,10 @@
 # coding: utf-8
 
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from shiling import (
     temple_view,
     admin_views,
-    auth_views,
 )
 
 admin.autodiscover()
@@ -43,30 +42,14 @@ urlpatterns = [
     url(r'^buddhismknowledge/$', temple_view.buddhismknowledge_list, name='buddhismknowledge_list'),
     url(r'^buddhismknowledge/(?P<buddhismknowledge_id>\d+)$', temple_view.buddhismknowledge_detail, name='buddhismknowledge_detail'),
 
-    # 捐赠
-    url(r'^donation/(?P<donation_type>\w+)/(?P<donation_amount>\w+)/add$', temple_view.donation_add, name='donation_add'),
-
     # 主持详情
     url(r'^host_detail/(?P<host_id>\d+)$', temple_view.host_detail, name='host_detail'),
-
-    # 微信网页授权
-    # url(r'^wechat/login/$', auth_views.wechat_login, name='wechat_login'),
-    # url(r'^wechat/do_login/$', auth_views.wechat_do_login, name='wechat_do_login'),
-
-    #支付
-    url(r'^pay/(?P<pay_type>\d+)/(?P<donation_amount>\w+)/add$', temple_view.pay_add, name='pay_add'),
-
-    #用户中心
-    url(r'^login/$', auth_views.login, name='login'),
-    url(r'^login_out/$', auth_views.login_out, name='login_out'),
-    url(r'^register/$', auth_views.register, name='register'),
-    url(r'^user/$', auth_views.index, name='index'),
-    url(r'^pwd_update/$', auth_views.pwd_update, name='pwd_update'),
-    url(r'^phone/(?P<phone>\d+)$', auth_views.check_phone, name='check_phone'),
 
     # 后台
     # url(r'^admin/', admin_views.index),
     url(r'^admin/', admin.site.urls),
+    # 用户中心
+    url(r'^user/', include('ucenter.urls')),
 
     # 后台上传
     url(r'^admin/upload$', admin_views.upload, name='upload'),

@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shiling',
-    'wechat_related',
+    'ucenter',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -106,6 +106,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'web', 'static')
 ]
 
-UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
-
 DOMAIN = 'http://localhost:8000'
+
+UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')

@@ -4,4 +4,4 @@ from django.apps import AppConfig
 
 
 class WechatRelatedConfig(AppConfig):
-    name = 'wechat_related'
+    name = 'ucenter'
