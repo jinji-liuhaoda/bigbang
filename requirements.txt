@@ -1,0 +1,4 @@
+simplejson
+requests==2.9.1
+Django==1.9
+redis==2.10.5
