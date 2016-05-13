@@ -20,6 +20,7 @@ a { color:#bbbbbc; text-decoration:none;}
 .nav a{height:52px;  margin:0 22px 0 18px; line-height: 50px; font-size: 15px; font-weight:bold; display: block; }
 .nav a.action{color: #edb30d; border-bottom: 2px solid #edb30d; box-sizing: border-box;}
 .nav .special{	margin-right: 60px;}
+
 .user{width: 45px;height:52px; box-shadow: -2px -5px 10px #000; position: fixed; right:0px; background: #303133;}
 .user img{margin-top: 15px; margin-left: 9px; border-radius: 50%;}
 .logo {text-align: center;}
@@ -51,6 +52,7 @@ a { color:#bbbbbc; text-decoration:none;}
 .amount-of-money .icon span{font-size: 20px; font-weight: bold; color: #fff; line-height: 40px;}
 .amount-of-money h3{ margin-left: 62px; line-height: 40px; text-align: left;color: #ababab;}
 .button01{height: 39px; width: 100%; background: #1b1c20; border-radius: 20px; margin:6px auto; text-align: center;}
+
 .button01 h3{color: #fff; line-height: 40px;}
 .click {padding: 58px 28px 90px; }
 .click li{float: left; width: 50%; text-align: center;}
@@ -186,7 +188,9 @@ li.last{ width: 100%; }
 .event-content h1{margin: 0;}
 
 .pop{height: 100%; width: 100%; background: rgba(0,0,0,0.5); position: fixed; top: 0;left: 0;}
+
 .apply{margin:10% 5%;width: 90%; padding-bottom:  48px;background: #fff; border-radius: 6px;position: fixed; max-height:90%;min-height:300px; overflow: hidden;}
+
 .apply img{position: absolute; right: 9px; top: 9px;}
 .apply .apply-hd{ padding: 20px 20px 20px 15px; border-bottom: 1px solid #eee;}
 .apply h2{text-align:left; font-size: 17px; color: #333;}
@@ -250,6 +254,7 @@ li.last{ width: 100%; }
 .sign-in{height: 88px; padding-left: 16px;}
 .sign-in-info li{height: 46px; line-height: 46px; border-bottom: 1px solid #eee;}
 .sign-in-info input{height:75%;width: 96%; font-size: 15px;outline: none;}
+
 .sign-in .provide-btn{ padding: 0 16px 0 0 ; }
 .button03{height: 39px; width: 100%; border-radius: 20px; margin: 12px auto; text-align: center; background: #ddd;}
 .button03 h3{color: #fff; line-height: 40px;}
