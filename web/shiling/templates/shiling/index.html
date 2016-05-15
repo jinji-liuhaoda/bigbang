@@ -10,7 +10,7 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
 			</ul>
 		</div>
 		<div class="user">
@@ -53,11 +53,27 @@
  					{{mage.content}}
  				</div>
 			</div>
-			<a href="/host_detail/{{mage.id}}">
-				<div class="more">
-					<span>更多介绍</span>
-				</div>
-			</a>
+			<div class="more" id="mage">
+				<span>更多介绍</span>
+			</div>
 		</div>
 	</div>
+{% endblock %}
+{% block script %}
+<script>
+	$(function(){
+		$("#mage").on('click',function(){
+			$.ajax({
+				url:"{{DOMAIN}}/sentiment/{{mage.id}}",
+				method:'GET',
+				success:function(jsonobj){
+					jsonobj = JSON.parse(jsonobj);
+					if (jsonobj.error == 0) {
+						window.location.href = '/host_detail/{{mage.id}}';
+					};
+				},
+			})
+		})		
+	})
+</script>
 {% endblock %}

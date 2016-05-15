@@ -18,6 +18,7 @@ import hashlib
 import random
 import requests
 import xml.etree.ElementTree as ET
+from xml.sax.saxutils import escape
 
 
 @csrf_exempt
@@ -41,10 +42,10 @@ def create_order(request):
                            <mch_id>" + WX_MCH_ID + "</mch_id>\
                            <device_info>WEB</device_info>\
                            <nonce_str>" + noncestr + "</nonce_str>\
-                           <body>" + body + "</body>\
-                           <detail>" + detail + "</detail>\
+                           <body>" + escape(body) + "</body>\
+                           <detail>" + escape(detail) + "</detail>\
                            <product_id>" + product_id + "</product_id>\
-                           <notify_url>" + DOMAIN + "/user/wx_pay_test/</notify_url>\
+                           <notify_url>" + DOMAIN + "/user/wx_pay/</notify_url>\
                            <openid>" + openid + "</openid>\
                            <out_trade_no>" + out_trade_no + "</out_trade_no>\
                            <spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>\

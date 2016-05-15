@@ -9,7 +9,7 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
 		</ul>
 	</div>
 	<div class="user"><a href="/user/login">
@@ -22,7 +22,7 @@
 			<div class="news-info">
 				<ul>
 					<li>
-						<img src="/static/images/look.png" width="14">&nbsp;168						
+						<img src="/static/images/look.png" width="14">&nbsp;{{volunteer.views_count}}						
 					</li>
 					<li>
 						<span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
@@ -80,21 +80,21 @@
 	<div class="apply">
 		<div class="apply-hd">
 			<h2>信息登记</h2>
-			<a id="close1"><img src="/static/images/close.png" width="14"></a>
+			<a href=""><img src="/static/images/close.png" width="14"></a>
 		</div>
-		<div>
-			<ul>
-				<li>
-					<div class="apply-info">
-						<input type="text" name="name" id="name" placeholder="姓名" class="text-style" />
-					</div>
-				</li>
-				<li>
-					<div class="apply-info">
-						<input type="text" name="phone" id="phone" placeholder="电话" class="text-style" />
-					</div>
-				</li>
-			</ul>
+		<div class="apply-bd">	
+			<div class="sign-in">
+			<div class="sign-in-info">
+				<ul>
+					<li>
+					<input type="text" name="name" id="name" placeholder="姓名" />
+					</li>
+					<li>
+					<input type="text" name="phone" id="phone" placeholder="电话" />
+					</li>
+				</ul>
+			</div>
+			</div>
 		</div>
 		<div class="provide-btn">
 			<div class="button01" id="pop1-btn">
@@ -140,28 +140,35 @@
 {% block script %}
 <script>
 	$(function(){
-		$('.pop1').hide()
-		$('.pop2').hide()
+		$('.pop1').hide();
+		$('.pop2').hide();
 		$(".provide-btn").on('click',function(){
-			$(".pop1").show()
-			$(".pop2").hide()
+			$(".pop1").show();
+			$(".pop2").hide();
 		})
 		$(".start").on('click',function(){
-			$(".pop1").hide()
-			$(".pop2").show()
+			$(".pop1").hide();
+			$(".pop2").show();
 		})
 		$("#close1").on('click',function(){
-			$(".pop1").hide()
+			$(".pop1").hide();
 		})
 		$("#close2").on('click',function(){
-			$(".pop2").hide()
+			$(".pop2").hide();
+		})
+		$.ajax({
+			url:"{{DOMAIN}}/views_count_volunteer/{{volunteer.id}}",
+			method:'GET',
+			success:function(jsonobj){
+				console.log(jsonobj)
+			},
 		})
 		$("#pop1-btn").on('click',function(){
-			var name = $("#name").val()
-			var phone = $("#phone").val()
+			var name = $("#name").val();
+			var phone = $("#phone").val();
 			if (!checkphone(phone)) {
-				alert("请输入正确手机号")
-				return false
+				alert("请输入正确手机号");
+				return false;
 			}
 			$.ajax({
 				url:"{{DOMAIN}}/volunteer/{{volunteer.id}}/signup",
