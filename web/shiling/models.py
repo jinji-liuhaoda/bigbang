@@ -35,6 +35,7 @@ class Mage(models.Model):
     detail = models.TextField(null=False, verbose_name="简介")
     experience = models.TextField(null=False, default='', verbose_name="履历")
     content = models.TextField(null=False, verbose_name="详情")
+    sentiment = models.IntegerField(default=0, verbose_name="人气")
     temple = models.ForeignKey(Temple, blank=True, null=True, verbose_name="所属寺庙")
 
     def __unicode__(self):

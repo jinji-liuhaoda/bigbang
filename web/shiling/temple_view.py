@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum
 from ucenter.wx_config import get_wx_config
 from ucenter.models import User
 from .models import (
@@ -100,6 +101,9 @@ def goodraise_list(request):
     goodraises = GoodRaise.objects.filter(
         end_time__gte=cur_time,
     )
+    for goodraise in goodraises:
+        ret = Good.objects.filter(goodraise=goodraise).aggregate(Sum('support_price'))
+        goodraise.support_price_num = ret.get('support_price__sum')
     context = {
         'title': '揭西石灵寺',
         'module': 'goodraise',
@@ -111,11 +115,14 @@ def goodraise_list(request):
 
 def goodraise_detail(request, goodraise_id):
     goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
+    ret = Good.objects.filter(goodraise=goodraise).aggregate(Sum('support_price'))
+    support_price_num = ret.get('support_price__sum')
     goods = Good.objects.filter(goodraise=goodraise).order_by('-id')
     context = {
         'title': '揭西石灵寺',
         'module': 'goodraise',
         'goodraise': goodraise,
+        'support_price_num': support_price_num,
         'goods': goods,
     }
     template = loader.get_template('shiling/goodraise_detail.html')
@@ -312,6 +319,34 @@ def host_detail(request, host_id):
     }
     template = loader.get_template('shiling/host_detail.html')
     return HttpResponse(template.render(context, request))
+
+
+def sentiment(request, host_id):
+    mage = get_object_or_404(Mage, id=host_id)
+    mage.sentiment = mage.sentiment + 1
+    mage.save()
+    return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
+
+
+def views_count(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id)
+    activity.views_count = activity.views_count + 1
+    activity.save()
+    return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
+
+
+def views_count_news(request, news_id):
+    news = get_object_or_404(News, id=news_id)
+    news.views_count = news.views_count + 1
+    news.save()
+    return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
+
+
+def views_count_volunteer(request, volunteer_id):
+    volunteer = get_object_or_404(Volunteer, id=volunteer_id)
+    volunteer.views_count = volunteer.views_count + 1
+    volunteer.save()
+    return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
 
 
 def pay_add(request):
