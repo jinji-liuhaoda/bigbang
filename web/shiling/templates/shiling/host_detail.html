@@ -1,0 +1,23 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="detail-abbot">
+		<div class="content">
+			<div class="abbot-box">
+				<div class="introduce-abbot">
+					<h5>住持介绍</h5>
+					<h1>{{mage.name}}</h1>
+					<div class="line"></div>
+					<div class="born">
+						{{mage.detail}}
+					</div>
+					<img src="{{mage.cover}}" width="100%";>
+					<h2>{{mage.mage_num}}</h2>
+					<h4>住持</h4>
+	 				<div class="">
+	 					{{mage.content}}
+	 				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

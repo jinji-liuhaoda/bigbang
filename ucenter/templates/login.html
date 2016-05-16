@@ -1,0 +1,86 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+<form role="form" method="POST" id="formid">
+		{% csrf_token %}
+	<div class="sign-in">
+		<div class="sign-in-info">
+			<ul>
+				<li>
+					<input type="text" name="phone" id="phone" placeholder="手机号"/>
+				</li>
+				<li>
+					<input type="text" name="pwd" id="pwd" placeholder="密码"/>
+				</li>
+			</ul>
+		</div>
+		<div class="provide-btn">
+			<div class="button03">
+				<a id="login"><h3>登录</h3></a>
+			</div>
+			<div class="button01">
+				<a href="/user/register"><h3>注册</h3></a>
+			</div>
+			<div class="button04">
+				<a href="/user/wx_login"><h3>微信登录</h3></a>
+			</div>
+		</div>
+		<div class="key">
+			<ul>
+				<li class="left">
+					<input type="radio"/>记住密码					
+				</li>
+				<li class="right">
+					<span>忘记密码?</span>					
+				</li>
+			</ul>
+		</div>
+	</div>
+</form>
+{% endblock %}
+{% block script %}
+<script>
+	if ({{error}}) {
+		alert("用户名或密码错误");
+	}
+</script>
+<script>
+	$(function(){
+		var is_login = false;
+		var login_status = function(){
+			var phone = $("#phone").val();
+			var pwd = $("#pwd").val();
+			if (phone && pwd && !is_login) {
+				is_login = true;
+				$("#login").parent().removeClass('button03');
+				$("#login").parent().addClass('button01');
+				$("#login").on('click',function(){
+					login_check();
+				})
+			}else if(!phone || !pwd){
+				$("#login").off();
+				$("#login").parent().addClass('button03');
+				$("#login").parent().removeClass('button01');
+			}
+		}
+		setInterval(login_status,50);
+
+		var login_check =  function(){
+			var phone = $("#phone").val();
+			var pwd = $("#pwd").val();
+			if (!phone || !pwd) {
+				alert("请输入完整信息");
+				return false;
+			}
+			if (!checkphone(phone)) {
+				alert("请输入正确手机号")
+				return false;
+			}
+			if (pwd.length<6) {
+				alert("密码必须6位以上")
+				return false;
+			}
+			$("#formid").submit();
+		}
+	})
+</script>
+{% endblock %}

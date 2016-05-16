@@ -14,7 +14,6 @@ from .models import (
     Volunteer,
     VolunteerUser,
     BuddhismKnowledge,
-    User,
 )
 from settings import UPLOAD_DIR
 import os

@@ -1,8 +1,7 @@
 {% extends 'shiling/base.html' %}
 {% block mainbody %}
-	<div class="index">
-		<div class="nav">
-			<ul class="text">
+	<div class="nav">
+		<ul class="text special">			
 			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
 			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
@@ -11,69 +10,66 @@
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
 			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
-			</ul>
-		</div>
-		<div class="user">
-			<a href="/user/login">
+		</ul>
+	</div>
+	<div class="user">
+		<a href="/user/login">
 			<img src="/static/images/user-icon.png" width="26">
-			</a>
-		</div>
-		<div class="logo">
-			<img src="/static/images/logo.png" width="142">
-		</div>
-		<a href="">
-			<div class="about">
-				<span>关于寺院</span>
-			</div>
 		</a>
 	</div>
-	<div class="content">
-		<div class="temple-box">
-			<div class="introduce-temple">
-				<h5>寺院介绍</h5>
-				<h1>{{temple.title}}</h1>
-				<div class="line"></div>
-				<div class="">
-					{{temple.content}}
-				</div>
-			</div>
-		</div>
-		<div class="abbot-box">
-			<div class="introduce-abbot">
-				<h5>住持介绍</h5>
-				<h1>{{mage.name}}</h1>
-				<div class="line"></div>
-				<div class="born">
-					{{mage.detail}}
-				</div>
-				<img src="{{mage.cover}}" width="100%";>
-				<h2>{{mage.mage_num}}</h2>
-				<h4>住持</h4>
- 				<div class="">
- 					{{mage.content}}
- 				</div>
-			</div>
-			<div class="more" id="mage">
-				<span>更多介绍</span>
-			</div>
-		</div>
+	<div class="news-box">
+		<ul>
+			{% for new in news %}
+			<li>
+				<a id="views_count_news" idvar="{{new.id}}">				
+					<div class="news">
+						<div class="news-pic">
+							<img src="http://placehold.it/335x132" width="100%">
+						</div>
+						<div class="news-content">
+							<div class="hd">
+								<h2>{{new.title}}</h2>
+							</div>
+							<div class="news-info">
+								<ul>
+									<li>
+										<img src="/static/images/look.png" width="14">&nbsp;{{new.views_count}}
+									</li>
+									<li>
+										<span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+									</li>
+									<li>
+										<img src="/static/images/clock.png" width="10">&nbsp;{{new.end_time}}
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="news-text">
+							<h4>{{new.detail}}</h4>
+						</div>
+					</div>
+				</a>
+			</li>
+			{% endfor %}
+		</ul>
 	</div>
 {% endblock %}
 {% block script %}
 <script>
 	$(function(){
-		$("#mage").on('click',function(){
+		$("#views_count_news").on('click',function(){
+			id =  $(this).attr("idvar")
 			$.ajax({
-				url:"{{DOMAIN}}/sentiment/{{mage.id}}",
+				url:"{{DOMAIN}}/views_count_news/" + id,
 				method:'GET',
 				success:function(jsonobj){
 					jsonobj = JSON.parse(jsonobj);
 					if (jsonobj.error == 0) {
-						window.location.href = '/host_detail/{{mage.id}}';
+						window.location.href = '/news/' + id;
 					};
 				},
 			})
-		})		
+		})	
 	})
 </script>
 {% endblock %}

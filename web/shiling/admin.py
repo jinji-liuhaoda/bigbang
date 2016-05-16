@@ -13,7 +13,6 @@ from .models import (
     Volunteer,
     VolunteerUser,
     BuddhismKnowledge,
-    User,
 )
 
 
@@ -57,6 +56,5 @@ admin.site.register(News)
 admin.site.register(Volunteer)
 admin.site.register(VolunteerUser)
 admin.site.register(BuddhismKnowledge)
-admin.site.register(User)
 admin.site.register(Provide, ProvideAdmin)
 admin.site.register(Category, CategoryAdmin)

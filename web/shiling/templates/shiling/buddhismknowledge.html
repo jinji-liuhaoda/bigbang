@@ -1,0 +1,35 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text special">			
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
+			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
+			<li><a href="/buddhismknowledge" class="special {% if module == 'buddhismknowledge' %}action {% endif %}" >佛教知识</a></li>
+		</ul>
+	</div>
+	<div class="user">
+		<a href="/user/login">
+			<img src="/static/images/user-icon.png" width="26">
+		</a>
+	</div>
+	<div class="knowledge">
+		<ul>
+			{% for buddhismknowledge in buddhismknowledges %}
+			<li>
+				<a href="/buddhismknowledge/{{buddhismknowledge.id}}">
+					<div class="pic">
+						<img src="http://placehold.it/120x120">
+					</div>
+				</a>
+				<h3>{{buddhismknowledge.title}}</h3>
+				<a href="/buddhismknowledge/{{buddhismknowledge.id}}"><h5>查&nbsp看&nbsp详&nbsp情</h5></a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text special">
+			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
+			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
+			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
+			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
+			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
+			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
+		</ul>
+	</div>
+	<div class="user">
+		<a href="/user/login">
+			<img src="/static/images/user-icon.png" width="26">
+		</a>
+	</div>
+	<div class="financing-detail-box">
+		<div class="model1">
+			<div class="hd">
+				<h2>{{goodraise.title}}</h2>
+				<div><img src="/static/images/clock.png" width="10">&nbsp;<span>{{goodraise.end_time}}</span></div>
+			</div>
+			<div class="img-box"><img src="http://placehold.it/335x132" width="100%"></div>
+			<div class="Progress">
+				<div class="Progress-bar">
+					<div class="Progress-accomplish"></div>
+					<h5>{{support_price_num}}/{{goodraise.total_price}}</h5>
+				</div>	
+			</div>
+			<div class="donation">
+				<div class="amount-of-money">
+					<div class="icon">
+						<span>￥</span>	
+					</div>
+					<div class="icon-bd">
+						<input type="text" name="money" placeholder="输入随喜金额" ></input>
+					</div>
+				</div>
+				<div class="button01">
+					<a href=""><h3>随喜确认</h3></a>
+				</div>
+			</div>
+		</div>
+		<div class="model2">
+			<ul>
+				{% for good in goods %}
+				<li>
+					<h2>{{good.name}}</h2>
+					<ul>
+						<li class="left">
+							<h3>已有9人支持</h3>
+						</li>
+						<li class="right">
+						<a href="/good_pay/{{good.id}}">
+							<div class="start">
+								<span>支持{{good.support_price}}元</span>
+							</div>
+						</a>
+						</li>
+						<div class="clear"></div>				
+					</ul>			
+				</li>
+				{% endfor %}
+			</ul>		
+		</div>
+		<div class="model3">
+			<div class="content">
+				<div class="abbot-box">
+					<div class="introduce-abbot">
+						<h5>详情</h5>
+						<h1>{{goodraise.title}}</h1>
+						<div class="line"></div>
+ 						<div class="">
+ 							{{goodraise.content}}
+ 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="model4">
+			<div class="model4-hd">
+				<h1>参与名单</h1>
+				<div class="line"></div>
+			</div>
+			<ul>
+				<li>
+					<div class="model4-box">
+						<ul>
+							<li>
+								<div class="pray-bd-pic">
+									<img src="http://placehold.it/52x52">
+								</div>
+							</li>
+							<li class="model4-info">
+								<h3>匿名</h3>
+								<h5>一天前</h5>
+							</li>
+							<li class="right">
+								<h3>捐助了<span>500</span>元</h3>
+							</li>
+
+						</ul>
+					</div>				
+				</li>
+			</ul>
+		</div>
+	</div>
+{% endblock %}

@@ -16,6 +16,7 @@ class Temple(models.Model):
     title = models.CharField(max_length=128, verbose_name="寺庙标题")
     cover = models.CharField(max_length=128, verbose_name="寺庙封面")
     detail = models.TextField(null=False, verbose_name="简介")
+    address = models.TextField(null=False, default='', verbose_name="地址")
     content = models.TextField(null=False, verbose_name="详情")
 
     def __unicode__(self):
@@ -32,7 +33,9 @@ class Mage(models.Model):
     mage_num = models.CharField(max_length=128, verbose_name="法号")
     cover = models.CharField(max_length=128, verbose_name="头像")
     detail = models.TextField(null=False, verbose_name="简介")
+    experience = models.TextField(null=False, default='', verbose_name="履历")
     content = models.TextField(null=False, verbose_name="详情")
+    sentiment = models.IntegerField(default=0, verbose_name="人气")
     temple = models.ForeignKey(Temple, blank=True, null=True, verbose_name="所属寺庙")
 
     def __unicode__(self):
@@ -59,6 +62,7 @@ class Provide(models.Model):
         verbose_name_plural = "供养"
 
     title = models.CharField(max_length=128, verbose_name="标题")
+    subtitle = models.CharField(max_length=300, default='', verbose_name="子标题")
     category = models.ForeignKey(Category, blank=True, null=True, verbose_name="所属分类")
     detail = models.TextField(null=False, verbose_name="描述")
     cover = models.CharField(max_length=128, blank=False, verbose_name="封面图片")
@@ -204,24 +208,3 @@ class BuddhismKnowledge(models.Model):
 
     def __unicode__(self):
         return self.title
-
-
-class User(models.Model):
-
-    class Meta(object):
-        verbose_name = "用户"
-        verbose_name_plural = "用户"
-
-    GENDER_CHOICES = (
-        (0, '男'),
-        (1, '女'),
-    )
-
-    name = models.CharField(max_length=128, verbose_name="姓名")
-    gender = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="性别")
-    openid = models.CharField(max_length=128, blank=True, verbose_name="微信OpenID")
-    headimgurl = models.CharField(max_length=300, blank=True, verbose_name="微信头像")
-    created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
-
-    def __unicode__(self):
-        return self.name

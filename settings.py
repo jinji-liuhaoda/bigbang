@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shiling',
+    'ucenter',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -106,8 +107,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'web', 'static')
 ]
 
-UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
+DOMAIN = 'http://localhost:8000'
 
-ROOT = os.path.abspath(os.path.dirname(__file__))
-if os.path.exists(os.path.join(ROOT, "settings_local.py")):
-    execfile(os.path.join(ROOT, "settings_local.py"))
+
+UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
