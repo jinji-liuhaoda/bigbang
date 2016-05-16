@@ -151,7 +151,7 @@ def wx_pay():
 
 def ch_phone(request, phone):
     users = User.objects.filter(phone=phone)
-    if len(users):
+    if users:
         return True
     else:
         return False

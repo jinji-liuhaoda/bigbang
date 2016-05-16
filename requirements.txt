@@ -2,3 +2,7 @@ simplejson
 requests==2.9.1
 Django==1.9
 redis==2.10.5
+<<<<<<< HEAD
+mysql-python==1.2.5
+=======
+>>>>>>> 706d301e5d83228c0296c619ac288b1a30140d51

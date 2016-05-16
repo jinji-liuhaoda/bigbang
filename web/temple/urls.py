@@ -10,7 +10,7 @@ from shiling import (
 admin.autodiscover()
 urlpatterns = [
     # 首页
-    url(r'^index$', temple_view.index, name='temple_index'),
+    url(r'^index/$', temple_view.index, name='temple_index'),
 
     # 供养
     url(r'^provide/$', temple_view.provide_list, name='provide_list'),
@@ -29,14 +29,17 @@ urlpatterns = [
     url(r'^activity/$', temple_view.activity_list, name='activity_list'),
     url(r'^activity/(?P<activity_id>\d+)$', temple_view.activity_detail, name='activity_detail'),
     url(r'^activity/(?P<activity_id>\d+)/signup$', temple_view.activity_signup, name='activity_signup'),
+    url(r'^views_count/(?P<activity_id>\d+)$', temple_view.views_count, name='views_count'),
 
     # 新闻
     url(r'^news/$', temple_view.news_list, name='news_list'),
     url(r'^news/(?P<news_id>\d+)$', temple_view.news_detail, name='news_detail'),
+    url(r'^views_count_news/(?P<news_id>\d+)$', temple_view.views_count_news, name='views_count_news'),
 
     # 义工
     url(r'^volunteer/$', temple_view.volunteer_detail, name='volunteer_detail'),
     url(r'^volunteer/(?P<volunteer_id>\d+)/signup$', temple_view.volunteer_signup, name='volunteer_signup'),
+    url(r'^views_count_volunteer/(?P<volunteer_id>\d+)$', temple_view.views_count_volunteer, name='views_count_volunteer'),
 
     # 佛教知识
     url(r'^buddhismknowledge/$', temple_view.buddhismknowledge_list, name='buddhismknowledge_list'),
@@ -44,6 +47,7 @@ urlpatterns = [
 
     # 主持详情
     url(r'^host_detail/(?P<host_id>\d+)$', temple_view.host_detail, name='host_detail'),
+    url(r'^sentiment/(?P<host_id>\d+)$', temple_view.sentiment, name='sentiment'),
 
     # 后台
     # url(r'^admin/', admin_views.index),

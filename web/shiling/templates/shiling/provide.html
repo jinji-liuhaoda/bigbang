@@ -9,7 +9,7 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
 		</ul>
 	</div>
 	<div class="user">
@@ -34,7 +34,11 @@
 				<div class="icon">
 					<span>￥</span>	
 				</div>
-				<h3>输入随喜金额</h3> 
+				<div class="icon-bd">
+				<input type="text" name="money" placeholder="输入随喜金额" class="bg-c"></input>
+				</div>		
+
+
 			</div>
 			<div class="button01">
 				<a href=""><h3>确认</h3></a>
@@ -86,7 +90,7 @@
 							</div>
 						</a>
 						<h3>{{provide.title}}</h3>
-						<a href="/provide/{{provide.id}}"><h5>查&nbsp看&nbsp详&nbsp情</h5></a>
+						<a href="/provide/{{provide.id}}"><h5>查&nbsp;看&nbsp;详&nbsp;情</h5></a>
 					</li>
 					{% endfor %}
 				</ul>

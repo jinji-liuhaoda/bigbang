@@ -9,7 +9,7 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
 		</ul>
 	</div>
 	<div class="user">
@@ -25,7 +25,7 @@
 				</div>
 				<h1>{{mage.mage_num}}</h1>
 				<div class="pray-text">
-					<a href=""><span>人气&nbsp2030</span></a><span>&nbsp&nbsp｜&nbsp&nbsp</span><a href=""><span>佛法&nbsp12</span></a>
+					<a href=""><span>人气&nbsp{{mage.sentiment}}</span></a><span>&nbsp&nbsp｜&nbsp&nbsp</span><a href=""><span>佛法&nbsp12</span></a>
 				</div>
 				<div class="pray-nav">
 					<ul>
@@ -41,17 +41,12 @@
 		</div>
 	</div>
 	<div class="abbot-index">
-<!-- 	<div class="address">
-			<h4>{{temple.address}}</h4>
-		</div> -->
 		<div class="content">
 			<p>{{mage.detail}}</p>
 			<img src="http://placehold.it/335x144" width="100%">
-			<a href="/host_detail/{{mage.id}}">
-				<div class="more">
-					<span>更多介绍</span>
-				</div>
-			</a>
+			<div class="more" id = "mage">
+				<span>更多介绍</span>
+			</div>
 		</div>
 	</div>
 	<div class="pray-bd">
@@ -81,21 +76,33 @@
 {% block script %}
 <script>
 	$(function(){
-		$(".abbot-index").hide()
-		$(".pray-bd").show()
-		$('#bless').addClass('select')
+		$(".abbot-index").hide();
+		$(".pray-bd").show();
+		$('#bless').addClass('select');
 		$("#main").on('click',function(){
-			$(".abbot-index").show()
-			$(".pray-bd").hide()
-			$("#bless").removeClass('select')
-			$(this).addClass('select')
+			$(".abbot-index").show();
+			$(".pray-bd").hide();
+			$("#bless").removeClass('select');
+			$(this).addClass('select');
 		})
 		$("#bless").on('click',function(){
-			$(".abbot-index").hide()
-			$(".pray-bd").show()
-			$("#main").removeClass('select')
-			$(this).addClass('select')
+			$(".abbot-index").hide();
+			$(".pray-bd").show();
+			$("#main").removeClass('select');
+			$(this).addClass('select');
 		})
+		$("#mage").on('click',function(){
+			$.ajax({
+				url:"{{DOMAIN}}/sentiment/{{mage.id}}",
+				method:'GET',
+				success:function(jsonobj){
+					jsonobj = JSON.parse(jsonobj);
+					if (jsonobj.error == 0) {
+						window.location.href = '/host_detail/{{mage.id}}';
+					};
+				},
+			})
+		})	
 	})
 </script>
 {% endblock %}
