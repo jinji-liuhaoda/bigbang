@@ -10,8 +10,8 @@ from ucenter.models import (
 def update_wechat_user_info():
     users = User.objects.all()
     for user in users:
-            if user.openid:
-                user_manager.update_wechat_user_info(user.openid)
+        if user.openid:
+            user_manager.update_wechat_user_info(user.openid)
 
 
 if __name__ == '__main__':

@@ -10,7 +10,7 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
 		</ul>
 	</div>
 	<div class="user">
@@ -31,7 +31,7 @@
 				<p>{{good.detail}}</p>
 			</div>
 			<div class="thanks-pay">
-				<input type="radio">&nbsp&nbsp匿名支付，金额：1.0元</input>
+				<input type="radio"/>&nbsp;&nbsp;匿名支付，金额：1.0元
 			</div>
 		</div>
 	</div>

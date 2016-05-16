@@ -1,4 +1,3 @@
-
 # coding: utf-8
 
 from django.conf.urls import url
@@ -20,5 +19,5 @@ urlpatterns = [
     url(r'^wx_create_order/$', wx_pay.create_order, name='create_order'),
 
     # 支付成功后微信回调地址
-    url(r'^wx_pay_test/$', wx_pay.wx_callback_pay, name='wx_callback_pay'),
+    url(r'^wx_pay/$', wx_pay.wx_callback_pay, name='wx_callback_pay'),
 ]

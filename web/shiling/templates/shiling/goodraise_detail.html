@@ -9,7 +9,7 @@
 			<li><a href="/activity" {% if module == 'activity' %}class="action" {% endif %}>活动</a></li>
 			<li><a href="/news" {% if module == 'news' %}class="action" {% endif %}>新闻</a></li>
 			<li><a href="/volunteer" {% if module == 'volunteer' %}class="action" {% endif %}>义工</a></li>
-			<li><a href="/buddhismknowledge"  class="special {% if module == 'buddhismknowledge' %}'action' {% endif %}" >佛教知识</a></li>
+			<li><a href="/buddhismknowledge" class="special" {% if module == 'buddhismknowledge' %}  action {% endif %} >佛教知识</a></li>
 		</ul>
 	</div>
 	<div class="user">
@@ -21,13 +21,13 @@
 		<div class="model1">
 			<div class="hd">
 				<h2>{{goodraise.title}}</h2>
-				<div><img src="/static/images/clock.png" width="10"><span>{{goodraise.end_time}}</span></div>
+				<div><img src="/static/images/clock.png" width="10">&nbsp;<span>{{goodraise.end_time}}</span></div>
 			</div>
 			<div class="img-box"><img src="http://placehold.it/335x132" width="100%"></div>
 			<div class="Progress">
 				<div class="Progress-bar">
 					<div class="Progress-accomplish"></div>
-					<h5>16100/{{goodraise.total_price}}</h5>
+					<h5>{{support_price_num}}/{{goodraise.total_price}}</h5>
 				</div>	
 			</div>
 			<div class="donation">
@@ -35,7 +35,9 @@
 					<div class="icon">
 						<span>￥</span>	
 					</div>
-					<h3>输入金额</h3> 
+					<div class="icon-bd">
+						<input type="text" name="money" placeholder="输入随喜金额" ></input>
+					</div>
 				</div>
 				<div class="button01">
 					<a href=""><h3>随喜确认</h3></a>
