@@ -5,7 +5,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import User, Order, GoodId
-from wechat_auth import web_webchat_check_login
+from wx_auth import web_webchat_check_login
 from settings import UPLOAD_DIR, DOMAIN
 from .constants import WX_APP_ID, WX_SECRET, WX_MCH_ID
 from .wx_config import get_wx_config
