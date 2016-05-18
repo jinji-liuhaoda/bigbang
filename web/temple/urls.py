@@ -10,6 +10,7 @@ from shiling import (
 admin.autodiscover()
 urlpatterns = [
     # 首页
+    url(r'^$', temple_view.index, name='temple_index'),
     url(r'^index/$', temple_view.index, name='temple_index'),
 
     # 供养
