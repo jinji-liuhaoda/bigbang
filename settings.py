@@ -111,3 +111,6 @@ DOMAIN = 'http://localhost:8000'
 
 
 UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
+ROOT = os.path.abspath(os.path.dirname(__file__))
+if os.path.exists(os.path.join(ROOT, "settings_local.py")):
+    execfile(os.path.join(ROOT, "settings_local.py"))
