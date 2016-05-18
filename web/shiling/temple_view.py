@@ -29,13 +29,15 @@ import time
 
 
 def index(request):
-    temple = Temple.objects.all()[0]
-    mage = get_object_or_404(Mage, temple=temple)
+    temples = Temple.objects.all()
+    if temples:
+        temple = temples[0]
+    else:
+        temple = {}
     context = {
         'title': '揭西石灵寺',
         'module': 'shouye',
         'temple': temple,
-        'mage': mage,
     }
     template = loader.get_template('shiling/index.html')
     return HttpResponse(template.render(context, request))
@@ -141,13 +143,15 @@ def good_pay(request, good_id):
 
 
 def blessing_list(request):
-    temple = Temple.objects.all()[0]
-    mage = get_object_or_404(Mage, temple=temple)
+    temples = Temple.objects.all()
+    if temples:
+        temple = temples[0]
+    else:
+        temple = {}
     context = {
         'title': '揭西石灵寺',
         'module': 'blessing',
         'temple': temple,
-        'mage': mage,
     }
     template = loader.get_template('shiling/blessing.html')
     return HttpResponse(template.render(context, request))
