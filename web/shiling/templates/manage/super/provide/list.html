@@ -1,0 +1,49 @@
+{% extends 'manage/super/base.html' %}
+
+{% block pageheader %}
+供养管理
+{% endblock %}
+
+{% block mainbody %}
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">
+      供养管理
+    </h3>
+    <div class="box-tools">
+    </div>
+  </div><!-- /.box-header -->
+
+  <div class="box-body">
+    <div style="margin-bottom:15px;">
+      <a href="/admin/provide/create" class="btn btn-info">新建</a>
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>标题</th>
+            <th>子标题</th>
+            <th>所属分类</th>
+            <th>价格</th>
+            <th>操作</th>
+          </tr>
+          {% for provide in provides %}
+            <tr>
+              <td><a href="/admin/provide/{{ provide.id }}/edit">{{ provide.id }}</a></td>
+              <td><a href="/admin/provide/{{ provide.id }}/edit">{{ provide.title }}</a></td>
+              <td><a href="/admin/provide/{{ provide.id }}/edit">{{ provide.subtitle }}</a></td>
+              <td><a href="/admin/provide/{{ provide.id }}/edit">{{ provide.category.name }}</a></td>
+              <td><a href="/admin/provide/{{ provide.id }}/edit">{{ provide.price }}</a></td>
+              <td>
+                <a class="btn btn-danger btn-xs" href="/admin/provide/{{ provide.id }}/delete">删除</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

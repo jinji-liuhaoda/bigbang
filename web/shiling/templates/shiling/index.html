@@ -3,7 +3,7 @@
 	<div class="index">
 		<div class="nav">
 			<ul class="text">
-			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
 			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
 			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
@@ -14,7 +14,7 @@
 			</ul>
 		</div>
 		<div class="user">
-			<a href="/user/login">
+			<a href="/cuser/login">
 			<img src="/static/images/user-icon.png" width="26">
 			</a>
 		</div>
@@ -34,23 +34,23 @@
 				<h1>{{temple.title}}</h1>
 				<div class="line"></div>
 				<div class="">
-					{{temple.content}}
+					{{temple.content|safe}}
 				</div>
 			</div>
 		</div>
 		<div class="abbot-box">
 			<div class="introduce-abbot">
 				<h5>住持介绍</h5>
-				<h1>{{mage.name}}</h1>
+				<h1>{{temple.mage.name}}</h1>
 				<div class="line"></div>
 				<div class="born">
-					{{mage.detail}}
+					{{temple.mage.detail|safe}}
 				</div>
-				<img src="{{mage.cover}}" width="100%";>
-				<h2>{{mage.mage_num}}</h2>
+				<img src="{{temple.mage.cover_url}}" width="100%";>
+				<h2>{{temple.mage.mage_num}}</h2>
 				<h4>住持</h4>
  				<div class="">
- 					{{mage.content}}
+ 					{{temple.mage.content|safe}}
  				</div>
 			</div>
 			<div class="more" id="mage">
@@ -64,12 +64,12 @@
 	$(function(){
 		$("#mage").on('click',function(){
 			$.ajax({
-				url:"{{DOMAIN}}/sentiment/{{mage.id}}",
+				url:"{{DOMAIN}}/sentiment/{{temple.mage.id}}",
 				method:'GET',
 				success:function(jsonobj){
 					jsonobj = JSON.parse(jsonobj);
 					if (jsonobj.error == 0) {
-						window.location.href = '/host_detail/{{mage.id}}';
+						window.location.href = '/host_detail/{{temple.mage.id}}';
 					};
 				},
 			})

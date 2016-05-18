@@ -2,7 +2,7 @@
 {% block mainbody %}
 	<div class="nav">
 		<ul class="text special">			
-			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
 			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
 			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
@@ -13,7 +13,7 @@
 		</ul>
 	</div>
 	<div class="user">
-		<a href="/user/login">
+		<a href="/cuser/login">
 			<img src="/static/images/user-icon.png" width="26">
 		</a>
 	</div>
@@ -24,7 +24,7 @@
 				<a id="views_count" idvar="{{activity.id}}">				
 					<div class="news">
 						<div class="news-pic">
-							<img src="http://placehold.it/335x132" width="100%">
+							<img src="{{activity.cover_url}}" width="100%">
 						</div>
 						<div class="news-content">
 							<div class="hd">
@@ -45,7 +45,7 @@
 							</div>
 						</div>
 						<div class="news-text">
-							<h4>{{activity.detail}}</h4>
+							<h4>{{activity.detail|safe}}</h4>
 						</div>
 						<div>
 							<ul>

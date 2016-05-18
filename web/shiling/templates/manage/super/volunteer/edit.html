@@ -1,0 +1,91 @@
+{% extends 'manage/super/base.html' %}
+
+{% block pageheader %}
+义工
+{% endblock %}
+
+{% block mainbody %}
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">
+      编辑义工
+    </h3>
+  </div><!-- /.box-header -->
+  <!-- form start -->
+
+  <div class="box-body">
+    {% if volunteer %}
+      <p>
+        <a class="btn btn-info" href="/admin/{{ volunteer.id }}/volunteeruser">报名管理</a>
+      </p>
+    {% endif %}
+    <form role="form" method="POST" action="/admin/volunteer" enctype="multipart/form-data">
+      {% csrf_token %}
+
+    <div class="form-group">
+      {% if volunteer %}
+      <input type="hidden" id="volunteer-id" name="volunteer-id" value="{{ volunteer.id }}" />
+      {% endif %}
+      <label for="exampleInputEmail1">标题</label>
+      <input type="text" class="form-control" id="title" name="title" placeholder=""
+      {% if volunteer %}value="{{ volunteer.title }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputFile">封面图片</label>
+      <input type="file" id="cover" name="cover" />
+      <p style="margin-top: 10px;">
+        {% if volunteer.cover %}
+        <img src="{{ cover_url }}?imageView/2/w/375" />
+        {% endif %}
+      </p>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">地址</label>
+      <input type="text" class="form-control" id="address" name="address" placeholder=""
+      {% if volunteer %}value="{{ volunteer.address }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">人数</label>
+      <input type="text" class="form-control" id="people_number" name="people_number" placeholder=""
+      {% if volunteer %}value="{{ volunteer.people_number }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">开始时间 - 结束时间</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <input type="text" class="form-control" id="daterange" name="daterange"
+        value="{% if volunteer %}{{ volunteer.start_time|date:"m/d/Y" }} - {{ volunteer.end_time|date:"m/d/Y" }}{% endif %}" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">简介</label>
+      <textarea class="form-control" id="detail" name="detail">{% if volunteer %}{{ volunteer.detail }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">详情</label>
+      <textarea class="form-control" id="content" name="content">{% if volunteer %}{{ volunteer.content }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary pull-right">
+          更新
+      </button>
+    </div>
+  </form>
+    </div><!-- /.box-body -->
+
+  <div class="box-footer">
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(function () {
+  $('#daterange').daterangepicker();
+  CKEDITOR.replace('detail');
+  CKEDITOR.replace('content');
+});
+</script>
+{% endblock %}

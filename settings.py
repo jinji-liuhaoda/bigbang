@@ -66,12 +66,22 @@ WSGI_APPLICATION = 'temple.wsgi.application'
 
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'temple',
+    #     'USER': 'temple',
+    #     'PASSWORD': 'temple',
+    #     'HOST': 'localhost',
+    #     'PORT': '3306',
+    #     'OPTIONS': {
+    #         'autocommit': True,
+    #     },
+    # }
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -101,14 +111,16 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'web', 'static')
 ]
 
-DOMAIN = 'http://localhost:8000'
+DOMAIN = 'http://temple.dev.attackt.com'
 
+LOGIN_URL = '/admin/login/'
 
 UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
 ROOT = os.path.abspath(os.path.dirname(__file__))

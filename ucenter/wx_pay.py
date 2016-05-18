@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import User, Order, GoodId
 from wx_auth import web_webchat_check_login
+
 from settings import UPLOAD_DIR, DOMAIN
 from .constants import WX_APP_ID, WX_SECRET, WX_MCH_ID
 from .wx_config import get_wx_config
@@ -28,7 +29,7 @@ def create_order(request):
         body = request.POST.get('body', '')
         detail = request.POST.get('detail', '')
         total_fee = request.POST.get('total_fee', '')
-        spbill_create_ip = request.session.get('user_ip', '')
+        spbill_create_ip = request.session.get('cuser_ip', '')
         noncestr = ''.join(map(lambda xx:(hex(ord(xx))[2:]), os.urandom(8)))
         stringA = "appid=" + WX_APP_ID + "&body=" + body + "&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr
         stringSignTemp = stringA + "&key=" + WX_SECRET
@@ -45,7 +46,7 @@ def create_order(request):
                            <body>" + escape(body) + "</body>\
                            <detail>" + escape(detail) + "</detail>\
                            <product_id>" + product_id + "</product_id>\
-                           <notify_url>" + DOMAIN + "/user/wx_pay/</notify_url>\
+                           <notify_url>" + DOMAIN + "/cuser/wx_pay/</notify_url>\
                            <openid>" + openid + "</openid>\
                            <out_trade_no>" + out_trade_no + "</out_trade_no>\
                            <spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>\
