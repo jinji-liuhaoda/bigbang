@@ -12,6 +12,7 @@ admin.autodiscover()
 urlpatterns = [
     # 首页
     url(r'^$', temple_view.index, name='temple_index'),
+
     # 供养
     url(r'^provide/$', temple_view.provide_list, name='provide_list'),
     url(r'^provide/(?P<provide_id>\d+)$', temple_view.provide_detail, name='provide_detail'),
