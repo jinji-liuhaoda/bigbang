@@ -1,0 +1,183 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+	<div class="nav">
+		<ul class="text">			
+			<li><a id="zhanghu" class="action">账户</a></li>
+			<li><a id="juanzhu">捐助</a></li>
+			<li><a id="activity">活动</a></li>
+		</ul>
+	</div>
+	<div class="user">
+		<a href="">
+			<img src="http://placehold.it/24x24" width="24">
+		</a>
+	</div>
+	<div class="detail">
+		<div class="login">
+			<div class="login-info">
+				<div class="login-info-hd">
+					<h5>个人资料</h5>
+				</div>
+				<div class="login-bd">
+					<ul>
+						<li class="head-portrait">
+							<ul>
+								<li>
+									<div class="left">
+										<h3>头像</h3>
+									</div>
+									<div class="right">
+										<a href="">
+											<img src="http://placehold.it/45x45" >
+										</a>
+									</div>
+									<div class="clear"></div>								
+								</li>
+							</ul>
+						</li>
+						<li>
+							<ul>
+								<li>
+									<div class="left">
+										<h3>昵称</h3>
+									</div>
+									<div class="right">
+										<h4>{{cuser.name}}</h4>
+									</div>
+									<div class="clear"></div>								
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div class="login-info">
+				<div class="login-info-hd">
+					<h5>账号信息</h5>
+				</div>
+				<div class="login-bd">
+					<ul>
+						<li class="bottom-line">
+							<ul>
+								<li>
+									<div class="left">
+										<h3>手机号</h3>
+									</div>
+									<div class="right">
+										<h4>{{cuser.phone}}</h4>
+									</div>
+									<div class="clear"></div>								
+								</li>
+							</ul>
+						</li>
+						<li>
+							<ul>
+								<li>
+									<div class="left">
+										<h3>修改密码</h3>
+									</div>
+									<div class="right">
+										<div class="arrows">
+										<a href="/cuser/pwd_update">
+											<img src="/static/images/arrows.png"  width="9">
+										</a>
+										</div>
+									</div>
+									<div class="clear"></div>								
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="provide-btn">
+			<div class="button02">
+				<a href="/cuser/login_out"><h3>退出</h3></a>
+			</div>
+		</div>
+	</div>
+	<div class="contribute juanzhu">
+		<div class="contribute-hd">	
+			<h5>供养和祈福的纪录</h5>
+		</div>
+		<div class="form">
+			<table cellspacing="0" cellpadding="0">
+				<tr>
+    				<td class="title">时间</td>
+   					<td class="title-bd">2016-04-16 10:29:30</td>
+				</tr>
+ 				<tr class="bless">
+					<td class="title">祈福</td>
+					<td class="title-bd">日行一善，随喜供养！完成供养共计1.00元<br>功德无量！</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="contribute activity">
+		<div class="contribute-hd">	
+			<h5>已报名的活动</h5>
+		</div>
+		<div class="form">
+			{% for activity_attendee in activity_attendees %}
+				<table cellspacing="0" cellpadding="0">
+					<tr>
+	    				<td class="title">人数</td>
+	   					<td class="title-bd">30</td>
+					</tr>
+	 				<tr>
+						<td class="title">状态</td>
+						<td class="title-bd">未开启</td>
+					</tr>
+					<tr>
+						<td class="title">时间</td>
+						<td class="title-bd">{{activity_attendee.activity.end_time}}</td>
+					</tr>
+					<tr>
+						<td class="title">地点</td>
+						<td class="title-bd">{{activity_attendee.activity.address}}</td>
+					</tr>
+				</table>
+				<br>
+			{% endfor %}
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+<script>
+	$(function(){
+ 		$(".detail").show();
+ 		$(".juanzhu").hide();
+ 		$(".activity").hide();
+
+ 		$("#zhanghu").on('click',function(){
+ 			$(this).addClass('action');;
+ 			$("#juanzhu").removeClass('action');
+ 			$("#activity").removeClass('action');
+	 		$(".detail").show();
+	 		$(".juanzhu").hide();
+	 		$(".activity").hide();
+ 		})
+
+  		$("#juanzhu").on('click',function(){
+ 			$(this).addClass('action');
+ 			$("#zhanghu").removeClass('action');
+ 			$("#activity").removeClass('action');
+
+	 		$(".detail").hide();
+	 		$(".juanzhu").show();
+	 		$(".activity").hide();
+ 		})
+
+  		$("#activity").on('click',function(){
+ 			$(this).addClass('action');
+ 			$("#zhanghu").removeClass('action');
+ 			$("#juanzhu").removeClass('action');
+ 			
+	 		$(".detail").hide();
+	 		$(".juanzhu").hide();
+	 		$(".activity").show();
+ 		})
+	})
+</script>
+{% endblock %}

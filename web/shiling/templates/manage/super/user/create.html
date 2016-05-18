@@ -1,0 +1,58 @@
+{% extends 'manage/super/base.html' %}
+
+{% block pageheader %}
+管理员
+{% endblock %}
+
+{% block mainbody %}
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">
+      {% if nuser %}
+      编辑管理员
+      {% else %}
+      新建管理员
+      {% endif %}
+    </h3>
+  </div><!-- /.box-header -->
+  <!-- form start -->
+
+  <div class="box-body">
+
+    <form role="form" method="POST"
+      {% if not nuser %}
+      action="/admin/user/create"
+      {% else %}
+      action="/admin/user/{{ nuser.id }}/edit"
+      {% endif %}
+      enctype="multipart/form-data">
+      {% csrf_token %}
+
+    <div class="form-group">
+      {% if nuser %}
+      <input type="hidden" id="nuser-id" name="nuser-id" value="{{ nuser.id }}" />
+      {% endif %}
+      <label for="exampleInputEmail1">用户名</label>
+      <input type="text" class="form-control" id="username" name="username" placeholder=""
+      {% if nuser %}value="{{ nuser.username }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">密码</label>
+      <input type="text" class="form-control" id="password" name="password" placeholder=""/>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary pull-right">
+        {% if nuser %}
+          更新
+        {% else %}
+          创建
+        {% endif %}
+      </button>
+    </div>
+  </form>
+    </div><!-- /.box-body -->
+
+  <div class="box-footer">
+  </div>
+</div>
+{% endblock %}

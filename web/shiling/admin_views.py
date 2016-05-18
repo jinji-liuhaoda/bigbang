@@ -1,6 +1,12 @@
 # coding: utf-8
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.template import loader
+from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.models import User as DjangoUser
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from .models import (
     Temple,
     Mage,
@@ -15,13 +21,1103 @@ from .models import (
     VolunteerUser,
     BuddhismKnowledge,
 )
+from ucenter.models import Order, Cuser
+from imagestore.qiniu_manager import upload, url, get_extension, handle_uploaded_file, BUCKET_NAME
 from settings import UPLOAD_DIR
 import os
 import datetime
 import time
 
 
-def upload(request):
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user = authenticate(username=username, password=password)
+        if user is not None and user.is_active:
+            login(request, user)
+            return HttpResponseRedirect('/admin/')
+        else:
+            context = {'error': '帐号/密码不正确'}
+            template = loader.get_template('manage/login.html')
+            return HttpResponse(template.render(context, request))
     context = {}
-    template = loader.get_template('kikkik/login.html')
+    template = loader.get_template('manage/login.html')
     return HttpResponse(template.render(context, request))
+
+
+@login_required
+def index(request):
+    context = {}
+    template = loader.get_template('manage/super/index.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect('/admin/login/')
+
+
+@login_required
+def temple_edit(request):
+    temples = Temple.objects.all()
+    if temples:
+        temple = temples[0]
+    else:
+        temple = Temple()
+    mages = Mage.objects.all()
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        title = request.POST.get('title', '')
+        detail = request.POST.get('detail', '')
+        address = request.POST.get('address', '')
+        content = request.POST.get('content', '')
+        mage_id = request.POST.get('host_id', '')
+        if mage_id:
+            mage = get_object_or_404(Mage, id=mage_id)
+            temple.mage = mage
+        temple.name = name
+        temple.title = title
+        temple.detail = detail
+        temple.address = address
+        temple.content = content
+        temple.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'temple_{}_{}.{}'.format(temple.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                temple.cover = key
+                temple.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+
+    context = {
+        'module': 'temple',
+        'temple': temple,
+        'mages': mages,
+    }
+    if temple:
+        context['cover_url'] = temple.cover_url()
+    template = loader.get_template('manage/super/temple/edit.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def mage_list(request):
+    temples = Temple.objects.all()
+    if temples:
+        temple = temples[0]
+    else:
+        temple = {}
+    mages = Mage.objects.all()
+    context = {
+        'module': 'mage',
+        'temple': temple,
+        'mages': mages,
+    }
+    template = loader.get_template('manage/super/mage/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def mage_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        mage_num = request.POST.get('mage_num', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        mage = Mage()
+        mage.name = name
+        mage.mage_num = mage_num
+        mage.detail = detail
+        mage.content = content
+        mage.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                mage.cover = key
+                mage.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/mage')
+    context = {
+        'module': 'mage',
+    }
+    template = loader.get_template('manage/super/mage/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def mage_edit(request, mage_id):
+    mage = get_object_or_404(Mage, id=mage_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        mage_num = request.POST.get('mage_num', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        mage.name = name
+        mage.mage_num = mage_num
+        mage.detail = detail
+        mage.content = content
+        mage.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                mage.cover = key
+                mage.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/mage')
+    context = {
+        'module': 'mage',
+        'mage': mage,
+    }
+    if mage:
+        context['cover_url'] = mage.cover_url()
+    template = loader.get_template('manage/super/mage/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def mage_delete(request, mage_id):
+    kwargs = {
+        'id': mage_id,
+    }
+    mage = get_object_or_404(Mage, **kwargs)
+    mage.delete()
+    return HttpResponseRedirect("/admin/mage")
+
+
+@login_required
+def category_list(request):
+    categorys = Category.objects.all()
+    context = {
+        'module': 'category',
+        'categorys': categorys,
+    }
+    template = loader.get_template('manage/super/provide/category/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def category_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        detail = request.POST.get('detail', '')
+        category = Category()
+        category.name = name
+        category.detail = detail
+        category.save()
+        return HttpResponseRedirect('/admin/category')
+    context = {
+        'module': 'category',
+    }
+    template = loader.get_template('manage/super/provide/category/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def category_edit(request, category_id):
+    category = get_object_or_404(Category, id=category_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        detail = request.POST.get('detail', '')
+        category.name = name
+        category.detail = detail
+        category.save()
+        return HttpResponseRedirect('/admin/category')
+    context = {
+        'module': 'category',
+        'category': category,
+    }
+    template = loader.get_template('manage/super/provide/category/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def category_delete(request, category_id):
+    kwargs = {
+        'id': category_id,
+    }
+    category = get_object_or_404(Category, **kwargs)
+    category.delete()
+    return HttpResponseRedirect("/admin/category")
+
+
+@login_required
+def provide_list(request):
+    provides = Provide.objects.all()
+    context = {
+        'module': 'provide',
+        'provides': provides,
+    }
+    template = loader.get_template('manage/super/provide/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def provide_create(request):
+    categorys = Category.objects.all()
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        subtitle = request.POST.get('subtitle', '')
+        content = request.POST.get('content', '')
+        detail = request.POST.get('detail', '')
+        price = request.POST.get('price', '')
+        category_id = request.POST.get('category_id', '')
+        provide = Provide()
+        provide.title = title
+        provide.subtitle = subtitle
+        provide.detail = detail
+        provide.content = content
+        provide.price = price
+        if category_id:
+            category = get_object_or_404(Category, id=category_id)
+            provide.category = category
+        provide.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'provide_{}_{}.{}'.format(provide.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                provide.cover = key
+                provide.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+            if request.FILES.get('banner_cover_url', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['banner_cover_url'].name)
+                key = 'provide_banner_{}_{}.{}'.format(provide.id, ts, ext)
+                handle_uploaded_file(request.FILES['banner_cover_url'], key)
+                provide.banner_cover = key
+                provide.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+
+        return HttpResponseRedirect('/admin/provide')
+    context = {
+        'module': 'provide',
+        'categorys': categorys,
+    }
+    template = loader.get_template('manage/super/provide/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def provide_edit(request, provide_id):
+    categorys = Category.objects.all()
+    provide = get_object_or_404(Provide, id=provide_id)
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        subtitle = request.POST.get('subtitle', '')
+        content = request.POST.get('content', '')
+        detail = request.POST.get('detail', '')
+        category_id = request.POST.get('category_id', '')
+        price = request.POST.get('price', '')
+        provide.title = title
+        provide.subtitle = subtitle
+        provide.detail = detail
+        provide.content = content
+        provide.price = price
+        if category_id:
+            category = get_object_or_404(Category, id=category_id)
+            provide.category = category
+        provide.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'provide_{}_{}.{}'.format(provide.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                provide.cover = key
+                provide.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+            if request.FILES.get('banner_cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['banner_cover'].name)
+                key = 'provide_banner_{}_{}.{}'.format(provide.id, ts, ext)
+                handle_uploaded_file(request.FILES['banner_cover'], key)
+                provide.banner_cover = key
+                provide.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+
+        return HttpResponseRedirect('/admin/provide')
+    context = {
+        'module': 'provide',
+        'provide': provide,
+        'categorys': categorys,
+    }
+    if provide:
+        context['cover_url'] = provide.cover_url()
+        context['banner_cover_url'] = provide.banner_cover_url()
+    template = loader.get_template('manage/super/provide/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def provide_delete(request, provide_id):
+    kwargs = {
+        'id': provide_id,
+    }
+    provide = get_object_or_404(Provide, **kwargs)
+    provide.delete()
+    return HttpResponseRedirect("/admin/provide")
+
+
+@login_required
+def provide_pay_list(request):
+    orders = Order.objects.filter(from_pay=0)
+    context = {
+        'module': 'provide-pay',
+        'orders': orders,
+    }
+    template = loader.get_template('manage/super/provide-pay/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def good_list(request, goodraise_id):
+    goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
+    goods = Good.objects.filter(goodraise=goodraise)
+    context = {
+        'module': 'goodraise',
+        'goodraise': goodraise,
+        'goods': goods,
+    }
+    template = loader.get_template('manage/super/good/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def good_create(request, goodraise_id):
+    goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        detail = request.POST.get('detail', '')
+        support_price = request.POST.get('support_price', '')
+        good = Good()
+        good.name = name
+        good.detail = detail
+        good.goodraise = goodraise
+        good.support_price = support_price
+        good.save()
+
+        return HttpResponseRedirect('/admin/' + str(goodraise.id) + '/good')
+    context = {
+        'module': 'goodraise',
+        'goodraise': goodraise,
+    }
+    template = loader.get_template('manage/super/good/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def good_edit(request, good_id):
+    good = get_object_or_404(Good, id=good_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        detail = request.POST.get('detail', '')
+        support_price = request.POST.get('support_price', '')
+        good.name = name
+        good.detail = detail
+        good.support_price = support_price
+        good.save()
+
+        return HttpResponseRedirect('/admin/' + str(good.goodraise.id) + '/good')
+    context = {
+        'module': 'goodraise',
+        'good': good,
+    }
+    template = loader.get_template('manage/super/good/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def good_delete(request, good_id):
+    kwargs = {
+        'id': good_id,
+    }
+    good = get_object_or_404(Good, **kwargs)
+    goodraise_id = good.goodraise.id
+    good.delete()
+    return HttpResponseRedirect("/admin/" + str(goodraise_id) + "/good")
+
+
+@login_required
+def goodraise_list(request):
+    goodraises = GoodRaise.objects.all()
+    context = {
+        'module': 'goodraise',
+        'goodraises': goodraises,
+    }
+    template = loader.get_template('manage/super/goodraise/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def goodraise_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        mage_num = request.POST.get('mage_num', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        mage = Mage()
+        mage.name = name
+        mage.mage_num = mage_num
+        mage.detail = detail
+        mage.content = content
+        mage.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                mage.cover = key
+                mage.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/mage')
+    context = {
+        'module': 'goodraise',
+    }
+    template = loader.get_template('manage/super/goodraise/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def goodraise_edit(request, goodraise_id):
+    goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        daterange = request.POST.get('daterange', '')
+        total_price = request.POST.get('total_price', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        goodraise.title = title
+        goodraise.total_price = total_price
+        goodraise.detail = detail
+        goodraise.content = content
+        goodraise.start_time = start_time
+        goodraise.end_time = end_time
+        goodraise.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'goodraise_{}_{}.{}'.format(goodraise.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                goodraise.cover = key
+                goodraise.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/goodraise')
+    context = {
+        'module': 'goodraise',
+        'goodraise': goodraise,
+    }
+    if goodraise:
+        context['cover_url'] = goodraise.cover_url()
+    template = loader.get_template('manage/super/goodraise/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def goodraise_pay_list(request):
+    orders = Order.objects.filter(from_pay=1)
+    context = {
+        'module': 'goodraise-pay',
+        'orders': orders,
+    }
+    template = loader.get_template('manage/super/goodraise-pay/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def activity_list(request):
+    activitys = Activity.objects.all()
+    context = {
+        'module': 'activity',
+        'activitys': activitys,
+    }
+    template = loader.get_template('manage/super/activity/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def activity_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        title = request.POST.get('title', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        address = request.POST.get('address', '')
+        people_number = request.POST.get('people_number', '')
+        daterange = request.POST.get('daterange', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        activity = Activity()
+        activity.name = name
+        activity.title = title
+        activity.detail = detail
+        activity.content = content
+        activity.address = address
+        activity.people_number = people_number
+        activity.start_time = start_time
+        activity.end_time = end_time
+        activity.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'activity_{}_{}.{}'.format(activity.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                activity.cover = key
+                activity.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/activity')
+    context = {
+        'module': 'activity',
+    }
+    template = loader.get_template('manage/super/activity/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def activity_edit(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        title = request.POST.get('title', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        address = request.POST.get('address', '')
+        people_number = request.POST.get('people_number', '')
+        daterange = request.POST.get('daterange', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        activity.name = name
+        activity.title = title
+        activity.detail = detail
+        activity.content = content
+        activity.address = address
+        activity.people_number = people_number
+        activity.start_time = start_time
+        activity.end_time = end_time
+        activity.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'activity_{}_{}.{}'.format(activity.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                activity.cover = key
+                activity.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/activity')
+    context = {
+        'module': 'activity',
+        'activity': activity,
+    }
+    if activity:
+        context['cover_url'] = activity.cover_url()
+    template = loader.get_template('manage/super/activity/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def activity_delete(request, activity_id):
+    kwargs = {
+        'id': activity_id,
+    }
+    activity = get_object_or_404(Activity, **kwargs)
+    activity.delete()
+    return HttpResponseRedirect("/admin/activity")
+
+
+@login_required
+def activity_attendee_list(request, activity_id):
+    activity = get_object_or_404(Activity, id=activity_id)
+    activityattendees = ActivityAttendee.objects.filter(activity=activity)
+    context = {
+        'module': 'activity',
+        'activityattendees': activityattendees,
+    }
+    template = loader.get_template('manage/super/activity/activityattendee/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def activityattendee_edit(request, activityattendee_id):
+    activityattendee = get_object_or_404(ActivityAttendee, id=activityattendee_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        mobile_phone = request.POST.get('mobile_phone', '')
+
+        activityattendee.name = name
+        activityattendee.mobile_phone = mobile_phone
+        activityattendee.save()
+
+        return HttpResponseRedirect('/admin/' + str(activityattendee.activity.id) + '/activityattendee')
+    context = {
+        'module': 'activity',
+        'activityattendee': activityattendee,
+    }
+    template = loader.get_template('manage/super/activity/activityattendee/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def activityattendee_delete(request, activityattendee_id):
+    kwargs = {
+        'id': activityattendee_id,
+    }
+    activityattendee = get_object_or_404(ActivityAttendee, **kwargs)
+    activity_id = activityattendee.activity.id
+    activityattendee.delete()
+    return HttpResponseRedirect("/admin/" + str(activity_id) + "/activityattendee")
+
+
+@login_required
+def news_list(request):
+    newss = News.objects.all()
+    context = {
+        'module': 'news',
+        'newss': newss,
+    }
+    template = loader.get_template('manage/super/news/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def news_create(request):
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        daterange = request.POST.get('daterange', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        news = News()
+        news.title = title
+        news.detail = detail
+        news.content = content
+        news.start_time = start_time
+        news.end_time = end_time
+        news.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'news_{}_{}.{}'.format(news.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                news.cover = key
+                news.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/news')
+    context = {
+        'module': 'news',
+    }
+    template = loader.get_template('manage/super/news/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def news_edit(request, news_id):
+    news = get_object_or_404(News, id=news_id)
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        daterange = request.POST.get('daterange', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        news.title = title
+        news.detail = detail
+        news.content = content
+        news.start_time = start_time
+        news.end_time = end_time
+        news.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'news_{}_{}.{}'.format(news.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                news.cover = key
+                news.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/news')
+    context = {
+        'module': 'news',
+        'news': news,
+    }
+    if news:
+        context['cover_url'] = news.cover_url()
+    template = loader.get_template('manage/super/news/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def news_delete(request, news_id):
+    kwargs = {
+        'id': news_id,
+    }
+    news = get_object_or_404(News, **kwargs)
+    news.delete()
+    return HttpResponseRedirect("/admin/news")
+
+
+@login_required
+def volunteer_detail(request):
+    volunteers = Volunteer.objects.all()
+    if volunteers:
+        volunteer = volunteers[0]
+    else:
+        volunteer = {}
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        address = request.POST.get('address', '')
+        people_number = request.POST.get('people_number', '')
+        detail = request.POST.get('detail', '')
+        content = request.POST.get('content', '')
+        daterange = request.POST.get('daterange', '')
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        volunteer.title = title
+        volunteer.address = address
+        volunteer.people_number = people_number
+        volunteer.detail = detail
+        volunteer.content = content
+        volunteer.start_time = start_time
+        volunteer.end_time = end_time
+        volunteer.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'volunteer_{}_{}.{}'.format(volunteer.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                volunteer.cover = key
+                volunteer.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+    context = {
+        'module': 'volunteer',
+        'volunteer': volunteer,
+    }
+    if volunteer:
+        context['cover_url'] = volunteer.cover_url()
+    template = loader.get_template('manage/super/volunteer/edit.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def volunteeruser_list(request, volunteer_id):
+    volunteer = get_object_or_404(Volunteer, id=volunteer_id)
+    volunteerusers = VolunteerUser.objects.filter(volunteer=volunteer)
+    context = {
+        'module': 'volunteer',
+        'volunteerusers': volunteerusers,
+    }
+    template = loader.get_template('manage/super/volunteer/volunteeruser/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def volunteeruser_edit(request, volunteeruser_id):
+    volunteeruser = get_object_or_404(VolunteerUser, id=volunteeruser_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        mobile_phone = request.POST.get('mobile_phone', '')
+
+        volunteeruser.name = name
+        volunteeruser.mobile_phone = mobile_phone
+        volunteeruser.save()
+
+        return HttpResponseRedirect('/admin/' + str(volunteeruser.volunteer.id) + '/volunteeruser')
+    context = {
+        'module': 'volunteer',
+        'volunteeruser': volunteeruser,
+    }
+    template = loader.get_template('manage/super/volunteer/volunteeruser/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def volunteeruser_delete(request, volunteeruser_id):
+    kwargs = {
+        'id': volunteeruser_id,
+    }
+    volunteeruser = get_object_or_404(VolunteerUser, **kwargs)
+    volunteer_id = volunteeruser.volunteer.id
+    volunteeruser.delete()
+    return HttpResponseRedirect("/admin/" + str(volunteer_id) + "/volunteeruser")
+
+
+@login_required
+def buddhismknowledge_list(request):
+    buddhismknowledges = BuddhismKnowledge.objects.all()
+    context = {
+        'module': 'buddhismknowledge',
+        'buddhismknowledges': buddhismknowledges,
+    }
+    template = loader.get_template('manage/super/buddhismknowledge/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def buddhismknowledge_create(request):
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        subtitle = request.POST.get('subtitle', '')
+        content = request.POST.get('content', '')
+
+        buddhismknowledge = BuddhismKnowledge()
+        buddhismknowledge.title = title
+        buddhismknowledge.subtitle = subtitle
+        buddhismknowledge.content = content
+        buddhismknowledge.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'news_{}_{}.{}'.format(buddhismknowledge.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                buddhismknowledge.cover = key
+                buddhismknowledge.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/buddhismknowledge')
+    context = {
+        'module': 'buddhismknowledge',
+    }
+    template = loader.get_template('manage/super/buddhismknowledge/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def buddhismknowledge_edit(request, buddhismknowledge_id):
+    buddhismknowledge = get_object_or_404(BuddhismKnowledge, id=buddhismknowledge_id)
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        subtitle = request.POST.get('subtitle', '')
+        content = request.POST.get('content', '')
+
+        buddhismknowledge.title = title
+        buddhismknowledge.subtitle = subtitle
+        buddhismknowledge.content = content
+        buddhismknowledge.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'news_{}_{}.{}'.format(buddhismknowledge.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                buddhismknowledge.cover = key
+                buddhismknowledge.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponseRedirect('/admin/buddhismknowledge')
+    context = {
+        'module': 'buddhismknowledge',
+        'buddhismknowledge': buddhismknowledge,
+    }
+    if buddhismknowledge:
+        context['cover_url'] = buddhismknowledge.cover_url()
+    template = loader.get_template('manage/super/buddhismknowledge/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def buddhismknowledge_delete(request, buddhismknowledge_id):
+    kwargs = {
+        'id': buddhismknowledge_id,
+    }
+    buddhismknowledge = get_object_or_404(BuddhismKnowledge, **kwargs)
+    buddhismknowledge.delete()
+    return HttpResponseRedirect("/admin/buddhismknowledge")
+
+
+@login_required
+def cuser_list(request):
+    cusers = Cuser.objects.all()
+    context = {
+        'module': 'cuser',
+        'cusers': cusers,
+    }
+    template = loader.get_template('manage/super/cuser/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def cuser_create(request):
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        city = request.POST.get('city', '')
+
+        cuser = Cuser()
+        cuser.name = name
+        cuser.city = city
+        cuser.save()
+        return HttpResponseRedirect('/admin/cuser')
+    context = {
+        'module': 'cuser',
+    }
+    template = loader.get_template('manage/super/cuser/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def cuser_edit(request, cuser_id):
+    cuser = get_object_or_404(Cuser, id=cuser_id)
+    if request.method == 'POST':
+        name = request.POST.get('name', '')
+        city = request.POST.get('city', '')
+
+        cuser.name = name
+        cuser.city = city
+        cuser.save()
+        return HttpResponseRedirect('/admin/cuser')
+    context = {
+        'module': 'cuser',
+        'cuser': cuser,
+    }
+    template = loader.get_template('manage/super/cuser/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def cuser_delete(request, cuser_id):
+    kwargs = {
+        'id': cuser_id,
+    }
+    cuser = get_object_or_404(Cuser, **kwargs)
+    cuser.delete()
+    return HttpResponseRedirect("/admin/cuser")
+
+
+@login_required
+def user_list(request):
+    users = DjangoUser.objects.all()
+    context = {
+        'module': 'user',
+        'users': users,
+    }
+    template = loader.get_template('manage/super/user/list.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def user_create(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+
+        if not username or not password:
+            messages.add_message(request, messages.ERROR, '用户名密码不能为空')
+            return HttpResponseRedirect('/admin/user/create')
+
+        try:
+            user = DjangoUser.objects.create_user(username, password=password)
+        except Exception, e:
+            messages.add_message(request, messages.ERROR, '该用户名已经存在, 请换一个用户名试试')
+            return HttpResponseRedirect('/admin/user/create')
+        return HttpResponseRedirect('/admin/user')
+    context = {
+        'module': 'user',
+    }
+    template = loader.get_template('manage/super/user/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def user_edit(request, user_id):
+    user = get_object_or_404(DjangoUser, id=user_id)
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
+        user.username = username
+        if password:
+            user.set_password(password)
+        try:
+            user.save()
+        except:
+            return HttpResponseRedirect("/admin/" + str(user.id) + "edit")
+        return HttpResponseRedirect("/admin/user")
+    context = {
+        'module': 'user',
+        'nuser': user,
+    }
+    template = loader.get_template('manage/super/user/create.html')
+    return HttpResponse(template.render(context, request))
+
+
+@login_required
+def user_delete(request, user_id):
+    kwargs = {
+        'id': user_id,
+    }
+    user = get_object_or_404(DjangoUser, **kwargs)
+    user.delete()
+    return HttpResponseRedirect("/admin/user")
+
+
+@csrf_exempt
+def ckeditor_upload(request):
+    temples = Temple.objects.all()
+    if temples:
+        temple = temples[0]
+    else:
+        temple = {}
+    if request.FILES:
+        ts = int(time.time())
+        checkNum = request.GET.get('CKEditorFuncNum')
+        ext = get_extension(request.FILES['upload'].name)
+        key = 'temple_{}_{}.{}'.format(temple.id, ts, ext)
+        handle_uploaded_file(request.FILES['upload'], key)
+        # 上传图片到qiniu
+        upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+        return HttpResponse("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction(\
+            '"+checkNum+"','"+url(BUCKET_NAME, key)+"','')</script>")

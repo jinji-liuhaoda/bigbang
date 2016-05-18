@@ -8,13 +8,13 @@
 					<h1>{{mage.name}}</h1>
 					<div class="line"></div>
 					<div class="born">
-						{{mage.detail}}
+						{{mage.detail|safe}}
 					</div>
-					<img src="{{mage.cover}}" width="100%";>
+					<img src="{{mage.cover_url}}" width="100%";>
 					<h2>{{mage.mage_num}}</h2>
 					<h4>住持</h4>
 	 				<div class="">
-	 					{{mage.content}}
+	 					{{mage.content|safe}}
 	 				</div>
 				</div>
 			</div>

@@ -3,15 +3,15 @@
 import django;django.setup()
 from ucenter.user_manager import user_manager
 from ucenter.models import (
-    User,
+    Cuser,
 )
 
 
 def update_wechat_user_info():
-    users = User.objects.all()
-    for user in users:
-        if user.openid:
-            user_manager.update_wechat_user_info(user.openid)
+    cusers = Cuser.objects.all()
+    for cuser in cusers:
+        if cuser.openid:
+            user_manager.update_wechat_user_info(cuser.openid)
 
 
 if __name__ == '__main__':

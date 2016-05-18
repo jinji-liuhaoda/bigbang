@@ -1,0 +1,58 @@
+{% extends 'manage/super/base.html' %}
+
+{% block pageheader %}
+报名管理
+{% endblock %}
+
+{% block mainbody %}
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">
+      {% if volunteeruser %}
+      编辑报名
+      {% else %}
+      新建报名
+      {% endif %}
+    </h3>
+  </div><!-- /.box-header -->
+  <!-- form start -->
+
+  <div class="box-body">
+    <form role="form" method="POST"
+      {% if not volunteeruser %}
+      action="/admin/volunteeruser/create"
+      {% else %}
+      action="/admin/volunteeruser/{{ volunteeruser.id }}/edit"
+      {% endif %}
+      enctype="multipart/form-data">
+      {% csrf_token %}
+
+    <div class="form-group">
+      {% if volunteeruser %}
+      <input type="hidden" id="volunteeruser-id" name="volunteeruser-id" value="{{ volunteeruser.id }}" />
+      {% endif %}
+      <label for="exampleInputEmail1">姓名</label>
+      <input type="text" class="form-control" id="name" name="name" placeholder=""
+      {% if volunteeruser %}value="{{ volunteeruser.name }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">手机号码</label>
+      <input type="text" class="form-control" id="mobile_phone" name="mobile_phone" placeholder=""
+      {% if volunteeruser %}value="{{ volunteeruser.mobile_phone }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary pull-right">
+        {% if volunteeruser %}
+          更新
+        {% else %}
+          创建
+        {% endif %}
+      </button>
+    </div>
+  </form>
+    </div><!-- /.box-body -->
+
+  <div class="box-footer">
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>揭西石灵寺管理</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="/static/admin/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/admin/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/admin/dist/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="/static/admin/dist/css/skins/skin-blue.min.css">
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+  <body class="hold-transition skin-blue sidebar-mini">
+    <div class="wrapper">
+
+      <!-- Main Header -->
+      <header class="main-header">
+
+        <!-- Logo -->
+        <a href="#" class="logo">
+          <!-- mini logo for sidebar mini 50x50 pixels -->
+          <span class="logo-mini"><b>揭西石灵寺</b></span>
+          <!-- logo for regular state and mobile devices -->
+          <span class="logo-lg"><b>揭西石灵寺</b></span>
+        </a>
+
+        <!-- Header Navbar -->
+        <nav class="navbar navbar-static-top" role="navigation">
+          <!-- Sidebar toggle button-->
+          <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+            <span class="sr-only">Toggle navigation</span>
+          </a>
+          <!-- Navbar Right Menu -->
+          <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+
+              <!-- User Account Menu -->
+              <li class="dropdown user user-menu">
+                <!-- Menu Toggle Button -->
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <!-- hidden-xs hides the username on small devices so only the image appears. -->
+                  <span class="hidden-xs">{{ request.user.username }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <!-- Menu Footer-->
+                  <li class="user-footer">
+                    <div class="pull-left">
+                      <a href="#" class="btn btn-default btn-flat">资料</a>
+                    </div>
+                    <div class="pull-right">
+                      <a href="/admin/logout/" class="btn btn-default btn-flat">退出</a>
+                    </div>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <!-- Left side column. contains the logo and sidebar -->
+      <aside class="main-sidebar">
+
+        <!-- sidebar: style can be found in sidebar.less -->
+        <section class="sidebar">
+
+          <!-- Sidebar Menu -->
+          <ul class="sidebar-menu">
+            <li class="header">揭西石灵寺管理</li>
+           <li class="treeview {% if module == 'temple' or module == 'mage' %}active{% endif %}" >
+              <a href="#"><span>基本信息</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu {% if module == 'temple' or module == 'mage' %}menu-open{% endif %}">
+                <li {% if module == 'temple' %}class="active"{% endif %}>
+                  <a href="/admin/temple"><i class="fa fa-circle-o"></i>关于寺庙</a>
+                </li>
+                <li {% if module == 'mage' %}class="active"{% endif %}>
+                  <a href="/admin/mage"><i class="fa fa-circle-o"></i>法师列表</a>
+                </li>
+              </ul>
+            </li>
+            <li class="treeview {% if module == 'category' or module == 'provide' or module == 'provide-pay' %}active{% endif %}" >
+              <a href="#"><span>供养</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu {% if module == 'category' or module == 'provide' or module == 'provide-pay' %}menu-open{% endif %}">
+                <li {% if module == 'category' %}class="active"{% endif %}><a href="/admin/category"><i class="fa fa-circle-o"></i>分类管理</a></li>
+                <li {% if module == 'provide' %}class="active"{% endif %}><a href="/admin/provide"><i class="fa fa-circle-o"></i>供养管理</a></li>
+                <li {% if module == 'provide-pay' %}class="active"{% endif %}><a href="/admin/provide-pay"><i class="fa fa-circle-o"></i>支付管理</a></li>
+              </ul>
+            </li>
+           <li class="treeview {% if module == 'goodraise' or module == 'goodraise-pay' %}active{% endif %}" >
+              <a href="#"><span>善筹</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu {% if module == 'goodraise' or module == 'goodraise-pay' %}menu-open{% endif %}">
+                <li {% if module == 'goodraise' %}class="active"{% endif %}><a href="/admin/goodraise"><i class="fa fa-circle-o"></i>善筹管理</a></li>
+                <li {% if module == 'goodraise-pay' %}class="active"{% endif %}><a href="/admin/goodraise-pay"><i class="fa fa-circle-o"></i>支付管理</a></li>
+              </ul>
+            </li>
+            <li {% if module == 'activity' %}class="active"{% endif %}><a href="/admin/activity">活动</a></li>
+            <li {% if module == 'news' %}class="active"{% endif %}><a href="/admin/news">新闻</a></li>
+            <li {% if module == 'volunteer' %}class="active"{% endif %}><a href="/admin/volunteer">义工</a></li>
+            <li {% if module == 'buddhismknowledge' %}class="active"{% endif %}><a href="/admin/buddhismknowledge">佛法知识</a>
+            </li>
+            <li {% if module == 'cuser' %}class="active"{% endif %}><a href="/admin/cuser">用户管理</a></li>
+            <li class="treeview {% if module == 'user' %}active{% endif %}" >
+              <a href="#"><span>系统配置</span> <i class="fa fa-angle-left pull-right"></i></a>
+              <ul class="treeview-menu {% if module == 'user' %}menu-open{% endif %}">
+                <li {% if module == 'user' %}class="active"{% endif %}>
+                  <a href="/admin/user"><i class="fa fa-circle-o"></i>管理员</a>
+                </li>
+              </ul>
+            </li>
+          </ul><!-- /.sidebar-menu -->
+        </section>
+        <!-- /.sidebar -->
+      </aside>
+
+      <!-- Content Wrapper. Contains page content -->
+      <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+          <h1>
+            {% block pageheader %}
+            {% endblock %}
+          </h1>
+          <ol class="breadcrumb">
+            <li><a href="/admin/"><i class="fa fa-dashboard"></i> 首页</a></li>
+            {% block breadcrumb %}
+            {% endblock %}
+          </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content">
+          {% block mainbody %}
+          {% endblock %}
+        </section><!-- /.content -->
+      </div><!-- /.content-wrapper -->
+
+      <!-- Main Footer -->
+      <footer class="main-footer">
+        <!-- To the right -->
+        <div class="pull-right hidden-xs">
+          <i>我们用心构建每一个产品!</i>
+        </div>
+        <!-- Default to the left -->
+        <!-- <strong>Copyright &copy; 2016 北京汇智河谷科技发展有限公司.</strong> All rights reserved. -->
+      </footer>
+
+      <!-- Control Sidebar -->
+      <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+          <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+          <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+          <!-- Home tab content -->
+          <div class="tab-pane active" id="control-sidebar-home-tab">
+            <h3 class="control-sidebar-heading">Recent Activity</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript::;">
+                  <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+                  <div class="menu-info">
+                    <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+                    <p>Will be 23 on April 24th</p>
+                  </div>
+                </a>
+              </li>
+            </ul><!-- /.control-sidebar-menu -->
+
+            <h3 class="control-sidebar-heading">Tasks Progress</h3>
+            <ul class="control-sidebar-menu">
+              <li>
+                <a href="javascript::;">
+                  <h4 class="control-sidebar-subheading">
+                    Custom Template Design
+                    <span class="label label-danger pull-right">70%</span>
+                  </h4>
+                  <div class="progress progress-xxs">
+                    <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                  </div>
+                </a>
+              </li>
+            </ul><!-- /.control-sidebar-menu -->
+
+          </div><!-- /.tab-pane -->
+          <!-- Stats tab content -->
+          <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div><!-- /.tab-pane -->
+          <!-- Settings tab content -->
+          <div class="tab-pane" id="control-sidebar-settings-tab">
+            <form method="post">
+              <h3 class="control-sidebar-heading">General Settings</h3>
+              <div class="form-group">
+                <label class="control-sidebar-subheading">
+                  Report panel usage
+                  <input type="checkbox" class="pull-right" checked>
+                </label>
+                <p>
+                  Some information about this general settings option
+                </p>
+              </div><!-- /.form-group -->
+            </form>
+          </div><!-- /.tab-pane -->
+        </div>
+      </aside><!-- /.control-sidebar -->
+      <div class="control-sidebar-bg"></div>
+    </div><!-- ./wrapper -->
+
+    <script src="/static/admin/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+    <script src="/static/admin/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/js/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=3q61qXeehGtRZPc2e0OmT1fi"></script>
+    <script src="/static/admin/plugins/daterangepicker/daterangepicker.js"></script>
+    <script src="/static/admin/dist/js/app.min.js"></script>
+    <script src="/static/ckeditor/ckeditor.js"></script>
+
+    {% block script %}
+    {% endblock %}
+  </body>
+</html>

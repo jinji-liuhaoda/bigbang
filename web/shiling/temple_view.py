@@ -6,7 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
 from ucenter.wx_config import get_wx_config
-from ucenter.models import User
+from ucenter.models import Cuser
 from .models import (
     Temple,
     Mage,
@@ -78,20 +78,20 @@ def provide_detail(request, provide_id):
 
 @csrf_exempt
 def provide_pay(request, provide_id):
-    user_id = request.session.get('user_id', '')
+    cuser_id = request.session.get('cuser_id', '')
     openid = request.session.get('openid', '')
     if request.method == 'POST':
         if openid == False:
             # 设置登录后回调地址
             request.session['redirest'] = request.get_raw_uri()
-            return HttpResponseRedirect('/user/wx_login')
+            return HttpResponseRedirect('/cuser/wx_login')
     provide = get_object_or_404(Provide, id=provide_id)
     context = {
         'wx_config': get_wx_config(request.get_raw_uri()),
         'title': '揭西石灵寺',
         'module': 'provide',
         'provide': provide,
-        'user_id': user_id,
+        'cuser_id': cuser_id,
         'openid': openid,
     }
     template = loader.get_template('shiling/provide_pay.html')

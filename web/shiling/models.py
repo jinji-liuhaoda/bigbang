@@ -3,7 +3,29 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+from imagestore.qiniu_manager import url, BUCKET_NAME
+
 import datetime
+
+
+class Mage(models.Model):
+
+    class Meta(object):
+        verbose_name = "法师"
+        verbose_name_plural = "法师"
+
+    name = models.CharField(max_length=128, verbose_name="法师名称")
+    mage_num = models.CharField(max_length=128, verbose_name="法号")
+    cover = models.CharField(max_length=128, verbose_name="头像")
+    detail = models.TextField(null=False, verbose_name="简介")
+    content = models.TextField(null=False, verbose_name="详情")
+    sentiment = models.IntegerField(default=0, verbose_name="人气")
+
+    def __unicode__(self):
+        return self.name
+
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
 
 
 class Temple(models.Model):
@@ -18,28 +40,13 @@ class Temple(models.Model):
     detail = models.TextField(null=False, verbose_name="简介")
     address = models.TextField(null=False, default='', verbose_name="地址")
     content = models.TextField(null=False, verbose_name="详情")
+    mage = models.ForeignKey(Mage, blank=True, null=True, verbose_name="主持")
 
     def __unicode__(self):
         return self.name
 
-
-class Mage(models.Model):
-
-    class Meta(object):
-        verbose_name = "法师"
-        verbose_name_plural = "法师"
-
-    name = models.CharField(max_length=128, verbose_name="法师名称")
-    mage_num = models.CharField(max_length=128, verbose_name="法号")
-    cover = models.CharField(max_length=128, verbose_name="头像")
-    detail = models.TextField(null=False, verbose_name="简介")
-    experience = models.TextField(null=False, default='', verbose_name="履历")
-    content = models.TextField(null=False, verbose_name="详情")
-    sentiment = models.IntegerField(default=0, verbose_name="人气")
-    temple = models.ForeignKey(Temple, blank=True, null=True, verbose_name="所属寺庙")
-
-    def __unicode__(self):
-        return self.name
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
 
 
 class Category(models.Model):
@@ -73,6 +80,12 @@ class Provide(models.Model):
     def __unicode__(self):
         return self.title
 
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
+
+    def banner_cover_url(self):
+        return url(BUCKET_NAME, self.banner_cover)
+
 
 class GoodRaise(models.Model):
 
@@ -90,6 +103,9 @@ class GoodRaise(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
 
 
 class Good(models.Model):
@@ -128,6 +144,9 @@ class Activity(models.Model):
     def __unicode__(self):
         return self.name
 
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
+
 
 class ActivityAttendee(models.Model):
 
@@ -160,6 +179,9 @@ class News(models.Model):
     def __unicode__(self):
         return self.title
 
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
+
 
 class Volunteer(models.Model):
 
@@ -179,6 +201,9 @@ class Volunteer(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
 
 
 class VolunteerUser(models.Model):
@@ -208,3 +233,6 @@ class BuddhismKnowledge(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)

@@ -4,14 +4,14 @@
 from django.contrib import admin
 
 from .models import (
-    User,
+    Cuser,
     Order,
     GoodId,
 )
 
 
 # 用户
-class UserAdmin(admin.ModelAdmin):
+class CuserAdmin(admin.ModelAdmin):
 
     list_display = (
         'phone', 'name', 'openid',
@@ -19,6 +19,6 @@ class UserAdmin(admin.ModelAdmin):
 
     exclude = ('created', 'last_updated')
 
-admin.site.register(User, UserAdmin)
+admin.site.register(Cuser, CuserAdmin)
 admin.site.register(Order)
 admin.site.register(GoodId)

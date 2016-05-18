@@ -19,7 +19,7 @@ from shiling.models import (
     VolunteerUser,
     BuddhismKnowledge,
 )
-from .models import User
+from .models import Cuser
 from wx_auth import web_webchat_check_login
 from settings import UPLOAD_DIR, DOMAIN
 import simplejson
@@ -29,23 +29,23 @@ import time
 
 
 def index(request):
-    user = get_object_or_404(User, id=request.session['user_id'])
-    activity_attendees = ActivityAttendee.objects.filter(mobile_phone=user.phone)
-    request.session['user_id'] = user.id
+    cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
+    activity_attendees = ActivityAttendee.objects.filter(mobile_phone=cuser.phone)
+    request.session['cuser_id'] = cuser.id
     context = {
         'title': '揭西石灵寺',
-        'user': user,
+        'cuser': cuser,
         'activity_attendees': activity_attendees,
     }
-    template = loader.get_template('user.html')
+    template = loader.get_template('cuser.html')
     return HttpResponse(template.render(context, request))
 
 
 @csrf_exempt
 def login(request):
     try:
-        request.session['user_id']
-        return HttpResponseRedirect('/user/index')
+        request.session['cuser_id']
+        return HttpResponseRedirect('/cuser/index')
     except Exception, e:
         print e
     error = 0
@@ -53,29 +53,29 @@ def login(request):
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
         try:
-            user = get_object_or_404(User, phone=phone)
-            is_pwd = check_password(pwd, user.pwd)
+            cuser = get_object_or_404(Cuser, phone=phone)
+            is_pwd = check_password(pwd, cuser.pwd)
             if is_pwd:
                 is_validation = 1
             else:
                 is_validation = 0
-        except User.DoesNotExist:
+        except Cuser.DoesNotExist:
             is_validation = 0
 
         if is_validation:
-            request.session['user_id'] = user.id
-            request.session['openid'] = user.openid
+            request.session['cuser_id'] = cuser.id
+            request.session['openid'] = cuser.openid
             #获取用户ip
             if request.META.has_key('HTTP_X_FORWARDED_FOR'):
-                user_ip = request.META['HTTP_X_FORWARDED_FOR']
+                cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
             else:
-                user_ip = request.META['REMOTE_ADDR']
-            request.session['user_ip'] = user_ip
+                cuser_ip = request.META['REMOTE_ADDR']
+            request.session['cuser_ip'] = cuser_ip
             # 其他页登录需要回调
             redirest = request.session.get('redirest', '')
             if redirest:
                 return HttpResponseRedirect(redirest)
-            return HttpResponseRedirect('/user/index')
+            return HttpResponseRedirect('/cuser/index')
         else:
             error = 1
     context = {
@@ -88,7 +88,7 @@ def login(request):
 
 def login_out(request):
     request.session.flush()
-    return HttpResponseRedirect('/user/login')
+    return HttpResponseRedirect('/cuser/login')
 
 
 @web_webchat_check_login
@@ -97,17 +97,17 @@ def register_do(request):
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
 
-        user = User.objects.get(id=request.session.get('user_id', ''))
-        user.phone = phone
-        user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
-        user.save()
+        cuser = Cuser.objects.get(id=request.session.get('cuser_id', ''))
+        cuser.phone = phone
+        cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
+        cuser.save()
         #获取用户ip
         if request.META.has_key('HTTP_X_FORWARDED_FOR'):
-            user_ip = request.META['HTTP_X_FORWARDED_FOR']
+            cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
-            user_ip = request.META['REMOTE_ADDR']
-        request.session['user_ip'] = user_ip
-        return HttpResponseRedirect('/user/index')
+            cuser_ip = request.META['REMOTE_ADDR']
+        request.session['cuser_ip'] = cuser_ip
+        return HttpResponseRedirect('/cuser/index')
 
     context = {
         'title': '揭西石灵寺',
@@ -119,7 +119,7 @@ def register_do(request):
 
 def register(request):
     request.session['register'] = 1
-    return HttpResponseRedirect('/user/register_do')
+    return HttpResponseRedirect('/cuser/register_do')
 
 
 @csrf_exempt
@@ -127,12 +127,12 @@ def pwd_update(request):
     if request.method == 'POST':
         pwd = request.POST.get('pwd1', '')
         try:
-            user = get_object_or_404(User, id=request.session['user_id'])
-            user.pwd = make_password(pwd, None, 'pbkdf2_sha256')
-            user.save()
-            return HttpResponseRedirect('/user/index')
+            cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
+            cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
+            cuser.save()
+            return HttpResponseRedirect('/cuser/index')
         except Exception, e:
-            return HttpResponseRedirect('/user/login')
+            return HttpResponseRedirect('/cuser/login')
     context = {
         'title': '揭西石灵寺',
     }
@@ -142,7 +142,7 @@ def pwd_update(request):
 
 @web_webchat_check_login
 def wx_login():
-    return HttpResponseRedirect('/user/login')
+    return HttpResponseRedirect('/cuser/login')
 
 
 def wx_pay():
@@ -150,8 +150,8 @@ def wx_pay():
 
 
 def ch_phone(request, phone):
-    users = User.objects.filter(phone=phone)
-    if users:
+    cusers = Cuser.objects.filter(phone=phone)
+    if cusers:
         return True
     else:
         return False
