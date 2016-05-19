@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import (
     Temple,
     Mage,
+    GoodDeedDay,
     Category,
     Provide,
     GoodRaise,
@@ -195,6 +196,69 @@ def mage_delete(request, mage_id):
     mage = get_object_or_404(Mage, **kwargs)
     mage.delete()
     return HttpResponseRedirect("/admin/mage")
+
+
+@login_required
+def gooddeedday_detail(request):
+    gooddeeddays = GoodDeedDay.objects.all()
+    if gooddeeddays:
+        gooddeedday = gooddeeddays[0]
+    else:
+        gooddeedday = GoodDeedDay()
+    if request.method == 'POST':
+        title = request.POST.get('title', '')
+        sub_title1 = request.POST.get('sub_title1', '')
+        sub_detail1 = request.POST.get('sub_detail1', '')
+        sub_price1 = request.POST.get('sub_price1', '')
+        sub_title2 = request.POST.get('sub_title2', '')
+        sub_detail2 = request.POST.get('sub_detail2', '')
+        sub_price2 = request.POST.get('sub_price2', '')
+        gooddeedday.title = title
+        gooddeedday.sub_title1 = sub_title1
+        gooddeedday.sub_detail1 = sub_detail1
+        gooddeedday.sub_price1 = sub_price1
+        gooddeedday.sub_title2 = sub_title2
+        gooddeedday.sub_detail2 = sub_detail2
+        gooddeedday.sub_price2 = sub_price2
+        gooddeedday.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'gooddeedday_{}_{}.{}'.format(gooddeedday.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                gooddeedday.cover = key
+                gooddeedday.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+            if request.FILES.get('sub_cover1', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['sub_cover1'].name)
+                key = 'gooddeedday_{}_{}.{}'.format(gooddeedday.id, ts, ext)
+                handle_uploaded_file(request.FILES['sub_cover1'], key)
+                gooddeedday.sub_cover1 = key
+                gooddeedday.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+            if request.FILES.get('sub_cover2', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['sub_cover2'].name)
+                key = 'gooddeedday_{}_{}.{}'.format(gooddeedday.id, ts, ext)
+                handle_uploaded_file(request.FILES['sub_cover2'], key)
+                gooddeedday.sub_cover2 = key
+                gooddeedday.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
+    context = {
+        'module': 'gooddeedday',
+        'gooddeedday': gooddeedday,
+    }
+    if gooddeedday:
+        context['cover_url'] = gooddeedday.cover_url()
+        context['sub_cover_url1'] = gooddeedday.sub_cover_url1()
+        context['sub_cover_url2'] = gooddeedday.sub_cover_url2()
+    template = loader.get_template('manage/super/provide/gooddeedday/edit.html')
+    return HttpResponse(template.render(context, request))
 
 
 @login_required

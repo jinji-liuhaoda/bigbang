@@ -26,7 +26,6 @@ class BaseManager(object):
             else:
                 raise Exception('errcode:{}, errmsg:{}'.format(
                     obj.get('errcode', ''),
-                    obj.get('errmsg', ''),
-            ))
+                    obj.get('errmsg', ''),))
 
         return obj

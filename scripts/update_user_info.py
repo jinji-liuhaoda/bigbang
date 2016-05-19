@@ -1,6 +1,6 @@
 # coding: utf-8
 
-import django;django.setup()
+import django.setup()
 from ucenter.user_manager import user_manager
 from ucenter.models import (
     Cuser,
