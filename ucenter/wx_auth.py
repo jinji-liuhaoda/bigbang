@@ -47,12 +47,12 @@ def wechat_do_login(request):
         request.session['register'] = False
     else:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
-
-    print 'wechat_do_login', openid, cuser.id
+        # 设置Session
+        request.session['cuser_id'] = cuser.id
+    print 'wechat_do_login', openid
 
     # 设置Session
     request.session['openid'] = openid
-    request.session['cuser_id'] = cuser.id
     # 获取用户ip
     if 'HTTP_X_FORWARDED_FOR' in request.META:
         cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
