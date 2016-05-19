@@ -97,7 +97,7 @@ def register_do(request):
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
 
-        cuser = Cuser.objects.get(id=request.session.get('cuser_id', ''))
+        cuser = Cuser.objects.get(id=request.session.get('cuser_id', 0))
         cuser.phone = phone
         cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
         cuser.save()
@@ -107,7 +107,7 @@ def register_do(request):
         else:
             cuser_ip = request.META['REMOTE_ADDR']
         request.session['cuser_ip'] = cuser_ip
-        return HttpResponseRedirect('/cuser/index')
+        return HttpResponseRedirect('/cuser')
 
     context = {
         'title': '揭西石灵寺',
