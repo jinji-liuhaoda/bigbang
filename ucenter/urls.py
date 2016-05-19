@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^login_out/$', auth_views.login_out, name='login_out'),
     url(r'^register/$', auth_views.register, name='register'),
     url(r'^register_do/$', auth_views.register_do, name='register_do'),
-    url(r'^index/$', auth_views.index, name='index'),
+    url(r'^$', auth_views.index, name='index'),
     url(r'^pwd_update/$', auth_views.pwd_update, name='pwd_update'),
     url(r'^phone/(?P<phone>\d+)$', auth_views.check_phone, name='check_phone'),
     # 微信相关

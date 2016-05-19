@@ -1,6 +1,6 @@
 # coding: utf-8
 
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
 from settings import DOMAIN
 from functools import wraps
@@ -26,7 +26,7 @@ def web_webchat_check_login(view):
             make_fake_user(request)
             return view(request, *args, **kwargs)
 
-        cuser_id = request.session.get('cuser_id', '')
+        cuser_id = request.session.get('cuser_id', 0)
         openid = request.session.get('openid', '')
         cnt = Cuser.objects.filter(id=cuser_id, openid=openid)
         if not cuser_id or not openid or not cnt:

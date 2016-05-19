@@ -85,7 +85,7 @@ def provide_detail(request, provide_id):
 
 @csrf_exempt
 def provide_pay(request, provide_id):
-    cuser_id = request.session.get('cuser_id', '')
+    cuser_id = request.session.get('cuser_id', 0)
     openid = request.session.get('openid', '')
     if request.method == 'POST':
         if not openid:
