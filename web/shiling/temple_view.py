@@ -84,7 +84,7 @@ def provide_detail(request, provide_id):
     return HttpResponse(template.render(context, request))
 
 
-# @web_webchat_check_login
+@web_webchat_check_login
 def provide_pay(request, provide_id):
     cuser_id = request.session.get('cuser_id', 0)
     openid = request.session.get('openid', '')
