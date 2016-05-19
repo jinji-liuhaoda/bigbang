@@ -120,7 +120,7 @@ STATICFILES_DIRS = [
 
 DOMAIN = 'http://temple.dev.attackt.com'
 
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = '/admin/login'
 
 UPLOAD_DIR = os.path.join(BASE_DIR, 'web', 'static', 'upload')
 ROOT = os.path.abspath(os.path.dirname(__file__))

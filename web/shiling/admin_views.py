@@ -57,7 +57,7 @@ def index(request):
 @login_required
 def logout_view(request):
     logout(request)
-    return HttpResponseRedirect('/admin/login/')
+    return HttpResponseRedirect('/admin/login')
 
 
 @login_required
