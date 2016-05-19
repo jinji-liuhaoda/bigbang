@@ -29,7 +29,7 @@ import time
 
 
 def index(request):
-    if request.session['cuser_id']:
+    if not request.session['cuser_id']:
         return HttpResponseRedirect('/cuser/login/')
     cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
     activity_attendees = ActivityAttendee.objects.filter(mobile_phone=cuser.phone)
