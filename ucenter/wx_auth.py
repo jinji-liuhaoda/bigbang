@@ -60,7 +60,8 @@ def wechat_do_login(request):
         cuser_ip = request.META['REMOTE_ADDR']
     request.session['cuser_ip'] = cuser_ip
     red_next_url = request.session.get('red_next_url', '')
-
+    if not red_next_url:
+        red_next_url = '/cuser/'
     return HttpResponseRedirect(red_next_url)
 
 
