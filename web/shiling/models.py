@@ -62,6 +62,36 @@ class Category(models.Model):
         return self.name
 
 
+class GoodDeedDay(models.Model):
+
+    class Meta(object):
+        verbose_name = "日行一善"
+        verbose_name_plural = "日行一善"
+
+    title = models.CharField(max_length=128, verbose_name="标题")
+    cover = models.CharField(max_length=128, blank=False, verbose_name="封面图片")
+    sub_title1 = models.CharField(max_length=300, default='', verbose_name="捐赠1标题")
+    sub_detail1 = models.CharField(max_length=300, default='', verbose_name="捐赠1描述")
+    sub_cover1 = models.CharField(max_length=128, blank=False, default='', verbose_name="捐赠1图片")
+    sub_price1 = models.FloatField(default=0.0, verbose_name="价格1")
+    sub_title2 = models.CharField(max_length=300, default='', verbose_name="捐赠2标题")
+    sub_detail2 = models.CharField(max_length=300, default='', verbose_name="捐赠2描述")
+    sub_cover2 = models.CharField(max_length=128, blank=False, default='', verbose_name="捐赠2图片")
+    sub_price2 = models.FloatField(default=0.0, verbose_name="价格2")
+
+    def __unicode__(self):
+        return self.title
+
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
+
+    def sub_cover_url1(self):
+        return url(BUCKET_NAME, self.sub_cover1)
+
+    def sub_cover_url2(self):
+        return url(BUCKET_NAME, self.sub_cover2)
+
+
 class Provide(models.Model):
 
     class Meta(object):

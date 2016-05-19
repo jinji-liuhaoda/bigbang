@@ -54,6 +54,7 @@ urlpatterns = [
     url(r'^admin/login$', admin_views.login_view),
     url(r'^admin/logout$', admin_views.logout_view),
     url(r'^admin/$', admin_views.index),
+
     # 关于寺庙
     url(r'^admin/temple$', admin_views.temple_edit),
 
@@ -64,6 +65,7 @@ urlpatterns = [
     url(r'^admin/mage/(?P<mage_id>\d+)/delete$', admin_views.mage_delete),
 
     # 供养
+    url(r'^admin/gooddeedday$', admin_views.gooddeedday_detail),
     url(r'^admin/category$', admin_views.category_list),
     url(r'^admin/category/create$', admin_views.category_create),
     url(r'^admin/category/(?P<category_id>\d+)/edit$', admin_views.category_edit),
@@ -125,8 +127,10 @@ urlpatterns = [
     url(r'^admin/user/create$', admin_views.user_create),
     url(r'^admin/user/(?P<user_id>\d+)/edit$', admin_views.user_edit),
     url(r'^admin/user/(?P<user_id>\d+)/delete$', admin_views.user_delete),
+
     # django后台
     url(r'^superadmin/', admin.site.urls),
+
     # 用户中心
     url(r'^cuser/', include('ucenter.urls')),
 
