@@ -1,0 +1,91 @@
+{% extends 'manage/super/base.html' %}
+
+{% block pageheader %}
+新闻管理
+{% endblock %}
+
+{% block mainbody %}
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">
+      {% if news %}
+      编辑新闻
+      {% else %}
+      新建新闻
+      {% endif %}
+    </h3>
+  </div><!-- /.box-header -->
+  <!-- form start -->
+
+  <div class="box-body">
+
+    <form role="form" method="POST"
+      {% if not news %}
+      action="/admin/news/create"
+      {% else %}
+      action="/admin/news/{{ news.id }}/edit"
+      {% endif %}
+      enctype="multipart/form-data">
+      {% csrf_token %}
+
+    <div class="form-group">
+      {% if news %}
+      <input type="hidden" id="news-id" name="news-id" value="{{ news.id }}" />
+      {% endif %}
+      <label for="exampleInputEmail1">标题</label>
+      <input type="text" class="form-control" id="title" name="title" placeholder=""
+      {% if news %}value="{{ news.title }}"{% endif %} />
+    </div>
+    <div class="form-group">
+      <label for="exampleInputFile">上传封面</label>
+      <input type="file" id="cover" name="cover" />
+      <p style="margin-top: 10px;">
+        {% if news.cover %}
+        <img src="{{ cover_url }}?imageView/2/w/375" />
+        {% endif %}
+      </p>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">开始时间 - 结束时间</label>
+      <div class="input-group">
+        <div class="input-group-addon">
+          <i class="fa fa-calendar"></i>
+        </div>
+        <input type="text" class="form-control" id="daterange" name="daterange"
+        value="{% if news %}{{ news.start_time|date:"m/d/Y" }} - {{ news.end_time|date:"m/d/Y" }}{% endif %}" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">简介</label>
+      <textarea class="form-control" id="detail" name="detail">{% if news %}{{ news.detail }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+      <label for="exampleInputEmail1">详情</label>
+      <textarea class="form-control" id="content" name="content">{% if news %}{{ news.content }}{% endif %}</textarea>
+    </div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary pull-right">
+        {% if news %}
+          更新
+        {% else %}
+          创建
+        {% endif %}
+      </button>
+    </div>
+  </form>
+    </div><!-- /.box-body -->
+
+  <div class="box-footer">
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+$(function () {
+  $('#daterange').daterangepicker();
+  CKEDITOR.replace('detail');
+  CKEDITOR.replace('content');
+});
+</script>
+{% endblock %}

@@ -8,7 +8,7 @@ from django.db import models
 import datetime
 
 
-class User(models.Model):
+class Cuser(models.Model):
 
     class Meta(object):
         verbose_name = "用户"
@@ -19,15 +19,15 @@ class User(models.Model):
         (1, '女'),
     )
 
-    name = models.CharField(max_length=128, verbose_name="昵称")
+    name = models.CharField(max_length=128, default='', verbose_name="昵称")
     gender = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="性别")
-    city = models.CharField(max_length=128, blank=True, verbose_name="城市")
-    phone = models.CharField(max_length=128, blank=True, verbose_name="电话")
-    province = models.CharField(max_length=128, blank=True, verbose_name="省份")
-    country = models.CharField(max_length=128, blank=True, verbose_name="国家")
+    city = models.CharField(max_length=128, blank=True, default='', verbose_name="城市")
+    phone = models.CharField(max_length=128, blank=True, default='', verbose_name="电话")
+    province = models.CharField(max_length=128, blank=True, default='', verbose_name="省份")
+    country = models.CharField(max_length=128, blank=True, default='', verbose_name="国家")
     pwd = models.TextField(null=False, default='', verbose_name="密码")
-    openid = models.CharField(max_length=128, blank=True, verbose_name="微信OpenID")
-    headimgurl = models.CharField(max_length=300, blank=True, verbose_name="微信头像")
+    openid = models.CharField(max_length=128, blank=True, default='', verbose_name="微信OpenID")
+    headimgurl = models.CharField(max_length=300, default='', blank=True, verbose_name="微信头像")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
 
     def __unicode__(self):
@@ -46,6 +46,11 @@ class Order(models.Model):
         (2, '支付成功'),
     )
 
+    FROM_CHOICES = (
+        (0, '供养'),
+        (1, '善筹'),
+    )
+
     out_trade_no = models.CharField(max_length=128, verbose_name="订单号")
     product_id = models.CharField(max_length=128, verbose_name="商品id")
     trade_type = models.CharField(max_length=128, default='', verbose_name="支付类型")
@@ -55,6 +60,7 @@ class Order(models.Model):
     detail = models.TextField(null=False, verbose_name="商品详情")
     total_fee = models.FloatField(default=0.0, verbose_name="总价")
     status = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="订单状态")
+    from_pay = models.IntegerField(choices=FROM_CHOICES, default=0, verbose_name="订单来源")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
 
     def __unicode__(self):

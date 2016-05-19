@@ -1,0 +1,46 @@
+{% extends 'manage/super/base.html' %}
+
+{% block pageheader %}
+订单管理
+{% endblock %}
+
+{% block mainbody %}
+<div class="box box-primary">
+  <div class="box-header with-border">
+    <h3 class="box-title">
+      订单管理
+    </h3>
+    <div class="box-tools">
+    </div>
+  </div><!-- /.box-header -->
+
+  <div class="box-body">
+    <div style="margin-bottom:15px;">
+      <!-- <a href="/admin/order/create" class="btn btn-info">新建</a> -->
+    </div>
+    <div class="row">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th style="width: 10px">#</th>
+            <th>名称</th>
+            <th>订单号</th>
+            <th>金额</th>
+            <th>操作</th>
+          </tr>
+          {% for order in orders %}
+            <tr>
+              <td><a href="/admin/order/{{ order.id }}/edit">{{ order.id }}</a></td>
+              <td><a href="/admin/order/{{ order.id }}/edit">{{ order.name }}</a></td>
+              <td><a href="/admin/order/{{ order.id }}/edit">{{ order.mage_num }}</a></td>
+              <td>
+                <a class="btn btn-danger btn-xs" href="/admin/order/{{ order.id }}/delete">删除</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

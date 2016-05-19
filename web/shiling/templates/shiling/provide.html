@@ -2,7 +2,7 @@
 {% block mainbody %}
 	<div class="nav">
 		<ul class="text special">
-			<li><a href="/index" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
+			<li><a href="/" {% if not module or module == 'shouye' %}class="action" {% endif %}>首页</a></li>
 			<li><a href="/provide" {% if module == 'provide' %}class="action" {% endif %}>供养</a></li>
 			<li><a href="/goodraise" {% if module == 'goodraise' %}class="action" {% endif %}>善筹</a></li>
 			<li><a href="/blessing" {% if module == 'blessing' %}class="action" {% endif %}>祈福</a></li>
@@ -13,7 +13,7 @@
 		</ul>
 	</div>
 	<div class="user">
-		<a href="/user/login">
+		<a href="/cuser/login">
 			<img src="/static/images/user-icon.png" width="26">
 		</a>
 	</div>
@@ -86,7 +86,7 @@
 					<li {% if item.pr_is == 1 and forloop.last %} class="last"{% endif %}>
 						<a href="/provide_pay/{{provide.id}}">
 							<div class="pic">
-								<img src="{{provide.cover}}">
+								<img src="{{provide.cover_url}}">
 							</div>
 						</a>
 						<h3>{{provide.title}}</h3>
