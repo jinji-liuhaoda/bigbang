@@ -3,7 +3,7 @@
 import requests
 from .base_manager import BaseManager
 from .constants import GET, POST
-from models import User
+from .models import Cuser
 
 WX_USER_INFO_URL = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token={}&openid={}&lang=zh_CN'
 
@@ -36,7 +36,7 @@ class UserManager(BaseManager):
         country = obj.get('country', '')
         headimgurl = obj.get('headimgurl', '')
         # 同步用户微信头像
-        User.objects.filter(openid=openid).update(headimgurl=headimgurl, name=name, city=city, province=province, country=country)
+        Cuser.objects.filter(openid=openid).update(headimgurl=headimgurl, name=name, city=city, province=province, country=country)
         return True
 
 
