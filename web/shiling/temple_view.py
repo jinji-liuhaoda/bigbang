@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
 from ucenter.wx_config import get_wx_config
 from ucenter.models import Cuser
+from ucenter.wx_auth import web_webchat_check_login
 from .models import (
     Temple,
     Mage,
@@ -83,9 +84,9 @@ def provide_detail(request, provide_id):
     return HttpResponse(template.render(context, request))
 
 
-@csrf_exempt
+# @web_webchat_check_login
 def provide_pay(request, provide_id):
-    cuser_id = request.session.get('cuser_id', '')
+    cuser_id = request.session.get('cuser_id', 0)
     openid = request.session.get('openid', '')
     if request.method == 'POST':
         if not openid:
@@ -151,6 +152,7 @@ def good_pay(request, good_id):
 
 def blessing_list(request):
     temples = Temple.objects.all()
+    buddhismknowledge = BuddhismKnowledge.objects.all()
     if temples:
         temple = temples[0]
     else:
@@ -159,6 +161,7 @@ def blessing_list(request):
         'title': '揭西石灵寺',
         'module': 'blessing',
         'temple': temple,
+        'bknow': len(buddhismknowledge),
     }
     template = loader.get_template('shiling/blessing.html')
     return HttpResponse(template.render(context, request))
