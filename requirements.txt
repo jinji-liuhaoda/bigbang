@@ -1,5 +1,5 @@
-simplejson
-requests==2.9.1
-Django==1.9
+simplejson==3.8.2
+requests==2.10.0
+Django==1.9.5
 redis==2.10.5
 qiniu==7.0.7
