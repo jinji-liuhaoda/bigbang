@@ -97,7 +97,7 @@ def register_do(request):
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
 
-        cuser = Cuser.objects.get_or_create(openid=request.session.get('openid', ''))
+        cuser, _ = Cuser.objects.get_or_create(openid=request.session.get('openid', ''))
         cuser.phone = phone
         cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
         cuser.save()
