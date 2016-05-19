@@ -65,8 +65,8 @@ def login(request):
         if is_validation:
             request.session['cuser_id'] = cuser.id
             request.session['openid'] = cuser.openid
-            #获取用户ip
-            if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+            # 获取用户ip
+            if 'HTTP_X_FORWARDED_FOR' in request.META:
                 cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
             else:
                 cuser_ip = request.META['REMOTE_ADDR']
@@ -101,8 +101,8 @@ def register_do(request):
         cuser.phone = phone
         cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
         cuser.save()
-        #获取用户ip
-        if request.META.has_key('HTTP_X_FORWARDED_FOR'):
+        # 获取用户ip
+        if 'HTTP_X_FORWARDED_FOR' in request.META:
             cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
         else:
             cuser_ip = request.META['REMOTE_ADDR']
@@ -160,6 +160,6 @@ def ch_phone(request, phone):
 def check_phone(request, phone):
     cp = ch_phone(request, phone)
     if cp:
-        return HttpResponse(simplejson.dumps({'error': 1, 'msg': '该手机号码已注册,请登录'}, ensure_ascii = False))
+        return HttpResponse(simplejson.dumps({'error': 1, 'msg': '该手机号码已注册,请登录'}, ensure_ascii=False))
     else:
         return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))

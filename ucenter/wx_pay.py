@@ -4,7 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from .models import User, Order, GoodId
+from .models import Cuser, Order, GoodId
 from wx_auth import web_webchat_check_login
 
 from settings import UPLOAD_DIR, DOMAIN
@@ -30,7 +30,7 @@ def create_order(request):
         detail = request.POST.get('detail', '')
         total_fee = request.POST.get('total_fee', '')
         spbill_create_ip = request.session.get('cuser_ip', '')
-        noncestr = ''.join(map(lambda xx:(hex(ord(xx))[2:]), os.urandom(8)))
+        noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
         stringA = "appid=" + WX_APP_ID + "&body=" + body + "&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr
         stringSignTemp = stringA + "&key=" + WX_SECRET
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
@@ -82,7 +82,7 @@ def create_order(request):
             stringB = "appid=" + WX_APP_ID + "&nonce_str=" + noncestr + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_SECRET
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
-            return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功','prepay_id': prepay_id, 'code_url': code_url, 'signB': signB}, ensure_ascii = False))
+            return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'prepay_id': prepay_id, 'code_url': code_url, 'signB': signB}, ensure_ascii=False))
         else:
             return HttpResponse(simplejson.dumps({'error': 1, 'msg': '下单失败'}, ensure_ascii=False))
 

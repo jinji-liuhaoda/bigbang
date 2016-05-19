@@ -12,7 +12,7 @@ STRING_1 = 'jsapi_ticket={}&noncestr={}&timestamp={}&url={}'
 
 def get_wx_config(url):
     jsapi_ticket = jsapi_ticket_manager.get_ticket()
-    noncestr = ''.join(map(lambda xx:(hex(ord(xx))[2:]), os.urandom(8)))
+    noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
     timestamp = int(time.time())
 
     string1 = STRING_1.format(jsapi_ticket, noncestr, timestamp, url)

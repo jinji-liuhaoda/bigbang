@@ -83,9 +83,10 @@
                 </li>
               </ul>
             </li>
-            <li class="treeview {% if module == 'category' or module == 'provide' or module == 'provide-pay' %}active{% endif %}" >
+            <li class="treeview {% if module == 'gooddeedday' or module == 'category' or module == 'provide' or module == 'provide-pay' %}active{% endif %}" >
               <a href="#"><span>供养</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu {% if module == 'category' or module == 'provide' or module == 'provide-pay' %}menu-open{% endif %}">
+              <ul class="treeview-menu {% if module == 'gooddeedday' or module == 'category' or module == 'provide' or module == 'provide-pay' %}menu-open{% endif %}">
+                <li {% if module == 'gooddeedday' %}class="active"{% endif %}><a href="/admin/gooddeedday"><i class="fa fa-circle-o"></i>日行一善</a></li>
                 <li {% if module == 'category' %}class="active"{% endif %}><a href="/admin/category"><i class="fa fa-circle-o"></i>分类管理</a></li>
                 <li {% if module == 'provide' %}class="active"{% endif %}><a href="/admin/provide"><i class="fa fa-circle-o"></i>供养管理</a></li>
                 <li {% if module == 'provide-pay' %}class="active"{% endif %}><a href="/admin/provide-pay"><i class="fa fa-circle-o"></i>支付管理</a></li>

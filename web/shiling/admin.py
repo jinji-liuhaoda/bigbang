@@ -3,6 +3,7 @@ from django.contrib import admin
 from .models import (
     Temple,
     Mage,
+    GoodDeedDay,
     Category,
     Provide,
     GoodRaise,
@@ -48,6 +49,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Temple)
 admin.site.register(Mage)
+admin.site.register(GoodDeedDay)
 admin.site.register(GoodRaise)
 admin.site.register(Good)
 admin.site.register(Activity)

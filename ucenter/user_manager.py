@@ -23,7 +23,7 @@ class UserManager(BaseManager):
         return UserManager.instance
 
     def update_wechat_user_info(self, openid):
-        #获得openid和access_token
+        # 获得openid和access_token
         access_token = self.get_token()
         obj = self.wx_request(POST, WX_USER_INFO_URL.format(
             access_token,

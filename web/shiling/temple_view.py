@@ -10,6 +10,7 @@ from ucenter.models import Cuser
 from .models import (
     Temple,
     Mage,
+    GoodDeedDay,
     Category,
     Provide,
     GoodRaise,
@@ -45,6 +46,11 @@ def index(request):
 
 def provide_list(request):
     categories = Category.objects.order_by('-id')
+    gooddeeddays = GoodDeedDay.objects.all()
+    if gooddeeddays:
+        gooddeedday = gooddeeddays[0]
+    else:
+        gooddeedday = {}
     pds = []
     for category in categories:
         provides = Provide.objects.filter(
@@ -53,12 +59,13 @@ def provide_list(request):
         item = {
             'category': category,
             'provides': provides,
-            'pr_is': len(provides)%2,
+            'pr_is': len(provides) % 2,
         }
         pds.append(item)
     context = {
         'title': '揭西石灵寺',
         'module': 'provide',
+        'gooddeedday': gooddeedday,
         'pds': pds,
     }
     template = loader.get_template('shiling/provide.html')
@@ -81,7 +88,7 @@ def provide_pay(request, provide_id):
     cuser_id = request.session.get('cuser_id', '')
     openid = request.session.get('openid', '')
     if request.method == 'POST':
-        if openid == False:
+        if not openid:
             # 设置登录后回调地址
             request.session['redirest'] = request.get_raw_uri()
             return HttpResponseRedirect('/cuser/wx_login')
@@ -197,7 +204,7 @@ def activity_signup(request, activity_id):
         mobile_phone=phone,
         activity=activity,
     )
-    #义工报名人数
+    # 义工报名人数
     activity_attendees2 = ActivityAttendee.objects.filter(
         activity=activity,
     )
@@ -273,7 +280,7 @@ def volunteer_signup(request, volunteer_id):
         mobile_phone=phone,
         volunteer=volunteer,
     )
-    #义工报名人数
+    # 义工报名人数
     volunteer_users2 = VolunteerUser.objects.filter(
         volunteer=volunteer,
     )
