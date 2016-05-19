@@ -107,7 +107,7 @@ def register_do(request):
         else:
             cuser_ip = request.META['REMOTE_ADDR']
         request.session['cuser_ip'] = cuser_ip
-        return HttpResponseRedirect('/cuser')
+        return HttpResponseRedirect('/cuser/index')
 
     context = {
         'title': '揭西石灵寺',
@@ -141,13 +141,9 @@ def pwd_update(request):
 
 
 @web_webchat_check_login
-def wx_login():
+def wx_login(request):
     request.session['register'] = 0
     return HttpResponseRedirect('/cuser/login')
-
-
-def wx_pay():
-    return 1
 
 
 def ch_phone(request, phone):
