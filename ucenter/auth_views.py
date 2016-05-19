@@ -97,7 +97,7 @@ def register_do(request):
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
 
-        cuser = Cuser.objects.get(id=request.session.get('cuser_id', 0))
+        cuser = Cuser.objects.get_or_create(openid=request.session.get('openid', ''))
         cuser.phone = phone
         cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
         cuser.save()
@@ -142,6 +142,7 @@ def pwd_update(request):
 
 @web_webchat_check_login
 def wx_login():
+    request.session['register'] = 0
     return HttpResponseRedirect('/cuser/login')
 
 
