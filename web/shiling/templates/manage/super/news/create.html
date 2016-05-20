@@ -8,7 +8,7 @@
 <div class="box box-primary">
   <div class="box-header with-border">
     <h3 class="box-title">
-      {% if news %}
+      {% if news.id %}
       编辑新闻
       {% else %}
       新建新闻
@@ -20,7 +20,7 @@
   <div class="box-body">
 
     <form role="form" method="POST"
-      {% if not news %}
+      {% if not news.id %}
       action="/admin/news/create"
       {% else %}
       action="/admin/news/{{ news.id }}/edit"
@@ -29,18 +29,19 @@
       {% csrf_token %}
 
     <div class="form-group">
-      {% if news %}
+      {% if news.id %}
       <input type="hidden" id="news-id" name="news-id" value="{{ news.id }}" />
       {% endif %}
       <label for="exampleInputEmail1">标题</label>
       <input type="text" class="form-control" id="title" name="title" placeholder=""
       {% if news %}value="{{ news.title }}"{% endif %} />
+      {{error.title_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputFile">上传封面</label>
       <input type="file" id="cover" name="cover" />
       <p style="margin-top: 10px;">
-        {% if news.cover %}
+        {% if news.cover and news.id %}
         <img src="{{ cover_url }}?imageView/2/w/375" />
         {% endif %}
       </p>
@@ -54,6 +55,7 @@
         <input type="text" class="form-control" id="daterange" name="daterange"
         value="{% if news %}{{ news.start_time|date:"m/d/Y" }} - {{ news.end_time|date:"m/d/Y" }}{% endif %}" />
       </div>
+      {{error.daterange_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">简介</label>
@@ -65,7 +67,7 @@
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary pull-right">
-        {% if news %}
+        {% if news.id %}
           更新
         {% else %}
           创建

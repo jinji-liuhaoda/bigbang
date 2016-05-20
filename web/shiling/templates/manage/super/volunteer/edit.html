@@ -14,7 +14,7 @@
   <!-- form start -->
 
   <div class="box-body">
-    {% if volunteer %}
+    {% if volunteer.id %}
       <p>
         <a class="btn btn-info" href="/admin/{{ volunteer.id }}/volunteeruser">报名管理</a>
       </p>
@@ -23,18 +23,19 @@
       {% csrf_token %}
 
     <div class="form-group">
-      {% if volunteer %}
+      {% if volunteer.id %}
       <input type="hidden" id="volunteer-id" name="volunteer-id" value="{{ volunteer.id }}" />
       {% endif %}
       <label for="exampleInputEmail1">标题</label>
       <input type="text" class="form-control" id="title" name="title" placeholder=""
       {% if volunteer %}value="{{ volunteer.title }}"{% endif %} />
+      {{error.title_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputFile">封面图片</label>
       <input type="file" id="cover" name="cover" />
       <p style="margin-top: 10px;">
-        {% if volunteer.cover %}
+        {% if volunteer.cover and volunteer.id %}
         <img src="{{ cover_url }}?imageView/2/w/375" />
         {% endif %}
       </p>
@@ -48,6 +49,7 @@
       <label for="exampleInputEmail1">人数</label>
       <input type="text" class="form-control" id="people_number" name="people_number" placeholder=""
       {% if volunteer %}value="{{ volunteer.people_number }}"{% endif %} />
+      {{error.people_number_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputPassword1">开始时间 - 结束时间</label>
@@ -58,6 +60,7 @@
         <input type="text" class="form-control" id="daterange" name="daterange"
         value="{% if volunteer %}{{ volunteer.start_time|date:"m/d/Y" }} - {{ volunteer.end_time|date:"m/d/Y" }}{% endif %}" />
       </div>
+      {{error.daterange_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">简介</label>

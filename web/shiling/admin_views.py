@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User as DjangoUser
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
 from .models import (
     Temple,
     Mage,
@@ -28,6 +29,8 @@ from settings import UPLOAD_DIR
 import os
 import datetime
 import time
+
+FILED_CHECK_MSG = '<b class="error_msg">字段为必填项</b>'
 
 
 def login_view(request):
@@ -68,22 +71,38 @@ def temple_edit(request):
     else:
         temple = Temple()
     mages = Mage.objects.all()
+    error = {}
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         title = request.POST.get('title', '')
         detail = request.POST.get('detail', '')
         address = request.POST.get('address', '')
         content = request.POST.get('content', '')
         mage_id = request.POST.get('host_id', '')
-        if mage_id:
-            mage = get_object_or_404(Mage, id=mage_id)
-            temple.mage = mage
-        temple.name = name
-        temple.title = title
+
         temple.detail = detail
         temple.address = address
         temple.content = content
-        temple.save()
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        else:
+            temple.name = name
+
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        else:
+            temple.title = title
+        if not len(mage_id):
+            flag = False
+            error['mage_id_msg'] = FILED_CHECK_MSG
+        else:
+            mage = get_object_or_404(Mage, id=mage_id)
+            temple.mage = mage
+        if flag:
+            temple.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -99,6 +118,7 @@ def temple_edit(request):
         'module': 'temple',
         'temple': temple,
         'mages': mages,
+        'error': error,
     }
     if temple:
         context['cover_url'] = temple.cover_url()
@@ -125,17 +145,32 @@ def mage_list(request):
 
 @login_required
 def mage_create(request):
+    error = {}
+    mage = {}
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         mage_num = request.POST.get('mage_num', '')
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
+
         mage = Mage()
-        mage.name = name
-        mage.mage_num = mage_num
         mage.detail = detail
         mage.content = content
-        mage.save()
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        else:
+            mage.name = name
+
+        if not len(mage_num):
+            flag = False
+            error['mage_num_msg'] = FILED_CHECK_MSG
+        else:
+            mage.mage_num = mage_num
+
+        if flag:
+            mage.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -143,13 +178,18 @@ def mage_create(request):
                 key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 mage.cover = key
-                mage.save()
+                if flag:
+                    mage.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/mage')
+        if flag:
+            return HttpResponseRedirect('/admin/mage')
     context = {
         'module': 'mage',
+        'error': error,
     }
+    if mage:
+        context['mage'] = mage
     template = loader.get_template('manage/super/mage/create.html')
     return HttpResponse(template.render(context, request))
 
@@ -157,7 +197,9 @@ def mage_create(request):
 @login_required
 def mage_edit(request, mage_id):
     mage = get_object_or_404(Mage, id=mage_id)
+    error = {}
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         mage_num = request.POST.get('mage_num', '')
         detail = request.POST.get('detail', '')
@@ -166,7 +208,16 @@ def mage_edit(request, mage_id):
         mage.mage_num = mage_num
         mage.detail = detail
         mage.content = content
-        mage.save()
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+
+        if not len(mage_num):
+            flag = False
+            error['mage_num_msg'] = FILED_CHECK_MSG
+
+        if flag:
+            mage.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -174,13 +225,16 @@ def mage_edit(request, mage_id):
                 key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 mage.cover = key
-                mage.save()
+                if flag:
+                    mage.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/mage')
+        if flag:
+            return HttpResponseRedirect('/admin/mage')
     context = {
         'module': 'mage',
         'mage': mage,
+        'error': error,
     }
     if mage:
         context['cover_url'] = mage.cover_url()
@@ -205,7 +259,9 @@ def gooddeedday_detail(request):
         gooddeedday = gooddeeddays[0]
     else:
         gooddeedday = GoodDeedDay()
+    error = {}
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         sub_title1 = request.POST.get('sub_title1', '')
         sub_detail1 = request.POST.get('sub_detail1', '')
@@ -220,7 +276,27 @@ def gooddeedday_detail(request):
         gooddeedday.sub_title2 = sub_title2
         gooddeedday.sub_detail2 = sub_detail2
         gooddeedday.sub_price2 = sub_price2
-        gooddeedday.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+
+        if not len(sub_title1):
+            flag = False
+            error['sub_title1_msg'] = FILED_CHECK_MSG
+
+        if not len(sub_price1):
+            flag = False
+            error['sub_price1_msg'] = FILED_CHECK_MSG
+
+        if not len(sub_title2):
+            flag = False
+            error['sub_title2_msg'] = FILED_CHECK_MSG
+
+        if not len(sub_price1):
+            flag = False
+            error['sub_price2_msg'] = FILED_CHECK_MSG
+        if flag:
+            gooddeedday.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -228,7 +304,8 @@ def gooddeedday_detail(request):
                 key = 'gooddeedday_{}_{}.{}'.format(gooddeedday.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 gooddeedday.cover = key
-                gooddeedday.save()
+                if flag:
+                    gooddeedday.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
             if request.FILES.get('sub_cover1', None):
@@ -237,7 +314,8 @@ def gooddeedday_detail(request):
                 key = 'gooddeedday_{}_{}.{}'.format(gooddeedday.id, ts, ext)
                 handle_uploaded_file(request.FILES['sub_cover1'], key)
                 gooddeedday.sub_cover1 = key
-                gooddeedday.save()
+                if flag:
+                    gooddeedday.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
             if request.FILES.get('sub_cover2', None):
@@ -246,12 +324,14 @@ def gooddeedday_detail(request):
                 key = 'gooddeedday_{}_{}.{}'.format(gooddeedday.id, ts, ext)
                 handle_uploaded_file(request.FILES['sub_cover2'], key)
                 gooddeedday.sub_cover2 = key
-                gooddeedday.save()
+                if flag:
+                    gooddeedday.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
     context = {
         'module': 'gooddeedday',
         'gooddeedday': gooddeedday,
+        'error': error,
     }
     if gooddeedday:
         context['cover_url'] = gooddeedday.cover_url()
@@ -274,16 +354,25 @@ def category_list(request):
 
 @login_required
 def category_create(request):
+    error = {}
+    category = {}
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         detail = request.POST.get('detail', '')
         category = Category()
         category.name = name
         category.detail = detail
-        category.save()
-        return HttpResponseRedirect('/admin/category')
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        if flag:
+            category.save()
+            return HttpResponseRedirect('/admin/category')
     context = {
         'module': 'category',
+        'error': error,
+        'category': category,
     }
     template = loader.get_template('manage/super/provide/category/create.html')
     return HttpResponse(template.render(context, request))
@@ -291,17 +380,24 @@ def category_create(request):
 
 @login_required
 def category_edit(request, category_id):
+    error = {}
     category = get_object_or_404(Category, id=category_id)
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         detail = request.POST.get('detail', '')
         category.name = name
         category.detail = detail
-        category.save()
-        return HttpResponseRedirect('/admin/category')
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        if flag:
+            category.save()
+            return HttpResponseRedirect('/admin/category')
     context = {
         'module': 'category',
         'category': category,
+        'error': error,
     }
     template = loader.get_template('manage/super/provide/category/create.html')
     return HttpResponse(template.render(context, request))
@@ -330,8 +426,11 @@ def provide_list(request):
 
 @login_required
 def provide_create(request):
+    error = {}
     categorys = Category.objects.all()
+    provide = {}
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         subtitle = request.POST.get('subtitle', '')
         content = request.POST.get('content', '')
@@ -344,10 +443,25 @@ def provide_create(request):
         provide.detail = detail
         provide.content = content
         provide.price = price
-        if category_id:
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+
+        if not len(subtitle):
+            flag = False
+            error['subtitle_msg'] = FILED_CHECK_MSG
+
+        if not len(price):
+            flag = False
+            error['price_msg'] = FILED_CHECK_MSG
+
+        if not len(category_id):
+            flag = False
+            error['category_id_msg'] = FILED_CHECK_MSG
+        if flag:
             category = get_object_or_404(Category, id=category_id)
             provide.category = category
-        provide.save()
+            provide.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -355,7 +469,8 @@ def provide_create(request):
                 key = 'provide_{}_{}.{}'.format(provide.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 provide.cover = key
-                provide.save()
+                if flag:
+                    provide.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
             if request.FILES.get('banner_cover_url', None):
@@ -364,14 +479,17 @@ def provide_create(request):
                 key = 'provide_banner_{}_{}.{}'.format(provide.id, ts, ext)
                 handle_uploaded_file(request.FILES['banner_cover_url'], key)
                 provide.banner_cover = key
-                provide.save()
+                if flag:
+                    provide.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-
-        return HttpResponseRedirect('/admin/provide')
+        if flag:
+            return HttpResponseRedirect('/admin/provide')
     context = {
         'module': 'provide',
         'categorys': categorys,
+        'provide': provide,
+        'error': error,
     }
     template = loader.get_template('manage/super/provide/create.html')
     return HttpResponse(template.render(context, request))
@@ -379,9 +497,11 @@ def provide_create(request):
 
 @login_required
 def provide_edit(request, provide_id):
+    error = {}
     categorys = Category.objects.all()
     provide = get_object_or_404(Provide, id=provide_id)
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         subtitle = request.POST.get('subtitle', '')
         content = request.POST.get('content', '')
@@ -393,10 +513,25 @@ def provide_edit(request, provide_id):
         provide.detail = detail
         provide.content = content
         provide.price = price
-        if category_id:
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+
+        if not len(subtitle):
+            flag = False
+            error['subtitle_msg'] = FILED_CHECK_MSG
+
+        if not len(price):
+            flag = False
+            error['price_msg'] = FILED_CHECK_MSG
+
+        if not len(category_id):
+            flag = False
+            error['category_id_msg'] = FILED_CHECK_MSG
+        if flag:
             category = get_object_or_404(Category, id=category_id)
             provide.category = category
-        provide.save()
+            provide.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -404,7 +539,8 @@ def provide_edit(request, provide_id):
                 key = 'provide_{}_{}.{}'.format(provide.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 provide.cover = key
-                provide.save()
+                if flag:
+                    provide.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
             if request.FILES.get('banner_cover', None):
@@ -413,15 +549,17 @@ def provide_edit(request, provide_id):
                 key = 'provide_banner_{}_{}.{}'.format(provide.id, ts, ext)
                 handle_uploaded_file(request.FILES['banner_cover'], key)
                 provide.banner_cover = key
-                provide.save()
+                if flag:
+                    provide.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-
-        return HttpResponseRedirect('/admin/provide')
+        if flag:
+            return HttpResponseRedirect('/admin/provide')
     context = {
         'module': 'provide',
         'provide': provide,
         'categorys': categorys,
+        'error': error,
     }
     if provide:
         context['cover_url'] = provide.cover_url()
@@ -466,8 +604,11 @@ def good_list(request, goodraise_id):
 
 @login_required
 def good_create(request, goodraise_id):
+    error = {}
+    good = {}
     goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         detail = request.POST.get('detail', '')
         support_price = request.POST.get('support_price', '')
@@ -476,12 +617,20 @@ def good_create(request, goodraise_id):
         good.detail = detail
         good.goodraise = goodraise
         good.support_price = support_price
-        good.save()
-
-        return HttpResponseRedirect('/admin/' + str(goodraise.id) + '/good')
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        if not len(support_price):
+            flag = False
+            error['support_price_msg'] = FILED_CHECK_MSG
+        if flag:
+            good.save()
+            return HttpResponseRedirect('/admin/' + str(goodraise.id) + '/good')
     context = {
         'module': 'goodraise',
         'goodraise': goodraise,
+        'good': good,
+        'error': error
     }
     template = loader.get_template('manage/super/good/create.html')
     return HttpResponse(template.render(context, request))
@@ -490,19 +639,28 @@ def good_create(request, goodraise_id):
 @login_required
 def good_edit(request, good_id):
     good = get_object_or_404(Good, id=good_id)
+    error = {}
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         detail = request.POST.get('detail', '')
         support_price = request.POST.get('support_price', '')
         good.name = name
         good.detail = detail
         good.support_price = support_price
-        good.save()
-
-        return HttpResponseRedirect('/admin/' + str(good.goodraise.id) + '/good')
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        if not len(support_price):
+            flag = False
+            error['support_price_msg'] = FILED_CHECK_MSG
+        if flag:
+            good.save()
+            return HttpResponseRedirect('/admin/' + str(good.goodraise.id) + '/good')
     context = {
         'module': 'goodraise',
         'good': good,
+        'error': error
     }
     template = loader.get_template('manage/super/good/create.html')
     return HttpResponse(template.render(context, request))
@@ -532,30 +690,61 @@ def goodraise_list(request):
 
 @login_required
 def goodraise_create(request):
+    error = {}
+    goodraise = {}
     if request.method == 'POST':
-        name = request.POST.get('name', '')
-        mage_num = request.POST.get('mage_num', '')
+        flag = True
+        title = request.POST.get('title', '')
+        total_price = request.POST.get('total_price', '')
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
-        mage = Mage()
-        mage.name = name
-        mage.mage_num = mage_num
-        mage.detail = detail
-        mage.content = content
-        mage.save()
+        daterange = request.POST.get('daterange', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
+        goodraise = GoodRaise()
+        goodraise.title = title
+        goodraise.total_price = total_price
+        goodraise.detail = detail
+        goodraise.content = content
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+
+        if not len(total_price):
+            flag = False
+            error['total_price_msg'] = FILED_CHECK_MSG
+
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            goodraise.start_time = start_time
+            goodraise.end_time = end_time
+        if flag:
+            goodraise.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
                 ext = get_extension(request.FILES['cover'].name)
-                key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
+                key = 'goodraise_{}_{}.{}'.format(goodraise.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
-                mage.cover = key
-                mage.save()
+                goodraise.cover = key
+                if flag:
+                    goodraise.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/mage')
+        if flag:
+            return HttpResponseRedirect('/admin/goodraise')
     context = {
         'module': 'goodraise',
+        'goodraise': goodraise,
+        'error': error
     }
     template = loader.get_template('manage/super/goodraise/create.html')
     return HttpResponse(template.render(context, request))
@@ -563,8 +752,10 @@ def goodraise_create(request):
 
 @login_required
 def goodraise_edit(request, goodraise_id):
+    error = {}
     goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         daterange = request.POST.get('daterange', '')
         total_price = request.POST.get('total_price', '')
@@ -573,16 +764,31 @@ def goodraise_edit(request, goodraise_id):
 
         arr = [r.strip() for r in daterange.split('-')]
 
-        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
 
         goodraise.title = title
         goodraise.total_price = total_price
         goodraise.detail = detail
-        goodraise.content = content
-        goodraise.start_time = start_time
-        goodraise.end_time = end_time
-        goodraise.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+
+        if not len(total_price):
+            flag = False
+            error['total_price_msg'] = FILED_CHECK_MSG
+
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            goodraise.start_time = start_time
+            goodraise.end_time = end_time
+        if flag:
+            goodraise.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -590,18 +796,31 @@ def goodraise_edit(request, goodraise_id):
                 key = 'goodraise_{}_{}.{}'.format(goodraise.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 goodraise.cover = key
-                goodraise.save()
+                if flag:
+                    goodraise.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/goodraise')
+        if flag:
+            return HttpResponseRedirect('/admin/goodraise')
     context = {
         'module': 'goodraise',
         'goodraise': goodraise,
+        'error': error
     }
     if goodraise:
         context['cover_url'] = goodraise.cover_url()
     template = loader.get_template('manage/super/goodraise/create.html')
     return HttpResponse(template.render(context, request))
+
+
+@login_required
+def goodraise_delete(request, goodraise_id):
+    kwargs = {
+        'id': goodraise_id,
+    }
+    goodraise = get_object_or_404(GoodRaise, **kwargs)
+    goodraise.delete()
+    return HttpResponseRedirect("/admin/goodraise")
 
 
 @login_required
@@ -628,7 +847,10 @@ def activity_list(request):
 
 @login_required
 def activity_create(request):
+    error = {}
+    activity = {}
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         title = request.POST.get('title', '')
         detail = request.POST.get('detail', '')
@@ -639,8 +861,11 @@ def activity_create(request):
 
         arr = [r.strip() for r in daterange.split('-')]
 
-        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
 
         activity = Activity()
         activity.name = name
@@ -649,9 +874,23 @@ def activity_create(request):
         activity.content = content
         activity.address = address
         activity.people_number = people_number
-        activity.start_time = start_time
-        activity.end_time = end_time
-        activity.save()
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not len(people_number):
+            flag = False
+            error['people_number_msg'] = FILED_CHECK_MSG
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            activity.start_time = start_time
+            activity.end_time = end_time
+        if flag:
+            activity.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -659,12 +898,16 @@ def activity_create(request):
                 key = 'activity_{}_{}.{}'.format(activity.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 activity.cover = key
-                activity.save()
+                if flag:
+                    activity.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/activity')
+        if flag:
+            return HttpResponseRedirect('/admin/activity')
     context = {
         'module': 'activity',
+        'activity': activity,
+        'error': error,
     }
     template = loader.get_template('manage/super/activity/create.html')
     return HttpResponse(template.render(context, request))
@@ -672,8 +915,10 @@ def activity_create(request):
 
 @login_required
 def activity_edit(request, activity_id):
+    error = {}
     activity = get_object_or_404(Activity, id=activity_id)
     if request.method == 'POST':
+        flag = True
         name = request.POST.get('name', '')
         title = request.POST.get('title', '')
         detail = request.POST.get('detail', '')
@@ -684,8 +929,11 @@ def activity_edit(request, activity_id):
 
         arr = [r.strip() for r in daterange.split('-')]
 
-        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
 
         activity.name = name
         activity.title = title
@@ -695,7 +943,23 @@ def activity_edit(request, activity_id):
         activity.people_number = people_number
         activity.start_time = start_time
         activity.end_time = end_time
-        activity.save()
+        if not len(name):
+            flag = False
+            error['name_msg'] = FILED_CHECK_MSG
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not len(people_number):
+            flag = False
+            error['people_number_msg'] = FILED_CHECK_MSG
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            activity.start_time = start_time
+            activity.end_time = end_time
+        if flag:
+            activity.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -703,13 +967,16 @@ def activity_edit(request, activity_id):
                 key = 'activity_{}_{}.{}'.format(activity.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 activity.cover = key
-                activity.save()
+                if flag:
+                    activity.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/activity')
+        if flag:
+            return HttpResponseRedirect('/admin/activity')
     context = {
         'module': 'activity',
         'activity': activity,
+        'error': error,
     }
     if activity:
         context['cover_url'] = activity.cover_url()
@@ -783,7 +1050,10 @@ def news_list(request):
 
 @login_required
 def news_create(request):
+    error = {}
+    news = {}
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
@@ -791,16 +1061,27 @@ def news_create(request):
 
         arr = [r.strip() for r in daterange.split('-')]
 
-        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
 
         news = News()
         news.title = title
         news.detail = detail
         news.content = content
-        news.start_time = start_time
-        news.end_time = end_time
-        news.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            news.start_time = start_time
+            news.end_time = end_time
+        if flag:
+            news.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -808,12 +1089,16 @@ def news_create(request):
                 key = 'news_{}_{}.{}'.format(news.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 news.cover = key
-                news.save()
+                if flag:
+                    news.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/news')
+        if flag:
+            return HttpResponseRedirect('/admin/news')
     context = {
         'module': 'news',
+        'error': error,
+        'news': news,
     }
     template = loader.get_template('manage/super/news/create.html')
     return HttpResponse(template.render(context, request))
@@ -821,8 +1106,10 @@ def news_create(request):
 
 @login_required
 def news_edit(request, news_id):
+    error = {}
     news = get_object_or_404(News, id=news_id)
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
@@ -830,15 +1117,26 @@ def news_edit(request, news_id):
 
         arr = [r.strip() for r in daterange.split('-')]
 
-        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
 
         news.title = title
         news.detail = detail
         news.content = content
-        news.start_time = start_time
-        news.end_time = end_time
-        news.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            news.start_time = start_time
+            news.end_time = end_time
+        if flag:
+            news.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -846,13 +1144,16 @@ def news_edit(request, news_id):
                 key = 'news_{}_{}.{}'.format(news.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 news.cover = key
-                news.save()
+                if flag:
+                    news.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/news')
+        if flag:
+            return HttpResponseRedirect('/admin/news')
     context = {
         'module': 'news',
         'news': news,
+        'error': error,
     }
     if news:
         context['cover_url'] = news.cover_url()
@@ -877,7 +1178,9 @@ def volunteer_detail(request):
         volunteer = volunteers[0]
     else:
         volunteer = {}
+    error = {}
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         address = request.POST.get('address', '')
         people_number = request.POST.get('people_number', '')
@@ -886,8 +1189,11 @@ def volunteer_detail(request):
         daterange = request.POST.get('daterange', '')
         arr = [r.strip() for r in daterange.split('-')]
 
-        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        try:
+            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+        except Exception, e:
+            daterange = False
 
         volunteer.title = title
         volunteer.address = address
@@ -896,7 +1202,20 @@ def volunteer_detail(request):
         volunteer.content = content
         volunteer.start_time = start_time
         volunteer.end_time = end_time
-        volunteer.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not len(people_number):
+            flag = False
+            error['people_number_msg'] = FILED_CHECK_MSG
+        if not daterange:
+            flag = False
+            error['daterange_msg'] = FILED_CHECK_MSG
+        else:
+            volunteer.start_time = start_time
+            volunteer.end_time = end_time
+        if flag:
+            volunteer.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -904,12 +1223,14 @@ def volunteer_detail(request):
                 key = 'volunteer_{}_{}.{}'.format(volunteer.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 volunteer.cover = key
-                volunteer.save()
+                if flag:
+                    volunteer.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
     context = {
         'module': 'volunteer',
         'volunteer': volunteer,
+        'error': error,
     }
     if volunteer:
         context['cover_url'] = volunteer.cover_url()
@@ -973,7 +1294,10 @@ def buddhismknowledge_list(request):
 
 @login_required
 def buddhismknowledge_create(request):
+    error = {}
+    buddhismknowledge = {}
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         subtitle = request.POST.get('subtitle', '')
         content = request.POST.get('content', '')
@@ -982,7 +1306,14 @@ def buddhismknowledge_create(request):
         buddhismknowledge.title = title
         buddhismknowledge.subtitle = subtitle
         buddhismknowledge.content = content
-        buddhismknowledge.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not len(subtitle):
+            flag = False
+            error['subtitle_msg'] = FILED_CHECK_MSG
+        if flag:
+            buddhismknowledge.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -990,12 +1321,16 @@ def buddhismknowledge_create(request):
                 key = 'news_{}_{}.{}'.format(buddhismknowledge.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 buddhismknowledge.cover = key
-                buddhismknowledge.save()
+                if flag:
+                    buddhismknowledge.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/buddhismknowledge')
+        if flag:
+            return HttpResponseRedirect('/admin/buddhismknowledge')
     context = {
         'module': 'buddhismknowledge',
+        'buddhismknowledge': buddhismknowledge,
+        'error': error,
     }
     template = loader.get_template('manage/super/buddhismknowledge/create.html')
     return HttpResponse(template.render(context, request))
@@ -1003,8 +1338,10 @@ def buddhismknowledge_create(request):
 
 @login_required
 def buddhismknowledge_edit(request, buddhismknowledge_id):
+    error = {}
     buddhismknowledge = get_object_or_404(BuddhismKnowledge, id=buddhismknowledge_id)
     if request.method == 'POST':
+        flag = True
         title = request.POST.get('title', '')
         subtitle = request.POST.get('subtitle', '')
         content = request.POST.get('content', '')
@@ -1012,7 +1349,14 @@ def buddhismknowledge_edit(request, buddhismknowledge_id):
         buddhismknowledge.title = title
         buddhismknowledge.subtitle = subtitle
         buddhismknowledge.content = content
-        buddhismknowledge.save()
+        if not len(title):
+            flag = False
+            error['title_msg'] = FILED_CHECK_MSG
+        if not len(subtitle):
+            flag = False
+            error['subtitle_msg'] = FILED_CHECK_MSG
+        if flag:
+            buddhismknowledge.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
@@ -1020,13 +1364,16 @@ def buddhismknowledge_edit(request, buddhismknowledge_id):
                 key = 'news_{}_{}.{}'.format(buddhismknowledge.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
                 buddhismknowledge.cover = key
-                buddhismknowledge.save()
+                if flag:
+                    buddhismknowledge.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/buddhismknowledge')
+        if flag:
+            return HttpResponseRedirect('/admin/buddhismknowledge')
     context = {
         'module': 'buddhismknowledge',
         'buddhismknowledge': buddhismknowledge,
+        'error': error,
     }
     if buddhismknowledge:
         context['cover_url'] = buddhismknowledge.cover_url()
@@ -1064,7 +1411,8 @@ def cuser_create(request):
         cuser = Cuser()
         cuser.name = name
         cuser.city = city
-        cuser.save()
+        if len(cuser.name):
+            cuser.save()
         return HttpResponseRedirect('/admin/cuser')
     context = {
         'module': 'cuser',
@@ -1082,7 +1430,8 @@ def cuser_edit(request, cuser_id):
 
         cuser.name = name
         cuser.city = city
-        cuser.save()
+        if len(cuser.name):
+            cuser.save()
         return HttpResponseRedirect('/admin/cuser')
     context = {
         'module': 'cuser',
