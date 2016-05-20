@@ -84,6 +84,7 @@ urlpatterns = [
     url(r'^admin/goodraise$', admin_views.goodraise_list),
     url(r'^admin/goodraise/create$', admin_views.goodraise_create),
     url(r'^admin/goodraise/(?P<goodraise_id>\d+)/edit$', admin_views.goodraise_edit),
+    url(r'^admin/goodraise/(?P<goodraise_id>\d+)/delete$', admin_views.goodraise_delete),
 
     url(r'^admin/goodraise-pay$', admin_views.goodraise_pay_list),
 

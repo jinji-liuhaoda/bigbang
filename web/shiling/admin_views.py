@@ -533,27 +533,36 @@ def goodraise_list(request):
 @login_required
 def goodraise_create(request):
     if request.method == 'POST':
-        name = request.POST.get('name', '')
-        mage_num = request.POST.get('mage_num', '')
+        title = request.POST.get('title', '')
+        total_price = request.POST.get('total_price', '')
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
-        mage = Mage()
-        mage.name = name
-        mage.mage_num = mage_num
-        mage.detail = detail
-        mage.content = content
-        mage.save()
+        daterange = request.POST.get('daterange', '')
+
+        arr = [r.strip() for r in daterange.split('-')]
+
+        start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
+        end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+
+        goodraise = GoodRaise()
+        goodraise.title = title
+        goodraise.total_price = total_price
+        goodraise.detail = detail
+        goodraise.content = content
+        goodraise.start_time = start_time
+        goodraise.end_time = end_time
+        goodraise.save()
         if request.FILES:
             if request.FILES.get('cover', None):
                 ts = int(time.time())
                 ext = get_extension(request.FILES['cover'].name)
-                key = 'mage_{}_{}.{}'.format(mage.id, ts, ext)
+                key = 'goodraise_{}_{}.{}'.format(goodraise.id, ts, ext)
                 handle_uploaded_file(request.FILES['cover'], key)
-                mage.cover = key
-                mage.save()
+                goodraise.cover = key
+                goodraise.save()
                 # 上传图片到qiniu
                 upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
-        return HttpResponseRedirect('/admin/mage')
+        return HttpResponseRedirect('/admin/goodraise')
     context = {
         'module': 'goodraise',
     }
@@ -602,6 +611,16 @@ def goodraise_edit(request, goodraise_id):
         context['cover_url'] = goodraise.cover_url()
     template = loader.get_template('manage/super/goodraise/create.html')
     return HttpResponse(template.render(context, request))
+
+
+@login_required
+def goodraise_delete(request, goodraise_id):
+    kwargs = {
+        'id': goodraise_id,
+    }
+    goodraise = get_object_or_404(GoodRaise, **kwargs)
+    goodraise.delete()
+    return HttpResponseRedirect("/admin/goodraise")
 
 
 @login_required
