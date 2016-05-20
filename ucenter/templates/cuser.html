@@ -9,7 +9,11 @@
 	</div>
 	<div class="user">
 		<a href="">
-			<img src="http://placehold.it/24x24" width="24">
+			{% if cuser.headimgurl %}
+				<img src="{{cuser.headimgurl}}" width="24">
+			{% else %}
+				<img src="http://placehold.it/24x24" width="24">
+			{% endif %}
 		</a>
 	</div>
 	<div class="detail">
@@ -28,7 +32,12 @@
 									</div>
 									<div class="right">
 										<a href="">
-											<img src="{{cuser.headimgurl}}" >
+										{% if cuser.headimgurl %}
+											<img src="{{cuser.headimgurl}}" width="45">
+										{% else %}
+											<img src="http://placehold.it/45x45" width="45">
+										{% endif %}
+
 										</a>
 									</div>
 									<div class="clear"></div>								
