@@ -42,7 +42,7 @@ def wechat_do_login(request):
     # 获取access_token
     data = get_data(request.GET.get('code', ''))
     openid = data.get('openid', '')
-    register = request.session.get('register', '')
+    register = request.session.get('register', 0)
     if register:
         request.session['register'] = False
     else:
