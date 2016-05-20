@@ -89,7 +89,7 @@ def login(request):
 
 
 def login_out(request):
-    request.session.flush()
+    request.session.clear()
     return HttpResponseRedirect('/cuser/login')
 
 
