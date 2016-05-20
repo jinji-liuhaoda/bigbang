@@ -62,7 +62,7 @@ def login(request):
             is_validation = 1
         else:
             is_validation = 0
-        print is_validation
+
         if is_validation:
             request.session['cuser_id'] = cuser.id
             request.session['openid'] = cuser.openid
