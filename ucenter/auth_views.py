@@ -46,8 +46,8 @@ def index(request):
 @csrf_exempt
 def login(request):
     try:
-        request.session['cuser_id']
-        return HttpResponseRedirect('/cuser/index')
+        if request.session['cuser_id']:
+            return HttpResponseRedirect('/cuser/index')
     except Exception, e:
         print e
     error = 0
@@ -109,6 +109,7 @@ def register_do(request):
         else:
             cuser_ip = request.META['REMOTE_ADDR']
         request.session['cuser_ip'] = cuser_ip
+        request.session['cuser_id'] = cuser.id
         return HttpResponseRedirect('/cuser/index')
 
     context = {
