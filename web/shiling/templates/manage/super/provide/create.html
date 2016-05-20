@@ -8,7 +8,7 @@
 <div class="box box-primary">
   <div class="box-header with-border">
     <h3 class="box-title">
-      {% if provide %}
+      {% if provide.id %}
       编辑供养
       {% else %}
       新建供养
@@ -20,7 +20,7 @@
   <div class="box-body">
 
     <form role="form" method="POST"
-      {% if not provide %}
+      {% if not provide.id %}
       action="/admin/provide/create"
       {% else %}
       action="/admin/provide/{{ provide.id }}/edit"
@@ -35,11 +35,13 @@
       <label for="exampleInputEmail1">标题</label>
       <input type="text" class="form-control" id="title" name="title" placeholder=""
       {% if provide %}value="{{ provide.title }}"{% endif %} />
+      {{error.title_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">子标题</label>
       <input type="text" class="form-control" id="subtitle" name="subtitle" placeholder=""
       {% if provide %}value="{{ provide.subtitle }}"{% endif %} />
+      {{error.subtitle_msg|safe}}
     </div>
       <div class="form-group">
         <label for="exampleInputPassword1">所属分类</label>
@@ -48,12 +50,13 @@
           <option value="{{category.id}}" {% if category.id == provide.category.id %} selected {% endif %}>{{category.name}}</option>
           {% endfor %}
         </select>
+        {{error.category_id_msg|safe}}
       </div>
     <div class="form-group">
       <label for="exampleInputFile">封面图片</label>
       <input type="file" id="cover" name="cover" />
       <p style="margin-top: 10px;">
-        {% if provide.cover %}
+        {% if provide.cover and provide.id %}
         <img src="{{ cover_url }}?imageView/2/w/375" />
         {% endif %}
       </p>
@@ -62,7 +65,7 @@
       <label for="exampleInputFile">banner图片</label>
       <input type="file" id="banner_cover" name="banner_cover" />
       <p style="margin-top: 10px;">
-        {% if provide.banner_cover %}
+        {% if provide.banner_cover and provide.id %}
         <img src="{{ banner_cover_url }}?imageView/2/w/375" />
         {% endif %}
       </p>
@@ -71,6 +74,7 @@
       <label for="exampleInputEmail1">价格</label>
       <input type="text" class="form-control" id="price" name="price" placeholder=""
       {% if provide %}value="{{ provide.price }}"{% endif %} />
+      {{error.price_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">描述</label>
@@ -82,7 +86,7 @@
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary pull-right">
-        {% if provide %}
+        {% if provide.id %}
           更新
         {% else %}
           创建

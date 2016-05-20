@@ -8,7 +8,7 @@
 <div class="box box-primary">
   <div class="box-header with-border">
     <h3 class="box-title">
-      {% if goodraise %}
+      {% if goodraise.id %}
       编辑善筹
       {% else %}
       新建善筹
@@ -18,13 +18,13 @@
   <!-- form start -->
 
   <div class="box-body">
-    {% if goodraise %}
+    {% if goodraise.id %}
       <p>
         <a class="btn btn-info" href="/admin/{{ goodraise.id }}/good">商品管理</a>
       </p>
     {% endif %}
     <form role="form" method="POST"
-      {% if not goodraise %}
+      {% if not goodraise.id %}
       action="/admin/goodraise/create"
       {% else %}
       action="/admin/goodraise/{{ goodraise.id }}/edit"
@@ -39,12 +39,13 @@
       <label for="exampleInputEmail1">标题</label>
       <input type="text" class="form-control" id="title" name="title" placeholder=""
       {% if goodraise %}value="{{ goodraise.title }}"{% endif %} />
+      {{error.title_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputFile">封面图片</label>
       <input type="file" id="cover" name="cover" />
       <p style="margin-top: 10px;">
-        {% if goodraise.cover %}
+        {% if goodraise.cover and goodraise.id %}
         <img src="{{ cover_url }}?imageView/2/w/375" />
         {% endif %}
       </p>
@@ -53,6 +54,7 @@
       <label for="exampleInputEmail1">目标金额</label>
       <input type="text" class="form-control" id="total_price" name="total_price" placeholder=""
       {% if goodraise %}value="{{ goodraise.total_price }}"{% endif %} />
+       {{error.total_price_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputPassword1">开始时间 - 结束时间</label>
@@ -63,6 +65,7 @@
         <input type="text" class="form-control" id="daterange" name="daterange"
         value="{% if goodraise %}{{ goodraise.start_time|date:"m/d/Y" }} - {{ goodraise.end_time|date:"m/d/Y" }}{% endif %}" />
       </div>
+      {{error.daterange_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">简介</label>
@@ -74,7 +77,7 @@
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary pull-right">
-        {% if goodraise %}
+        {% if goodraise.id %}
           更新
         {% else %}
           创建

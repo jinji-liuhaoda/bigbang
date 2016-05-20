@@ -16,18 +16,19 @@
     {% csrf_token %}
     <div class="box-body">
       <div class="form-group">
-        {% if gooddeedday %}
+        {% if gooddeedday.id %}
         <input type="hidden" id="gooddeedday-id" name="gooddeedday-id" value="{{ gooddeedday.id }}" />
         {% endif %}
         <label for="exampleInputEmail1">标题</label>
         <input type="text" class="form-control" id="title" name="title" placeholder="输入标题"
         {% if gooddeedday %}value="{{ gooddeedday.title }}"{% endif %} />
+        {{error.title_msg|safe}}
       </div>
       <div class="form-group">
         <label for="exampleInputFile">封面图片</label>
         <input type="file" id="cover" name="cover" />
         <p style="margin-top: 10px;">
-          {% if gooddeedday.cover %}
+          {% if gooddeedday.cover and gooddeedday.id %}
           <img src="{{ cover_url }}?imageView/2/w/375" />
           {% endif %}
         </p>
@@ -36,6 +37,7 @@
         <label for="exampleInputPassword1">捐赠1标题</label>
         <input type="text" class="form-control" id="sub_title1" name="sub_title1" placeholder="输入标题"
         {% if gooddeedday %}value="{{ gooddeedday.sub_title1 }}"{% endif %}/>
+        {{error.sub_title1_msg|safe}}
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">捐赠1简介</label>
@@ -46,7 +48,7 @@
         <label for="exampleInputFile">捐赠1封面</label>
         <input type="file" id="sub_cover1" name="sub_cover1" />
         <p style="margin-top: 10px;">
-          {% if gooddeedday.sub_cover1 %}
+          {% if gooddeedday.sub_cover1 and gooddeedday.id %}
           <img src="{{ sub_cover_url1 }}?imageView/2/w/375" />
           {% endif %}
         </p>
@@ -55,11 +57,13 @@
         <label for="exampleInputPassword1">价格1</label>
         <input type="text" class="form-control" id="sub_price1" name="sub_price1" placeholder="输入价格"
         {% if gooddeedday %}value="{{ gooddeedday.sub_price1 }}"{% endif %}/>
+        {{error.sub_price1_msg|safe}}
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">捐赠2标题</label>
         <input type="text" class="form-control" id="sub_title2" name="sub_title2" placeholder="输入标题"
         {% if gooddeedday %}value="{{ gooddeedday.sub_title2 }}"{% endif %}/>
+        {{error.sub_title2_msg|safe}}
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">捐赠2简介</label>
@@ -70,7 +74,7 @@
         <label for="exampleInputFile">捐赠2封面</label>
         <input type="file" id="sub_cover2" name="sub_cover2" />
         <p style="margin-top: 10px;">
-          {% if gooddeedday.sub_cover2 %}
+          {% if gooddeedday.sub_cover2 and gooddeedday.id %}
           <img src="{{ sub_cover_url2 }}?imageView/2/w/375" />
           {% endif %}
         </p>
@@ -79,12 +83,13 @@
         <label for="exampleInputPassword1">价格2</label>
         <input type="text" class="form-control" id="sub_price2" name="sub_price2" placeholder="输入价格"
         {% if gooddeedday %}value="{{ gooddeedday.sub_price2 }}"{% endif %}/>
+        {{error.sub_price2_msg|safe}}
       </div>
     </div><!-- /.box-body -->
 
     <div class="box-footer">
       <button type="submit" class="btn btn-primary pull-right">
-        {% if gooddeedday %}
+        {% if gooddeedday.id %}
           更新
         {% else %}
           创建

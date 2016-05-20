@@ -20,7 +20,7 @@
   <div class="box-body">
 
     <form role="form" method="POST"
-      {% if not mage %}
+      {% if not mage.id %}
       action="/admin/mage/create"
       {% else %}
       action="/admin/mage/{{ mage.id }}/edit"
@@ -35,11 +35,13 @@
       <label for="exampleInputEmail1">名称</label>
       <input type="text" class="form-control" id="name" name="name" placeholder=""
       {% if mage %}value="{{ mage.name }}"{% endif %} />
+      {{error.name_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputEmail1">法号</label>
       <input type="text" class="form-control" id="mage_num" name="mage_num" placeholder=""
       {% if mage %}value="{{ mage.mage_num }}"{% endif %} />
+      {{error.mage_num_msg|safe}}
     </div>
     <div class="form-group">
       <label for="exampleInputFile">头像</label>
@@ -60,7 +62,7 @@
     </div>
     <div class="form-group">
       <button type="submit" class="btn btn-primary pull-right">
-        {% if mage %}
+        {% if mage.id %}
           更新
         {% else %}
           创建

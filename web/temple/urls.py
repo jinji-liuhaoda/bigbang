@@ -73,6 +73,7 @@ urlpatterns = [
     url(r'^admin/provide$', admin_views.provide_list),
     url(r'^admin/provide/create$', admin_views.provide_create),
     url(r'^admin/provide/(?P<provide_id>\d+)/edit$', admin_views.provide_edit),
+    url(r'^admin/provide/(?P<provide_id>\d+)/delete$', admin_views.provide_delete),
 
     url(r'^admin/provide-pay$', admin_views.provide_pay_list),
 
