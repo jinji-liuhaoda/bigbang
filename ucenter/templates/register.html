@@ -74,7 +74,7 @@
 					var jsonobj = JSON.parse(jsonobj);
 					if (jsonobj.error == 1) {
 						alert(jsonobj.msg);
-						window.location.href = '{{DOMAIN}}/cuser/login';
+						window.location.href = '{{DOMAIN}}/cuser/login/';
 					}else{
 						$("#formid").submit();
 					}

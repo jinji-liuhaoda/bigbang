@@ -54,14 +54,13 @@ def login(request):
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
-        try:
-            cuser = get_object_or_404(Cuser, phone=phone)
+
+        cuser = get_object_or_404(Cuser, phone=phone)
+        if cuser:
             is_pwd = check_password(pwd, cuser.pwd)
-            if is_pwd:
-                is_validation = 1
-            else:
-                is_validation = 0
-        except Cuser.DoesNotExist:
+        if cuser and is_pwd:
+            is_validation = 1
+        else:
             is_validation = 0
 
         if is_validation:
@@ -75,11 +74,12 @@ def login(request):
             request.session['cuser_ip'] = cuser_ip
             # 其他页登录需要回调
             redirest = request.session.get('redirest', '')
-            if redirest:
+            if len(redirest):
                 return HttpResponseRedirect(redirest)
             return HttpResponseRedirect('/cuser/index')
         else:
             error = 1
+
     context = {
         'title': '揭西石灵寺',
         'error': error,
