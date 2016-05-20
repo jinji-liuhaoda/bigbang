@@ -1177,7 +1177,7 @@ def volunteer_detail(request):
     if volunteers:
         volunteer = volunteers[0]
     else:
-        volunteer = {}
+        volunteer = Volunteer()
     error = {}
     if request.method == 'POST':
         flag = True
@@ -1200,8 +1200,6 @@ def volunteer_detail(request):
         volunteer.people_number = people_number
         volunteer.detail = detail
         volunteer.content = content
-        volunteer.start_time = start_time
-        volunteer.end_time = end_time
         if not len(title):
             flag = False
             error['title_msg'] = FILED_CHECK_MSG
