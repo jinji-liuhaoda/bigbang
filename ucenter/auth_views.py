@@ -30,7 +30,7 @@ import time
 
 @web_webchat_check_login
 def index(request):
-    cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
+    cuser = get_object_or_404(Cuser, id=request.session.get('cuser_id', 0))
     activity_attendees = ActivityAttendee.objects.filter(mobile_phone=cuser.phone)
     request.session['cuser_id'] = cuser.id
     context = {
@@ -44,6 +44,8 @@ def index(request):
 
 @csrf_exempt
 def login(request):
+    if request.session.get('cuser_id', 0):
+        return HttpResponseRedirect('/cuser/index')
     context = {
         'title': '揭西石灵寺',
     }
