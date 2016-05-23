@@ -28,6 +28,7 @@ import datetime
 import time
 
 
+@csrf_exempt
 @web_webchat_check_login
 def index(request):
     cuser = get_object_or_404(Cuser, id=request.session.get('cuser_id', 0))
