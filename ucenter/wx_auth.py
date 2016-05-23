@@ -29,7 +29,7 @@ def web_webchat_check_login(view):
         cuser_id = request.session.get('cuser_id', 0)
         openid = request.session.get('openid', '')
         cnt = Cuser.objects.filter(id=cuser_id, openid=openid)
-        if not openid:
+        if not len(openid):
             request.session['red_next_url'] = request.get_raw_uri()
             return HttpResponseRedirect(WX_AUTH_URL)
 
