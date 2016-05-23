@@ -28,12 +28,8 @@ import datetime
 import time
 
 
+@web_webchat_check_login
 def index(request):
-    try:
-        if not request.session['cuser_id']:
-            return HttpResponseRedirect('/cuser/login')
-    except Exception, e:
-        print e
     cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
     activity_attendees = ActivityAttendee.objects.filter(mobile_phone=cuser.phone)
     request.session['cuser_id'] = cuser.id
@@ -48,13 +44,6 @@ def index(request):
 
 @csrf_exempt
 def login(request):
-    try:
-        if request.session['cuser_id']:
-            return HttpResponseRedirect('/cuser/index')
-    except Exception, e:
-        print e
-    error = 0
-
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
