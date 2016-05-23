@@ -4,3 +4,4 @@ Django==1.9.5
 redis==2.10.5
 qiniu==7.0.7
 -e git+ssh://git@github.com/jinji-inc/common.git@master#egg=attackt
+
