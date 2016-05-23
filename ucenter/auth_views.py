@@ -44,6 +44,9 @@ def index(request):
 
 @csrf_exempt
 def login(request):
+    context = {
+        'title': '揭西石灵寺',
+    }
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
@@ -72,11 +75,8 @@ def login(request):
             return HttpResponseRedirect('/cuser/index')
         else:
             error = 1
+            context['error'] = error
 
-    context = {
-        'title': '揭西石灵寺',
-        'error': error,
-    }
     template = loader.get_template('login.html')
     return HttpResponse(template.render(context, request))
 
