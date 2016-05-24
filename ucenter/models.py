@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 
+from shiling.models import Good
+
 import datetime
 
 
@@ -62,6 +64,7 @@ class Order(models.Model):
     status = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="订单状态")
     from_pay = models.IntegerField(choices=FROM_CHOICES, default=0, verbose_name="订单来源")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
+    good = models.ForeignKey(Good, blank=True, null=True, verbose_name="所属商品")
 
     def __unicode__(self):
         return self.body
