@@ -15,7 +15,7 @@ a { color:#bbbbbc; text-decoration:none;}
  
 .index{ width: 100% ; height: 100%; background: url(../images/background.png) no-repeat 0 0 ; background-size:100% 100%;}
 .nav{ background: #303133; position: fixed; width: 100%; overflow-x:auto;}
-.text{width: 10000px;}
+.text{width: 1000px;}
 .nav li{float: left;color: #bbbbbc; overflow: hidden;}
 .nav a{height:52px;  margin:0 22px 0 18px; line-height: 50px; font-size: 15px; font-weight:bold; display: block; }
 .nav a.action{color: #edb30d; border-bottom: 2px solid #edb30d; box-sizing: border-box;}
