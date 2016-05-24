@@ -5,8 +5,9 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Sum
+from django.db.models import Count
 from ucenter.wx_config import get_wx_config
-from ucenter.models import Cuser
+from ucenter.models import Cuser, Order
 from ucenter.wx_auth import web_webchat_check_login
 from .models import (
     Temple,
@@ -112,8 +113,15 @@ def goodraise_list(request):
         end_time__gte=cur_time,
     )
     for goodraise in goodraises:
-        ret = Good.objects.filter(goodraise=goodraise).aggregate(Sum('support_price'))
-        goodraise.support_price_num = ret.get('support_price__sum')
+        goods = Good.objects.filter(goodraise=goodraise)
+        # 统计订单支付成功，总金额
+        support_price_num = 0
+        for good in goods:
+            total_fee_json = Order.objects.filter(good=good, status=2).values('total_fee').annotate(dcount=Count('total_fee'))
+            for x in total_fee_json:
+                support_price_num = support_price_num + x.get('total_fee')
+
+        goodraise.support_price_num = support_price_num
     context = {
         'title': '揭西石灵寺',
         'module': 'goodraise',
@@ -125,7 +133,15 @@ def goodraise_list(request):
 
 def goodraise_detail(request, goodraise_id):
     goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
-    ret = Good.objects.filter(goodraise=goodraise).aggregate(Sum('support_price'))
+    goods = Good.objects.filter(goodraise=goodraise)
+    support_price_num = 0
+    # 统计订单支付成功，总金额
+    for good in goods:
+        total_fee_json = Order.objects.filter(good=good, status=2).values('total_fee').annotate(dcount=Count('total_fee'))
+        for x in total_fee_json:
+            support_price_num = support_price_num + x.get('total_fee')
+
+    goodraise.support_price_num = support_price_num
     support_price_num = ret.get('support_price__sum')
     goods = Good.objects.filter(goodraise=goodraise).order_by('-id')
     context = {
