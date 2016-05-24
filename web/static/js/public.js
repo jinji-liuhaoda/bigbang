@@ -1,3 +1,10 @@
+var nav_width = $(".nav").width()
+var action_offset_left = $('.action').offset().left
+var action_index = $(".nav li").index($('.action').parent())
+if (action_index>2 ) {
+	var left = action_offset_left-nav_width/2+15
+	$('.nav').scrollLeft(left)
+};
 //验证手机号码
 var checkphone = function(phone){
 	var reg = /^0?1[3|4|5|8][0-9]\d{8}$/;

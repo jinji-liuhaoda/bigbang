@@ -1526,7 +1526,7 @@ def ckeditor_upload(request):
         ts = int(time.time())
         checkNum = request.GET.get('CKEditorFuncNum')
         ext = get_extension(request.FILES['upload'].name)
-        key = 'temple_{}_{}.{}'.format(temple.id, ts, ext)
+        key = 'temple_{}.{}'.format(ts, ext)
         handle_uploaded_file(request.FILES['upload'], key)
         # 上传图片到qiniu
         upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
