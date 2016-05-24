@@ -773,6 +773,7 @@ def goodraise_edit(request, goodraise_id):
         goodraise.title = title
         goodraise.total_price = total_price
         goodraise.detail = detail
+        goodraise.content = content
         if not len(title):
             flag = False
             error['title_msg'] = FILED_CHECK_MSG
