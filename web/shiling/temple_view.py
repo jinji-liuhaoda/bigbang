@@ -141,8 +141,6 @@ def goodraise_detail(request, goodraise_id):
         for x in total_fee_json:
             support_price_num = support_price_num + x.get('total_fee')
 
-    goodraise.support_price_num = support_price_num
-    support_price_num = ret.get('support_price__sum')
     goods = Good.objects.filter(goodraise=goodraise).order_by('-id')
     context = {
         'title': '揭西石灵寺',
