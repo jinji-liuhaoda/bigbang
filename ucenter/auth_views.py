@@ -54,7 +54,6 @@ def login(request):
         return HttpResponseRedirect('/cuser/index')
     except Exception, e:
         request.session.clear()
-        return HttpResponseRedirect('/cuser/wx_login')
     context = {
         'title': '揭西石灵寺',
     }
