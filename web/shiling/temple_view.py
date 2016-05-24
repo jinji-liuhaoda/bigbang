@@ -370,6 +370,7 @@ def views_count_news(request, news_id):
     return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
 
 
+@csrf_exempt
 def views_count_volunteer(request, volunteer_id):
     volunteer = get_object_or_404(Volunteer, id=volunteer_id)
     volunteer.views_count = volunteer.views_count + 1
