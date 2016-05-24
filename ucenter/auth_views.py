@@ -49,8 +49,12 @@ def index(request):
 
 @csrf_exempt
 def login(request):
-    if request.session.get('cuser_id', 0):
+    try:
+        cuser = Cuser.objects.get(id=request.session.get('cuser_id', 0))
         return HttpResponseRedirect('/cuser/index')
+    except Exception, e:
+        request.session.clear()
+        return HttpResponseRedirect('/cuser/wx_login')
     context = {
         'title': '揭西石灵寺',
     }
