@@ -30,8 +30,8 @@
 <script>
 	$(function(){
 		$("#submit").on('click',function(){
-			var pwd1 = $.trim($("#pwd1").val());
-			var pwd2 = $.trim($("#pwd2").val());
+			var pwd1 = $("#pwd1").val();
+			var pwd2 = $("#pwd2").val();
 			if (!pwd1 || !pwd2) {
 				alert("请输入新密码");
 				return false;
@@ -41,7 +41,7 @@
 				return false;
 			}
 			if (pwd1.length<6) {
-				alert("密码必须6位以上");
+				alert("密码至少6位");
 				return false;
 			}
 			$("#formid").submit();

@@ -132,14 +132,13 @@ def register(request):
 def pwd_update(request):
     if request.method == 'POST':
         pwd = request.POST.get('pwd1', '')
-        if pwd:
-            try:
-                cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
-                cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
-                cuser.save()
-                return HttpResponseRedirect('/cuser/index')
-            except Exception, e:
-                return HttpResponseRedirect('/cuser/login')
+        try:
+            cuser = get_object_or_404(Cuser, id=request.session['cuser_id'])
+            cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
+            cuser.save()
+            return HttpResponseRedirect('/cuser/index')
+        except Exception, e:
+            return HttpResponseRedirect('/cuser/login')
     context = {
         'title': '揭西石灵寺',
     }
