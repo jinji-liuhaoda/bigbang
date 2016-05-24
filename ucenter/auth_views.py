@@ -31,7 +31,11 @@ import time
 @csrf_exempt
 @web_webchat_check_login
 def index(request):
-    cuser = get_object_or_404(Cuser, id=request.session.get('cuser_id', 0))
+    try:
+        cuser = Cuser.objects.get(id=request.session.get('cuser_id', 0))
+    except Exception, e:
+        return HttpResponseRedirect('/cuser/login')
+
     activity_attendees = ActivityAttendee.objects.filter(mobile_phone=cuser.phone)
     request.session['cuser_id'] = cuser.id
     context = {
@@ -141,7 +145,6 @@ def pwd_update(request):
 
 @web_webchat_check_login
 def wx_login(request):
-    request.session['register'] = False
     return HttpResponseRedirect('/cuser/login')
 
 

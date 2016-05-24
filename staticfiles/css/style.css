@@ -181,7 +181,7 @@ li.last{ width: 100%; }
 .form table{width:100%; }
 .form tr{height: 43px; }
 .form td{ font-size: 15px; color: #4A4A4A; font-weight: bold;border:1px solid #eee;}
-.form td.title{text-align: center; background: #f5f5f5;}
+.form td.title{text-align: center; background: #f5f5f5;min-width: 50px;}
 .title-bd{ padding:0 20px 0 13px; line-height: 21px;}
 .event-content .abbot-box{padding-bottom: 88px;}
 .event-content h1{margin: 0;}
@@ -191,7 +191,6 @@ li.last{ width: 100%; }
 .apply img{position: absolute; right: 9px; top: 9px;}
 .apply .apply-hd{ padding: 20px 20px 20px 15px; border-bottom: 1px solid #eee;}
 .apply h2{text-align:left; font-size: 17px; color: #333;}
-.apply-bd .sign-in{padding-left: 0px;}
 .apply-bd .sign-in .sign-in-info li{padding-left: 16px;}
 .apply .provide-btn{padding-left:15px; padding-right: 15px;}
 .apply h4{font-size: 14px; color: #797979;text-align:left; padding-top: 8px;}
@@ -254,7 +253,7 @@ li.last{ width: 100%; }
 
 .sign-in{height: 88px; padding-left: 16px;}
 .sign-in-info .sign-in-info-box{height: 46px; line-height: 46px; }
-.sign-in-info input{height:100%;width: 100%; font-size: 15px;outline: none; -webkit-box-flex: 1;    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);border: 0;outline: 0;-webkit-appearance: none;background-color: transparent;font-size: inherit;color: inherit;}
+.sign-in-info input{height:100%;width: 100%; font-size: 15px;outline: none; -webkit-box-flex: 1;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);border: 0;outline: 0;-webkit-appearance: none;background-color: transparent;font-size: inherit;color: inherit;}
 .sign-in .provide-btn{ padding: 0 16px 0 0 ; }
 .button03{height: 39px; width: 100%; border-radius: 20px; margin: 12px auto; text-align: center; background: #ddd;}
 .button03 h3{color: #fff; line-height: 40px;}

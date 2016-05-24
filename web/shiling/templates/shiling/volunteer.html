@@ -59,7 +59,7 @@
 				<div class="abbot-box">
 					<div class="introduce-abbot">
 						<h1>{{volunteer.name}}</h1>
- 						<div class="">
+ 						<div class="volunteer-content">
  							{{volunteer.content|safe}}
  						</div>
 						<img src="{{volunteer.cover_url}}" width="100%">
@@ -85,14 +85,12 @@
 		<div class="apply-bd">	
 			<div class="sign-in">
 			<div class="sign-in-info">
-				<ul>
-					<li>
+				<div class="sign-in-info-box sign-in-info-bottom">
 					<input type="text" name="name" id="name" placeholder="姓名" />
-					</li>
-					<li>
+				</div>
+				<div class="sign-in-info-box sign-in-info-bottom">
 					<input type="text" name="phone" id="phone" placeholder="电话" />
-					</li>
-				</ul>
+				</div>
 			</div>
 			</div>
 		</div>

@@ -43,12 +43,12 @@ def wechat_do_login(request):
     data = get_data(request.GET.get('code', ''))
     openid = data.get('openid', '')
     register = request.session.get('register', 0)
-    if register:
-        request.session['register'] = False
-    else:
+    if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
         # 设置Session
         request.session['cuser_id'] = cuser.id
+    else:
+        del request.session['register']
     print 'wechat_do_login', openid
 
     # 设置Session
