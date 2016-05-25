@@ -52,7 +52,7 @@ def wechat_do_login(request):
     data = get_data(request.GET.get('code', ''))
     openid = data.get('openid')
     access_token = data.get('access_token', '')
-    if access_token:
+    if not access_token:
         return HttpResponseRedirect('/cuser/login')
     user_info_data = get_user_info(access_token, openid)
 
