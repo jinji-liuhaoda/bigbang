@@ -44,24 +44,43 @@ def create_order(request):
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee)
         xml_request = "<xml>\
-                           <appid><![CDATA[" + WX_APP_ID + "]]></appid>\
-                           <mch_id><![CDATA[" + WX_MCH_ID + "]]></mch_id>\
-                           <device_info><![CDATA[WEB]]></device_info>\
+                           <appid>" + WX_APP_ID + "</appid>\
+                           <mch_id>" + WX_MCH_ID + "</mch_id>\
+                           <device_info>WEB</device_info>\
                            <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
                            <body><![CDATA[" + escape(body) + "]]></body>\
                            <detail><![CDATA[" + escape(detail) + "]]></detail>\
-                           <product_id><![CDATA[" + product_id + "]]></product_id>\
+                           <product_id>" + product_id + "</product_id>\
+                           <fee_type>CNY</fee_type>\
                            <notify_url><![CDATA[" + DOMAIN + "/cuser/wx_pay/]]></notify_url>\
                            <openid><![CDATA[" + openid + "]]></openid>\
                            <out_trade_no><![CDATA[" + out_trade_no + "]]></out_trade_no>\
                            <spbill_create_ip><![CDATA[" + spbill_create_ip + "]]></spbill_create_ip>\
-                           <total_fee><![CDATA[" + total_fee + "]]></total_fee>\
-                           <trade_type><![CDATA[JSAPI]]></trade_type>\
+                           <total_fee>" + total_fee + "</total_fee>\
+                           <trade_type>JSAPI</trade_type>\
                            <sign><![CDATA[" + sign + "]]></sign>\
                         </xml>"
+        xml_request1 = '<xml>\
+                           <appid>wx2421b1c4370ec43b</appid>\
+                           <attach>支付测试</attach>\
+                           <body>树屋树递快递到寝配送服务</body>\
+                           <detail>树屋树递快递到寝配送服务</detail>\
+                           <device_info>WEB</device_info>\
+                           <fee_type>CNY</fee_type>\
+                           <mch_id>10000100</mch_id>\
+                           <nonce_str><![CDATA[7&-1ib26HO5lWFoavTwe^]]></nonce_str>\
+                           <notify_url><![CDATA[http://www.treehouses.cn/front-4ae1dacda1f197bbfbc57ec9fbb4911f/api/wxpayresponse]]></notify_url>\
+                           <openid><![CDATA[o8nXct499ctQzioUQt93-vyq9hgM]]></openid>\
+                           <out_trade_no><![CDATA[60065]]></out_trade_no>\
+                           <product_id>0001</product_id>\
+                           <spbill_create_ip><![CDATA[49.140.188.1]]></spbill_create_ip>\
+                           <total_fee>1</total_fee>\
+                           <trade_type>JSAPI</trade_type>\
+                           <sign><![CDATA[F88FABC7BFD25B726864DC6D6FC8313B]]></sign>\
+                        </xml'
         logging.error(xml_request)
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
-        r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
+        r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request1, headers=headers)
         logging.error(r.text)
         root = ET.fromstring(r.text)
         # 解析xml内容
