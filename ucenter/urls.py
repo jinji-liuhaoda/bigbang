@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^index$', auth_views.index, name='index'),
     url(r'^pwd_update/$', auth_views.pwd_update, name='pwd_update'),
     url(r'^phone/(?P<phone>\d+)$', auth_views.check_phone, name='check_phone'),
+    url(r'^send_code/(?P<phone>\d+)$', auth_views.send_code, name='send_code'),
     # 微信相关
     url(r'^wx_login/$', auth_views.wx_login, name='wx_login'),
     url(r'^wechat_do_login/$', wx_auth.wechat_do_login, name='wechat_do_login'),
