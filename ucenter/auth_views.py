@@ -188,7 +188,7 @@ def send_code(request, phone):
     except Exception, e:
         send_status = False
     if send_status:
-        request.session['vc_code_json'] = {'vc_code': vc_code, 'send_time': int(time.time())}
+        request.session['vc_code_json'] = simplejson.dumps({'vc_code': vc_code, 'send_time': int(time.time())}, ensure_ascii=False)
         return HttpResponse(simplejson.dumps({'error': 0, 'msg': '验证码发送成功'}, ensure_ascii=False))
     else:
         return HttpResponse(simplejson.dumps({'error': 1, 'msg': '验证码发送失败'}, ensure_ascii=False))
