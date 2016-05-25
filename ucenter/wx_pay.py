@@ -26,9 +26,6 @@ reload(sys)
 sys.setdefaultencoding("utf-8")
 
 
-logger = logging.getLogger(__name__)
-
-
 @csrf_exempt
 def create_order(request):
     if request.method == 'POST':
@@ -36,6 +33,7 @@ def create_order(request):
         body = request.POST.get('body', '')
         detail = request.POST.get('detail', '')
         total_fee = request.POST.get('total_fee', '')
+        total_fee = str(int(float(total_fee)*100))
         spbill_create_ip = request.session.get('cuser_ip', '')
         noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
         stringA = "appid=" + WX_APP_ID + "&body=" + body + "&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr
@@ -63,7 +61,7 @@ def create_order(request):
                         </xml>"
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
-        logger.error(r.text)
+        logging.error(r.text)
         root = ET.fromstring(r.text)
         # 解析xml内容
         for child in root:
