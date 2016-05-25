@@ -44,20 +44,20 @@ def create_order(request):
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee)
         xml_request = "<xml>\
-                           <appid>" + WX_APP_ID + "</appid>\
-                           <mch_id>" + WX_MCH_ID + "</mch_id>\
-                           <device_info>WEB</device_info>\
-                           <nonce_str>" + noncestr + "</nonce_str>\
-                           <body>" + escape(body) + "</body>\
-                           <detail>" + escape(detail) + "</detail>\
-                           <product_id>" + product_id + "</product_id>\
-                           <notify_url>" + DOMAIN + "/cuser/wx_pay/</notify_url>\
-                           <openid>" + openid + "</openid>\
-                           <out_trade_no>" + out_trade_no + "</out_trade_no>\
-                           <spbill_create_ip>" + spbill_create_ip + "</spbill_create_ip>\
-                           <total_fee>" + total_fee + "</total_fee>\
-                           <trade_type>JSAPI</trade_type>\
-                           <sign>" + sign + "</sign>\
+                           <appid><![CDATA[" + WX_APP_ID + "]]></appid>\
+                           <mch_id><![CDATA[" + WX_MCH_ID + "]]></mch_id>\
+                           <device_info><![CDATA[WEB]]></device_info>\
+                           <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
+                           <body><![CDATA[" + escape(body) + "]]></body>\
+                           <detail><![CDATA[" + escape(detail) + "]]></detail>\
+                           <product_id><![CDATA[" + product_id + "]]></product_id>\
+                           <notify_url><![CDATA[" + DOMAIN + "/cuser/wx_pay/]]></notify_url>\
+                           <openid><![CDATA[" + openid + "]]></openid>\
+                           <out_trade_no><![CDATA[" + out_trade_no + "]]></out_trade_no>\
+                           <spbill_create_ip><![CDATA[" + spbill_create_ip + "]]></spbill_create_ip>\
+                           <total_fee><![CDATA[" + total_fee + "]]></total_fee>\
+                           <trade_type><![CDATA[JSAPI]]></trade_type>\
+                           <sign><![CDATA[" + sign + "]]></sign>\
                         </xml>"
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
