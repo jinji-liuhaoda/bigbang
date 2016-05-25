@@ -118,7 +118,13 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'web', 'static')
 ]
 
-DOMAIN = 'http://temple.dev.attackt.com'
+VCODE_ACCOUNT_SID = 'aaf98f8954383ba201544c82d5f710cc'
+
+VCODE_ACCOUNT_TOKEN = '2cf09f0f402d46b79cbd11bd46c88913'
+
+VCODE_APP_ID = '8a48b5515438446d01544c83656f1136'
+
+DOMAIN = 'http://localhost:8000'
 
 LOGIN_URL = '/admin/login'
 
