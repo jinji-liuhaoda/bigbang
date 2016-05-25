@@ -74,21 +74,18 @@ def create_order(request):
                 trade_type = child.text
             if child.tag == 'prepay_id':
                 prepay_id = child.text
-            if child.tag == 'code_url':
-                code_url = child.text
 
         if return_code == 'SUCCESS' and result_code == 'SUCCESS':
             # 成功需要修改订单状态
             order = get_object_or_404(Order, out_trade_no=out_trade_no)
             order.trade_type = trade_type
             order.prepay_id = prepay_id
-            order.code_url = code_url
             order.status = 1
             timestamp = int(time.time())
             stringB = "appid=" + WX_APP_ID + "&nonce_str=" + noncestr + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
-            return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'prepay_id': prepay_id, 'code_url': code_url, 'signB': signB}, ensure_ascii=False))
+            return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'prepay_id': prepay_id, 'signB': signB}, ensure_ascii=False))
         else:
             return HttpResponse(simplejson.dumps({'error': 1, 'msg': '下单失败'}, ensure_ascii=False))
 
