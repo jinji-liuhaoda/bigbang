@@ -59,6 +59,7 @@ def create_order(request):
                            <trade_type><![CDATA[JSAPI]]></trade_type>\
                            <sign><![CDATA[" + sign + "]]></sign>\
                         </xml>"
+        logging.error(xml_request)
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
         logging.error(r.text)
