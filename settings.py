@@ -130,6 +130,8 @@ SMS_SUB_ACCOUNT_TOKEN = ''
 
 SMS_APP_ID = ''
 
+WX_PAY_MCH_KEY = ''
+
 DOMAIN = 'http://localhost:8000'
 
 LOGIN_URL = '/admin/login'

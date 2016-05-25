@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Cuser, Order, GoodId
 from wx_auth import web_webchat_check_login
 
-from settings import UPLOAD_DIR, DOMAIN
+from settings import UPLOAD_DIR, DOMAIN, WX_PAY_MCH_KEY
 from .constants import WX_APP_ID, WX_SECRET, WX_MCH_ID
 from .wx_config import get_wx_config
 
@@ -39,7 +39,7 @@ def create_order(request):
         product_id = get_product_id()
         noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
         stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
-        stringSignTemp = stringA + "&key=" + WX_SECRET
+        stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
         print stringA
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
@@ -63,6 +63,7 @@ def create_order(request):
         logging.error(body)
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
+        logging.error(r.text)
         root = ET.fromstring(r.text)
         # 解析xml内容
         for child in root:
@@ -76,9 +77,6 @@ def create_order(request):
                 prepay_id = child.text
             if child.tag == 'code_url':
                 code_url = child.text
-            if child.tag == 'return_msg':
-                code_url = child.text
-                logging.error(code_url.decode('utf-8'))
 
         if return_code == 'SUCCESS' and result_code == 'SUCCESS':
             # 成功需要修改订单状态
