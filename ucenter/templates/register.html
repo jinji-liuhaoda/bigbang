@@ -84,8 +84,13 @@
 		$("#submit").on('click',function(){
 			var phone = $("#phone").val();
 			var pwd = $("#pwd").val();
+			var v_code = $("#v_code").val();
 			if (!phone || !pwd) {
 				alert("请输入完整信息");
+				return false;
+			}
+			if (!v_code) {
+				alert("请输入验证码");
 				return false;
 			}
 			if (!checkphone(phone)) {
