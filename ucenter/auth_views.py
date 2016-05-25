@@ -5,6 +5,7 @@ from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password, check_password
+from attackt.sms import SMSManager
 from shiling.models import (
     Temple,
     Mage,
@@ -22,6 +23,8 @@ from shiling.models import (
 from .models import Cuser
 from wx_auth import web_webchat_check_login
 from settings import UPLOAD_DIR, DOMAIN
+from .constants import VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID
+import random
 import simplejson
 import os
 import datetime
@@ -96,29 +99,47 @@ def login_out(request):
     return HttpResponseRedirect('/cuser/login')
 
 
+@csrf_exempt
 @web_webchat_check_login
 def register_do(request):
-    if request.method == 'POST':
-        phone = request.POST.get('phone', '')
-        pwd = request.POST.get('pwd', '')
-
-        cuser, _ = Cuser.objects.get_or_create(openid=request.session.get('openid', ''))
-        cuser.phone = phone
-        cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
-        cuser.save()
-        # 获取用户ip
-        if 'HTTP_X_FORWARDED_FOR' in request.META:
-            cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
-        else:
-            cuser_ip = request.META['REMOTE_ADDR']
-        request.session['cuser_ip'] = cuser_ip
-        request.session['cuser_id'] = cuser.id
-        return HttpResponseRedirect('/cuser/index')
-
     context = {
         'title': '揭西石灵寺',
         'DOMAIN': DOMAIN,
     }
+    if request.method == 'POST':
+        phone = request.POST.get('phone', '')
+        pwd = request.POST.get('pwd', '')
+        v_code = request.POST.get('v_code', '')
+        vc_code_json = request.session.get('vc_code_json', '{}')
+        vc_code_json = simplejson.loads(vc_code_json)
+        if vc_code_json:
+            diff_v_time = int(time.time())-int(vc_code_json.send_time)
+        if vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time < 60:
+            error_msg = {'error': 0, 'msg': ''}
+        elif vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time > 60:
+            error_msg = {'error': 1, 'msg': '验证码失效'}
+        else:
+            error_msg = {'error': 2, 'msg': '验证码错误'}
+        context['error_msg'] = simplejson.dumps(error_msg, ensure_ascii=False)
+        if not error_msg['error']:
+            openid = request.session.get('openid', '')
+            name = request.session.get('nickname', '')
+            city = request.session.get('city', '')
+            province = request.session.get('province', '')
+            country = request.session.get('country', '')
+            headimgurl = request.session.get('headimgurl', '')
+            cuser, _ = Cuser.objects.get_or_create(openid=openid, name=name, city=city, province=province, country=country, headimgurl=headimgurl)
+            cuser.phone = phone
+            cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
+            cuser.save()
+            # 获取用户ip
+            if 'HTTP_X_FORWARDED_FOR' in request.META:
+                cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
+            else:
+                cuser_ip = request.META['REMOTE_ADDR']
+            request.session['cuser_ip'] = cuser_ip
+            request.session['cuser_id'] = cuser.id
+            return HttpResponseRedirect('/cuser/index')
     template = loader.get_template('register.html')
     return HttpResponse(template.render(context, request))
 
@@ -157,6 +178,21 @@ def ch_phone(request, phone):
         return True
     else:
         return False
+
+
+def send_code(request, phone):
+    vc_code = str(random.randint(1000, 9999))
+    sms_manager = SMSManager(VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID)
+    try:
+        result = sms_manager.send_auth_code(phone, verification_code)
+        send_status = True
+    except Exception, e:
+        send_status = False
+    if send_status:
+        request.session['vc_code_json'] = {'vc_code': vc_code, 'send_time': int(time.time())}
+        return HttpResponse(simplejson.dumps({'error': 0, 'msg': '验证码发送成功'}, ensure_ascii=False))
+    else:
+        return HttpResponse(simplejson.dumps({'error': 1, 'msg': '验证码发送失败'}, ensure_ascii=False))
 
 
 def check_phone(request, phone):

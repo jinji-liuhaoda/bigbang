@@ -42,12 +42,22 @@ def wechat_do_login(request):
     # 获取access_token
     data = get_data(request.GET.get('code', ''))
     openid = data.get('openid', '')
+    name = data.get('nickname', '')
+    city = data.get('city', '')
+    province = data.get('province', '')
+    country = data.get('country', '')
+    headimgurl = data.get('headimgurl', '')
     register = request.session.get('register', 0)
     if not register:
-        cuser, _ = Cuser.objects.get_or_create(openid=openid)
+        cuser, _ = Cuser.objects.get_or_create(openid=openid, name=name, city=city, province=province, country=country, headimgurl=headimgurl)
         # 设置Session
         request.session['cuser_id'] = cuser.id
     else:
+        request.session['name'] = name
+        request.session['city'] = city
+        request.session['province'] = province
+        request.session['country'] = country
+        request.session['headimgurl'] = headimgurl
         del request.session['register']
     print 'wechat_do_login', openid
 
