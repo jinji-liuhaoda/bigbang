@@ -28,9 +28,6 @@ import simplejson
 import os
 import datetime
 import time
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 
 
 @csrf_exempt
@@ -131,10 +128,10 @@ def register_do(request):
             country = request.session.get('country', '')
             headimgurl = request.session.get('headimgurl', '')
             cuser, _ = Cuser.objects.get_or_create(openid=openid)
-            cuser.name = name
-            cuser.city = city
-            cuser.province = province
-            cuser.country = country
+            cuser.name = unicode(name, 'utf-8')
+            cuser.city = unicode(city, 'utf-8')
+            cuser.province = unicode(province, 'utf-8')
+            cuser.country = unicode(country, 'utf-8')
             cuser.headimgurl = headimgurl
             cuser.phone = phone
             cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
