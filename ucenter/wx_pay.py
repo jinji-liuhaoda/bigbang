@@ -38,7 +38,7 @@ def create_order(request):
         out_trade_no = get_out_trade_no()
         product_id = get_product_id()
         noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
-        stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&total_fee=" + total_fee + "&trade_type=JSAPI"
+        stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
         stringSignTemp = stringA + "&key=" + WX_SECRET
         print stringA
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
