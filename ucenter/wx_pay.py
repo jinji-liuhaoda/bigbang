@@ -20,6 +20,9 @@ import random
 import requests
 import xml.etree.ElementTree as ET
 from xml.sax.saxutils import escape
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 
 @csrf_exempt
@@ -54,10 +57,10 @@ def create_order(request):
                            <trade_type>JSAPI</trade_type>\
                            <sign>" + sign + "</sign>\
                         </xml>"
-        headers = {'Content-Type': 'application/xml; charset=UTF-8'}
+        headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
-        tree = ET.parse(r.text)
-        root = tree.getroot()
+        print 'create-order------------------', r.text
+        root = ET.fromstring(r.text)
         # 解析xml内容
         for child in root:
             if child.tag == 'return_code':
