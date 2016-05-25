@@ -40,7 +40,6 @@ def create_order(request):
         noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
         stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
         stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
-        print stringA
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee)
@@ -80,14 +79,14 @@ def create_order(request):
 
         if return_code == 'SUCCESS' and result_code == 'SUCCESS':
             # 成功需要修改订单状态
-            order = Order.get_object_or_404(out_trade_no=out_trade_no)
+            order = get_object_or_404(Order, out_trade_no=out_trade_no)
             order.trade_type = trade_type
             order.prepay_id = prepay_id
             order.code_url = code_url
             order.status = 1
             timestamp = int(time.time())
             stringB = "appid=" + WX_APP_ID + "&nonce_str=" + noncestr + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timestamp
-            stringSignTempB = stringB + "&key=" + WX_SECRET
+            stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
             return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'prepay_id': prepay_id, 'code_url': code_url, 'signB': signB}, ensure_ascii=False))
         else:
@@ -106,7 +105,7 @@ def wx_callback_pay(request):
         if child.tag == 'transaction_id':
             transaction_id = child.text
     if return_code == 'SUCCESS':
-        order = Order.get_object_or_404(out_trade_no=out_trade_no)
+        order = get_object_or_404(Order, out_trade_no=out_trade_no)
         order.status = 2
         order.save()
         print '------------transaction_id--------------' + transaction_id
