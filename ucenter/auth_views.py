@@ -22,7 +22,7 @@ from shiling.models import (
 )
 from .models import Cuser
 from wx_auth import web_webchat_check_login
-from settings import UPLOAD_DIR, DOMAIN, VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID
+from settings import UPLOAD_DIR, DOMAIN, SMS_ACCOUNT_SID, SMS_ACCOUNT_TOKEN, SMS_SUB_ACCOUNT_SID, SMS_TEMPLATE_ID, SMS_SUB_ACCOUNT_TOKEN, SMS_APP_ID
 import random
 import simplejson
 import os
@@ -181,7 +181,7 @@ def ch_phone(request, phone):
 
 def send_code(request, phone):
     vc_code = str(random.randint(1000, 9999))
-    sms_manager = SMSManager(VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID)
+    sms_manager = SMSManager(SMS_ACCOUNT_SID, SMS_ACCOUNT_TOKEN, SMS_SUB_ACCOUNT_SID, SMS_SUB_ACCOUNT_TOKEN, SMS_APP_ID)
     try:
         result = sms_manager.send_auth_code(phone, vc_code)
         send_status = True
