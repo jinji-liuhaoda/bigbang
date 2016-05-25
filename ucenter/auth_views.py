@@ -113,9 +113,9 @@ def register_do(request):
         vc_code_json = simplejson.loads(vc_code_json)
         if vc_code_json:
             diff_v_time = int(time.time())-int(vc_code_json.send_time)
-        if vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time < 60:
+        if vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time < 120:
             error_msg = {'error': 0, 'msg': ''}
-        elif vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time > 60:
+        elif vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time > 120:
             error_msg = {'error': 1, 'msg': '验证码失效'}
         else:
             error_msg = {'error': 2, 'msg': '验证码错误'}
@@ -183,7 +183,7 @@ def send_code(request, phone):
     vc_code = str(random.randint(1000, 9999))
     sms_manager = SMSManager(SMS_ACCOUNT_SID, SMS_ACCOUNT_TOKEN, SMS_SUB_ACCOUNT_SID, SMS_SUB_ACCOUNT_TOKEN, SMS_APP_ID)
     try:
-        result = sms_manager.send_auth_code(phone, vc_code)
+        result = sms_manager.send_auth_code(phone, vc_code, expired_minutes=2, template_id=SMS_TEMPLATE_ID)
         send_status = True
     except Exception, e:
         send_status = False
