@@ -12,6 +12,7 @@ from .constants import WX_APP_ID, WX_SECRET, WX_MCH_ID
 from .wx_config import get_wx_config
 
 import simplejson
+import logging
 import os
 import datetime
 import time
@@ -23,6 +24,9 @@ from xml.sax.saxutils import escape
 import sys
 reload(sys)
 sys.setdefaultencoding("utf-8")
+
+
+logger = logging.getLogger(__name__)
 
 
 @csrf_exempt
@@ -59,7 +63,7 @@ def create_order(request):
                         </xml>"
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
-        print 'create-order------------------', r.text
+        logger.error('--------------------------', r.text)
         root = ET.fromstring(r.text)
         # 解析xml内容
         for child in root:
