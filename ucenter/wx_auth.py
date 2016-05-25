@@ -50,7 +50,7 @@ def web_webchat_check_login(view):
 def wechat_do_login(request):
     # 获取access_token
     data = get_data(request.GET.get('code', ''))
-    openid = data.get('openid', '')
+    openid = data.get('openid')
     access_token = data.get('access_token', '')
     user_info_data = get_user_info(access_token, openid)
 
@@ -62,10 +62,10 @@ def wechat_do_login(request):
     register = request.session.get('register', 0)
     if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
-        cuser.name = unicode(name, 'utf-8')
-        cuser.city = unicode(city, 'utf-8')
-        cuser.province = unicode(province, 'utf-8')
-        cuser.country = unicode(country, 'utf-8')
+        cuser.name = name
+        cuser.city = city
+        cuser.province = province
+        cuser.country = country
         cuser.headimgurl = headimgurl
         cuser.save()
         # 设置Session
