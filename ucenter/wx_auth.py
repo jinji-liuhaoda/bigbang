@@ -8,9 +8,6 @@ from .constants import WX_APP_ID, WX_SECRET, USE_FAKE_WECHAT_USER, WX_REDIRECT_U
 
 from .models import Cuser
 import requests
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
 
 
 def get_data(code):
@@ -65,10 +62,10 @@ def wechat_do_login(request):
     register = request.session.get('register', 0)
     if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
-        cuser.name = name
-        cuser.city = city
-        cuser.province = province
-        cuser.country = country
+        cuser.name = unicode(name, 'utf-8')
+        cuser.city = unicode(city, 'utf-8')
+        cuser.province = unicode(province, 'utf-8')
+        cuser.country = unicode(country, 'utf-8')
         cuser.headimgurl = headimgurl
         cuser.save()
         # 设置Session
