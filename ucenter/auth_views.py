@@ -112,10 +112,10 @@ def register_do(request):
         vc_code_json = request.session.get('vc_code_json', '{}')
         vc_code_json = simplejson.loads(vc_code_json)
         if vc_code_json:
-            diff_v_time = int(time.time())-int(vc_code_json.send_time)
-        if vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time < 120:
+            diff_v_time = int(time.time())-int(vc_code_json['send_time'])
+        if vc_code_json and (vc_code_json['v_code'] == v_code) and diff_v_time < 120:
             error_msg = {'error': 0, 'msg': ''}
-        elif vc_code_json and (vc_code_json.v_code == v_code) and diff_v_time > 120:
+        elif vc_code_json and (vc_code_json['v_code'] == v_code) and diff_v_time > 120:
             error_msg = {'error': 1, 'msg': '验证码失效'}
         else:
             error_msg = {'error': 2, 'msg': '验证码错误'}
