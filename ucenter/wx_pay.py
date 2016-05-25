@@ -35,26 +35,26 @@ def create_order(request):
         total_fee = request.POST.get('total_fee', '')
         total_fee = str(int(float(total_fee)*100))
         spbill_create_ip = request.session.get('cuser_ip', '')
-        noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
-        stringA = "appid=" + WX_APP_ID + "&body=" + body + "&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr
-        stringSignTemp = stringA + "&key=" + WX_SECRET
-        sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         out_trade_no = get_out_trade_no()
         product_id = get_product_id()
+        noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
+        stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&total_fee=" + total_fee + "&trade_type=JSAPI"
+        stringSignTemp = stringA + "&key=" + WX_SECRET
+        print stringA
+        sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee)
         xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
-                           <mch_id>" + WX_MCH_ID + "</mch_id>\
-                           <device_info>WEB</device_info>\
-                           <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
                            <body>body_str</body>\
                            <detail>detail_str</detail>\
-                           <product_id>" + product_id + "</product_id>\
-                           <fee_type>CNY</fee_type>\
+                           <device_info>WEB</device_info>\
+                           <mch_id>" + WX_MCH_ID + "</mch_id>\
+                           <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
                            <notify_url><![CDATA[" + DOMAIN + "/cuser/wx_pay/]]></notify_url>\
                            <openid><![CDATA[" + openid + "]]></openid>\
                            <out_trade_no><![CDATA[" + out_trade_no + "]]></out_trade_no>\
+                           <product_id>" + product_id + "</product_id>\
                            <spbill_create_ip><![CDATA[" + spbill_create_ip + "]]></spbill_create_ip>\
                            <total_fee>" + total_fee + "</total_fee>\
                            <trade_type>JSAPI</trade_type>\
@@ -63,7 +63,6 @@ def create_order(request):
         logging.error(body)
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
-        logging.error(r.text)
         root = ET.fromstring(r.text)
         # 解析xml内容
         for child in root:
@@ -77,6 +76,9 @@ def create_order(request):
                 prepay_id = child.text
             if child.tag == 'code_url':
                 code_url = child.text
+            if child.tag == 'return_msg':
+                code_url = child.text
+                logging.error(code_url.decode('utf-8'))
 
         if return_code == 'SUCCESS' and result_code == 'SUCCESS':
             # 成功需要修改订单状态
