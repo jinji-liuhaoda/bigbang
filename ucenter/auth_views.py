@@ -22,8 +22,7 @@ from shiling.models import (
 )
 from .models import Cuser
 from wx_auth import web_webchat_check_login
-from settings import UPLOAD_DIR, DOMAIN
-from .constants import VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID
+from settings import UPLOAD_DIR, DOMAIN, VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID
 import random
 import simplejson
 import os
