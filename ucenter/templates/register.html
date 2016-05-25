@@ -50,9 +50,12 @@
 {% endblock %}
 {% block script %}
 <script>
-	var error_msg = JSON.parse('{{error_msg|safe}}');
-	if (error_msg.error) {
-		alert(error_msg.msg);
+	var error_msg = '{{error_msg|safe}}';
+	if ($.trim(error_msg)) {
+		error_msg = JSON.parse(error_msg)
+		if (error_msg.error) {
+			alert(error_msg.msg);
+		}
 	}
 </script>
 <script>
