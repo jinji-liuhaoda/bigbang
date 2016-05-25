@@ -183,7 +183,7 @@ def send_code(request, phone):
     vc_code = str(random.randint(1000, 9999))
     sms_manager = SMSManager(VCODE_ACCOUNT_SID, VCODE_ACCOUNT_TOKEN, VCODE_APP_ID)
     try:
-        result = sms_manager.send_auth_code(phone, verification_code)
+        result = sms_manager.send_auth_code(phone, vc_code)
         send_status = True
     except Exception, e:
         send_status = False
