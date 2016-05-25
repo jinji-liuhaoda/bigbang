@@ -128,11 +128,16 @@ def register_do(request):
             country = request.session.get('country', '')
             headimgurl = request.session.get('headimgurl', '')
             cuser, _ = Cuser.objects.get_or_create(openid=openid)
-            cuser.name = name
-            cuser.city = city
-            cuser.province = province
-            cuser.country = country
-            cuser.headimgurl = headimgurl
+            if name:
+                cuser.name = name
+            if city:
+                cuser.city = city
+            if province:
+                cuser.province = province
+            if country:
+                cuser.country = country
+            if headimgurl:
+                cuser.headimgurl = headimgurl
             cuser.phone = phone
             cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
             cuser.save()
