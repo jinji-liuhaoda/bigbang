@@ -18,3 +18,4 @@ WX_AUTH_URL = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid={}&redi
     WX_APP_ID,
     urllib.quote_plus(WX_REDIRECT_URI)
 )
+WX_USER_INFO_URL = 'https://api.weixin.qq.com/sns/userinfo?access_token={}&openid={}&lang=zh_CN'
