@@ -46,6 +46,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 
+@web_webchat_check_login
 def provide_list(request):
     categories = Category.objects.order_by('-id')
     gooddeeddays = GoodDeedDay.objects.all()
@@ -88,23 +89,35 @@ def provide_detail(request, provide_id):
 @web_webchat_check_login
 def provide_pay(request, provide_id):
     cuser_id = request.session.get('cuser_id', 0)
-    openid = request.session.get('openid', '')
-    if request.method == 'POST':
-        if not openid:
-            # 设置登录后回调地址
-            request.session['redirest'] = request.get_raw_uri()
-            return HttpResponseRedirect('/cuser/wx_login')
     provide = get_object_or_404(Provide, id=provide_id)
     context = {
-        'wx_config': get_wx_config(request.get_raw_uri()),
         'title': '揭西石灵寺',
         'module': 'provide',
         'provide': provide,
         'cuser_id': cuser_id,
-        'openid': openid,
     }
     template = loader.get_template('shiling/provide_pay.html')
     return HttpResponse(template.render(context, request))
+
+
+@web_webchat_check_login
+@csrf_exempt
+def wechat_pay(request):
+    if request.method == 'POST':
+        body = request.POST.get('body', '')
+        detail = request.POST.get('detail', '')
+        price = request.POST.get('price', '')
+        context = {
+            'wx_config': get_wx_config(request.get_raw_uri()),
+            'title': '揭西石灵寺',
+            'module': 'provide',
+            'body': body,
+            'detail': detail,
+            'price': price,
+        }
+        template = loader.get_template('shiling/wechat_pay.html')
+        return HttpResponse(template.render(context, request))
+    return HttpResponseRedirect(request.get_raw_uri())
 
 
 def goodraise_list(request):
@@ -131,6 +144,7 @@ def goodraise_list(request):
     return HttpResponse(template.render(context, request))
 
 
+@web_webchat_check_login
 def goodraise_detail(request, goodraise_id):
     goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
     goods = Good.objects.filter(goodraise=goodraise)

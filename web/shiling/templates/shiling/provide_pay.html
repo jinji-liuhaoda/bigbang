@@ -17,7 +17,7 @@
 			<img src="/static/images/user-icon.png" width="26">
 		</a>
 	</div>
-	<form role="form" method="POST" id="formid">
+	<form role="form" method="POST" id="formid" action="/wechat_pay/">
 		<div class="detail">
 			<div class="thanks-box">
 				<div class="thanks-hd">
@@ -28,64 +28,17 @@
 				</div>
 				<h3>{{provide.title}}</h3>
 				<div class="thanks-pay">
+					<input type="hidden" name="body" value="{{provide.title}}"/>
+					<input type="hidden" name="detail" value="{{provide.detail}}"/>
+					<input type="hidden" name="price" value="{{provide.price}}"/>
 					<input type="radio" name="anonymous"/>&nbsp&nbsp匿名支付，金额：{{provide.price}}元
 				</div>
 			</div>	
 			<div class="provide-btn">
-				<div class="button01">
-					<input type="hidden" name="openid" id="openid" value="{{openid}}" />
-					<a id="confirm"><h3>确认</h3></a>
-				</div>
+				<button class="button01">
+					<h3>确认</h3>
+				</button>
 			</div>
 		</div>
 	</form>
-{% endblock %}
-{% block script %}
-<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script type="text/javascript">
-    wx.config({
-        debug: false,
-        appId: '{{wx_config.appId}}',
-        timestamp: '{{wx_config.timestamp}}',
-        nonceStr: '{{wx_config.noncestr}}',
-        signature: '{{wx_config.signature}}',
-		jsApiList: ['chooseWXPay']
-    });
-</script>
-<script>
-	$(function(){
-		var wx_pay = function(wx_pay_json){
-			wx.chooseWXPay({
-			    timestamp: '1464234577', // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-			    nonceStr: '40491034a228b5e9', // 支付签名随机串，不长于 32 位
-			    package:  'prepay_id=wx20160526114936f89a41e9470039829929', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-			    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-			    paySign: 'B33B17BADB819059E3DB89AEBB24EB7A', // 支付签名
-			    success: function (res) {
-			        // 支付成功后的回调函数
-			    }
-			})
-		}
-		$("#confirm").on('click',function(){
-			var openid = $("#openid").val();
-			if (!openid) {
-				$("#formid").submit();
-				return;
-			}
-			$.ajax({
-				url:"{{DOMAIN}}/cuser/wx_create_order/",
-				method:'POST',
-				data:{ body:'{{provide.subtitle}}', detail:'{{provide.detail}}', total_fee:'{{provide.price}}'},
-				success:function(jsonobj){
-					jsonobj = JSON.parse(jsonobj);
-					if (jsonobj.error == 0) {
-						wx_pay(jsonobj.wx_pay_json);
-					}else{
-						alert(jsonobj.msg);
-					}
-				},
-			})
-		})		
-	})
-</script>
 {% endblock %}

@@ -35,36 +35,42 @@
 					<span>￥</span>	
 				</div>
 				<div class="icon-bd">
-				<input type="text" name="money" placeholder="输入随喜金额" class="bg-c"></input>
-				</div>		
-
-
+					<input type="hidden" id="title" value="{{gooddeedday.title}}" />
+					<input type="hidden" id="detail" value="随喜" />
+					<input type="text" id="money" placeholder="输入随喜金额" class="bg-c"/>
+				</div>
 			</div>
 			<div class="button01">
-				<a href=""><h3>确认</h3></a>
+				<a class="wechat_pay"><h3>确认</h3></a>
 			</div>
 		</div>
 		<div class="click">
 			<ul>
 				<li>
 					<div class="pic-box">
-						<a href="">
+						<a class="wechat_pay">
 							<div class="pic">
 								<img src="{{gooddeedday.sub_cover_url1}}">
 							</div>
 							<h3>{{gooddeedday.sub_title1}}</h3>
-							<h5>{{gooddeedday.sub_detail1}}</h5>		
+							<h5>{{gooddeedday.sub_detail1}}</h5>
+							<input type="hidden" id="title" value="{{gooddeedday.sub_title1}}" />
+							<input type="hidden" id="detail" value="{{gooddeedday.sub_detail1}}" />
+							<input type="hidden" id="money" value="{{gooddeedday.sub_price1}}" />
 						</a>
 					</div>		
 				</li>
 				<li>
 					<div class="pic-box">
-						<a href="">
+						<a class="wechat_pay">
 							<div class="pic">
 								<img src="{{gooddeedday.sub_cover_url2}}">
 							</div>
 							<h3>{{gooddeedday.sub_title2}}</h3>
-							<h5>{{gooddeedday.sub_detail2}}</h5>	
+							<h5>{{gooddeedday.sub_detail2}}</h5>
+							<input type="hidden" id="title" value="{{gooddeedday.sub_title2}}" />
+							<input type="hidden" id="detail" value="{{gooddeedday.sub_detail2}}" />
+							<input type="hidden" id="money" value="{{gooddeedday.sub_price2}}" />	
 						</a>
 					</div>
 				</li>
@@ -99,4 +105,25 @@
 		</div>
 	</div>
 	{% endfor %}
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+	$(function(){
+		$('.wechat_pay').on('click',function(){
+			var price = $(this).parent().parent().find('#money').val()
+			var body = $(this).parent().parent().find('#title').val()
+			var detail = $(this).parent().parent().find('#detail').val()
+			if (price>=0.01) {
+				form = $("<form method='post' action='/wechat_pay/'></form>")
+				input1 = $("<input type='text'>").val(price).attr('name','price')
+				input2 = $("<input type='text'>").val(body).attr('name','body')
+				input3 = $("<input type='text'>").val(detail).attr('name','detail')
+				form.append(input1)
+				form.append(input2)
+				form.append(input3)
+				form.submit()
+			};
+		})
+	})
+</script>
 {% endblock %}

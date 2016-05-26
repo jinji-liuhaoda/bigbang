@@ -18,27 +18,30 @@
 			<img src="/static/images/user-icon.png" width="26">
 		</a>
 	</div>
-	<div class="thanks-financing-box">
-		<div class="hd">
-			<h2>{{good.name}}</h2>
-		</div>
-		<div class="thanks-financing-bd">
-			<div class="thanks-financing">
-				<div class="img-box"><img src="http://placehold.it/335x132" width="100%"></div>
+	<form role="form" method="POST" id="formid" action="/wechat_pay/">
+		<div class="thanks-financing-box">
+			<div class="hd">
+				<h2>{{good.name}}</h2>
 			</div>
-			<div class="provide-content">
-				<h1>￥{{good.support_price}}元</h1>
-				<p>{{good.detail}}</p>
-			</div>
-			<div class="thanks-pay">
-				<input type="radio"/>&nbsp;&nbsp;匿名支付，金额：1.0元
+			<div class="thanks-financing-bd">
+				<div class="thanks-financing">
+					<div class="img-box"><img src="http://placehold.it/335x132" width="100%"></div>
+				</div>
+				<div class="provide-content">
+					<h1>￥{{good.support_price}}元</h1>
+					<p>{{good.detail}}</p>
+				</div>
+				<div class="thanks-pay">
+					<input type="hidden" name="body" value="{{good.title}}"/>
+					<input type="hidden" name="detail" value="{{good.detail}}"/>
+					<input type="hidden" name="price" value="{{good.support_price}}"/>
+					<input type="radio"/>&nbsp;&nbsp;匿名支付，金额：{{good.support_price}}元
+				</div>
 			</div>
 		</div>
-	</div>
-	<div class="provide-btn">
-		<div class="button01">
-			<a href=""><h3>微信支付</h3></a>
+		<div class="provide-btn">
+			<button class="button01"><h3>微信支付</h3></button>
 		</div>
-	</div>
+	</form>
 </div>
 {% endblock %}
