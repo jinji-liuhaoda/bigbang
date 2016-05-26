@@ -85,7 +85,8 @@ def create_order(request):
             stringB = "appid=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + str(prepay_id) + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
-            return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'prepay_id': prepay_id, 'signB': signB}, ensure_ascii=False))
+            wx_pay_json = {'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'package': 'prepay_id=' + str(prepay_id), 'paySign': signB}
+            return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'wx_pay_json': wx_pay_json}, ensure_ascii=False))
         else:
             return HttpResponse(simplejson.dumps({'error': 1, 'msg': '下单失败'}, ensure_ascii=False))
 
