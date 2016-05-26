@@ -82,10 +82,10 @@ def create_order(request):
             order.prepay_id = prepay_id
             order.status = 1
             timestamp = str(int(time.time()))
-            stringB = "appId=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + str(prepay_id) + "&signType=MD5&timeStamp=" + timestamp
+            stringB = "appId=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
-            wx_pay_json = {'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'package': 'prepay_id=' + str(prepay_id), 'paySign': signB}
+            wx_pay_json = {'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'prepay_id': prepay_id, 'paySign': signB}
             return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'wx_pay_json': wx_pay_json}, ensure_ascii=False))
         else:
             return HttpResponse(simplejson.dumps({'error': 1, 'msg': '下单失败'}, ensure_ascii=False))
@@ -93,20 +93,8 @@ def create_order(request):
 
 # 支付成功后微信回调地址
 def wx_callback_pay(request):
-    postxml = request.body.read()
-    post_tree = ET.parse(postxml)
-    for child in root:
-        if child.tag == 'return_code':
-            return_code = child.text
-        if child.tag == 'out_trade_no':
-            out_trade_no = child.text
-        if child.tag == 'transaction_id':
-            transaction_id = child.text
-    if return_code == 'SUCCESS':
-        order = get_object_or_404(Order, out_trade_no=out_trade_no)
-        order.status = 2
-        order.save()
-        print '------------transaction_id--------------' + transaction_id
+    if request.method == 'POST':
+        request.POST.get('prepay_id', '')
 
 
 def order_insert(out_trade_no, product_id, body, detail, total_fee):
