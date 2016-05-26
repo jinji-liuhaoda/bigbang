@@ -111,6 +111,7 @@ def wechat_pay(request):
             'wx_config': get_wx_config(request.get_raw_uri()),
             'title': '揭西石灵寺',
             'module': 'provide',
+            'DOMAIN': DOMAIN,
             'body': body,
             'detail': detail,
             'price': price,
