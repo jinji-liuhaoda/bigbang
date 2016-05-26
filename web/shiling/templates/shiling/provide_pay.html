@@ -54,13 +54,13 @@
 </script>
 <script>
 	$(function(){
-		var wx_pay = function(prepay_id, paySign){
+		var wx_pay = function(wx_pay_json){
 			wx.chooseWXPay({
-			    timestamp: '1464197020', // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
-			    nonceStr: '1f8996b9df356986', // 支付签名随机串，不长于 32 位
-			    package: 'prepay_id=wx20160526012618a9490de4800815511791', // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-			    signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-			    paySign: '978F07D7A9A24F632608388C42A4F863', // 支付签名
+			    timestamp: wx_pay_json.timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+			    nonceStr: wx_pay_json.nonceStr, // 支付签名随机串，不长于 32 位
+			    package:  wx_pay_json.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+			    signType: wx_pay_json.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+			    paySign: wx_pay_json.paySign, // 支付签名
 			    success: function (res) {
 			        // 支付成功后的回调函数
 			    }
@@ -79,7 +79,7 @@
 				success:function(jsonobj){
 					jsonobj = JSON.parse(jsonobj);
 					if (jsonobj.error == 0) {
-						wx_pay(jsonobj.prepay_id, jsonobj.signB);
+						wx_pay(jsonobj.wx_pay_json);
 					}else{
 						alert(jsonobj.msg);
 					}
