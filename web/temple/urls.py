@@ -129,6 +129,9 @@ urlpatterns = [
     url(r'^admin/user/(?P<user_id>\d+)/edit$', admin_views.user_edit),
     url(r'^admin/user/(?P<user_id>\d+)/delete$', admin_views.user_delete),
 
+    # 微信支付
+    url(r'^wechat_pay/$', temple_view.wechat_pay, name='wechat_pay'),
+
     # django后台
     url(r'^superadmin/', admin.site.urls),
 

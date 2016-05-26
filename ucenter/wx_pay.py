@@ -82,7 +82,7 @@ def create_order(request):
             order.prepay_id = prepay_id
             order.status = 1
             timestamp = str(int(time.time()))
-            stringB = "appid=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + str(prepay_id) + "&signType=MD5&timeStamp=" + timestamp
+            stringB = "appId=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + str(prepay_id) + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
             wx_pay_json = {'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'package': 'prepay_id=' + str(prepay_id), 'paySign': signB}
@@ -110,7 +110,9 @@ def wx_callback_pay(request):
 
 
 def order_insert(out_trade_no, product_id, body, detail, total_fee):
+    cuser_id = request.session.get('cuser_id', 0)
     order = Order()
+    order.cuser = get_object_or_404(Cuser, id=cuser_id)
     order.out_trade_no = out_trade_no
     order.product_id = product_id
     order.body = body

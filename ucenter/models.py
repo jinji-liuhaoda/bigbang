@@ -65,6 +65,7 @@ class Order(models.Model):
     from_pay = models.IntegerField(choices=FROM_CHOICES, default=0, verbose_name="订单来源")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
     good = models.ForeignKey(Good, blank=True, null=True, verbose_name="所属商品")
+    cuser = models.ForeignKey(Cuser, blank=True, null=True, verbose_name="所属用户")
 
     def __unicode__(self):
         return self.body
