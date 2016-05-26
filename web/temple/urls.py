@@ -15,7 +15,7 @@ urlpatterns = [
     # 供养
     url(r'^provide/$', temple_view.provide_list, name='provide_list'),
     url(r'^provide/(?P<provide_id>\d+)$', temple_view.provide_detail, name='provide_detail'),
-    url(r'^provide_pay/(?P<provide_id>\d+)$', temple_view.provide_pay, name='provide_pay'),
+    url(r'^provide_pay/(?P<provide_id>\d+)/$', temple_view.provide_pay, name='provide_pay'),
 
     # 善筹
     url(r'^goodraise/$', temple_view.goodraise_list, name='goodraise_list'),
