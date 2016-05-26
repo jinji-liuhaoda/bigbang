@@ -94,7 +94,11 @@ def create_order(request):
 # 支付成功后微信回调地址
 def wx_callback_pay(request):
     if request.method == 'POST':
-        request.POST.get('prepay_id', '')
+        prepay_id = request.POST.get('prepay_id', '')
+        order = get_object_or_404(Order, id=prepay_id)
+        order.status = 2
+        order.save()
+        return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
 
 
 def order_insert(out_trade_no, product_id, body, detail, total_fee, request):

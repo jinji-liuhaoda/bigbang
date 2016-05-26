@@ -115,6 +115,7 @@ def wechat_pay(request):
             'body': body,
             'detail': detail,
             'price': price,
+            'redirect_uri': request.get_raw_uri(),
         }
         template = loader.get_template('shiling/wechat_pay.html')
         return HttpResponse(template.render(context, request))
