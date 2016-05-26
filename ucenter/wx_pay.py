@@ -42,7 +42,7 @@ def create_order(request):
         stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
-        order_insert(out_trade_no, product_id, body, detail, total_fee)
+        order_insert(out_trade_no, product_id, body, detail, total_fee, request)
         xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
                            <body>body_str</body>\
@@ -97,7 +97,7 @@ def wx_callback_pay(request):
         request.POST.get('prepay_id', '')
 
 
-def order_insert(out_trade_no, product_id, body, detail, total_fee):
+def order_insert(out_trade_no, product_id, body, detail, total_fee, request):
     cuser_id = request.session.get('cuser_id', 0)
     order = Order()
     order.cuser = get_object_or_404(Cuser, id=cuser_id)
