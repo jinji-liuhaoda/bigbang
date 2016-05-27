@@ -54,8 +54,8 @@ class Order(models.Model):
     )
 
     ANONYMOUS_CHOICES = (
-        (0, ''),
-        (1, ''),
+        (0, '非匿名'),
+        (1, '匿名'),
     )
 
     out_trade_no = models.CharField(max_length=128, verbose_name="订单号")

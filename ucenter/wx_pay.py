@@ -111,6 +111,10 @@ def order_insert(out_trade_no, product_id, body, detail, total_fee, request, ano
     order.body = body
     order.detail = detail
     order.total_fee = total_fee
+    if anonymous:
+        anonymous = 1
+    else:
+        anonymous = 0
     order.anonymous = anonymous
     order.status = 0
     order.save()
