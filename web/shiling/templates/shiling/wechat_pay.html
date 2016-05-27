@@ -53,9 +53,8 @@
 			    success: function (res) {
 					if(res.errMsg == "chooseWXPay:ok" ) {
 				        // 支付成功后的回调函数
-				        $.post('{{DOMAIN}}/cuser/wx_callback_pay/',{prepay_id:wx_pay_json.prepay_id},function(data){
-				        	window.location.href = '{{redirect_uri}}';
-				        })
+				        window.location.href = '{{redirect_uri}}';
+				        $.post('{{DOMAIN}}/cuser/wx_callback_pay/',{prepay_id:wx_pay_json.prepay_id},function(data){})
 					}else{
 						alert(res.errMsg);
 					}
@@ -68,7 +67,7 @@
 		$.ajax({
 			url:"{{DOMAIN}}/cuser/wx_create_order/",
 			method:'POST',
-			data:{ body:'{{body}}', detail:'{{detail}}', total_fee:'{{price}}'},
+			data:{ body:'{{body}}', detail:'{{detail}}', total_fee:'{{price}}'}, anonymous:'{{anonymous}}'},
 			success:function(jsonobj){
 				jsonobj = JSON.parse(jsonobj);
 				if (jsonobj.error == 0) {

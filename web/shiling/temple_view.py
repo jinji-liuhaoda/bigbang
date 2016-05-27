@@ -69,6 +69,7 @@ def provide_list(request):
         'title': '揭西石灵寺',
         'module': 'provide',
         'gooddeedday': gooddeedday,
+        'redirect_uri': request.get_raw_uri(),
         'pds': pds,
     }
     template = loader.get_template('shiling/provide.html')
@@ -95,6 +96,7 @@ def provide_pay(request, provide_id):
         'module': 'provide',
         'provide': provide,
         'cuser_id': cuser_id,
+        'redirect_uri': request.get_raw_uri(),
     }
     template = loader.get_template('shiling/provide_pay.html')
     return HttpResponse(template.render(context, request))
@@ -107,6 +109,8 @@ def wechat_pay(request):
         body = request.POST.get('body', '')
         detail = request.POST.get('detail', '')
         price = request.POST.get('price', '')
+        redirect_uri = request.POST.get('redirect_uri', '')
+        anonymous = request.POST.get('anonymous', '')
         context = {
             'wx_config': get_wx_config(request.get_raw_uri()),
             'title': '揭西石灵寺',
@@ -115,7 +119,8 @@ def wechat_pay(request):
             'body': body,
             'detail': detail,
             'price': price,
-            'redirect_uri': request.get_raw_uri(),
+            'redirect_uri': redirect_uri,
+            'anonymous': anonymous,
         }
         template = loader.get_template('shiling/wechat_pay.html')
         return HttpResponse(template.render(context, request))
@@ -164,6 +169,7 @@ def goodraise_detail(request, goodraise_id):
         'goodraise': goodraise,
         'support_price_num': support_price_num,
         'goods': goods,
+        'redirect_uri': request.get_raw_uri(),
     }
     template = loader.get_template('shiling/goodraise_detail.html')
     return HttpResponse(template.render(context, request))
@@ -175,6 +181,7 @@ def good_pay(request, good_id):
         'title': '揭西石灵寺',
         'module': 'goodraise',
         'good': good,
+        'redirect_uri': request.get_raw_uri(),
     }
     template = loader.get_template('shiling/good_pay.html')
     return HttpResponse(template.render(context, request))

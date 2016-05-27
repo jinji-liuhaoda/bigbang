@@ -53,6 +53,11 @@ class Order(models.Model):
         (1, '善筹'),
     )
 
+    ANONYMOUS_CHOICES = (
+        (0, ''),
+        (1, ''),
+    )
+
     out_trade_no = models.CharField(max_length=128, verbose_name="订单号")
     product_id = models.CharField(max_length=128, verbose_name="商品id")
     trade_type = models.CharField(max_length=128, default='', verbose_name="支付类型")
@@ -63,6 +68,7 @@ class Order(models.Model):
     total_fee = models.FloatField(default=0.0, verbose_name="总价")
     status = models.IntegerField(choices=GENDER_CHOICES, default=0, verbose_name="订单状态")
     from_pay = models.IntegerField(choices=FROM_CHOICES, default=0, verbose_name="订单来源")
+    anonymous = models.IntegerField(choices=ANONYMOUS_CHOICES, default=0, verbose_name="是否匿名")
     created = models.DateTimeField(default=datetime.datetime.now, verbose_name="创建时间")
     good = models.ForeignKey(Good, blank=True, null=True, verbose_name="所属商品")
     cuser = models.ForeignKey(Cuser, blank=True, null=True, verbose_name="所属用户")

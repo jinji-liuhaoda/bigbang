@@ -39,6 +39,7 @@
 						<input type="hidden" id="title" value="善筹" />
 						<input type="hidden" id="detail" value="随喜" />
 						<input type="text" id="money" placeholder="输入随喜金额" />
+						<input type="hidden" id="redirect_uri" value="{{redirect_uri}}" />
 					</div>
 				</div>
 				<div class="button01 wechat_pay">
@@ -118,14 +119,17 @@
 			var price = $(this).parent().find('#money').val()
 			var body = $(this).parent().find('#title').val()
 			var detail = $(this).parent().find('#detail').val()
+			var redirect_uri = $('#redirect_uri').val()
 			if (price>=0.01) {
 				form = $("<form method='post' action='/wechat_pay/'></form>")
 				input1 = $("<input type='text'>").val(price).attr('name','price')
 				input2 = $("<input type='text'>").val(body).attr('name','body')
 				input3 = $("<input type='text'>").val(detail).attr('name','detail')
+				input4 = $("<input type='text'>").val(redirect_uri).attr('name','redirect_uri')
 				form.append(input1)
 				form.append(input2)
 				form.append(input3)
+				form.append(input4)
 				form.submit()
 			};
 		})
