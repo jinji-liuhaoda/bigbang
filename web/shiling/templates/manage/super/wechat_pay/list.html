@@ -25,14 +25,23 @@
             <th style="width: 10px">#</th>
             <th>名称</th>
             <th>订单号</th>
+            <th>商品id</th>
             <th>金额</th>
+            <th>来源</th>
+            <th>用户</th>
+            <th>状态</th>
             <th>操作</th>
           </tr>
           {% for order in orders %}
             <tr>
-              <td><a href="/admin/order/{{ order.id }}/edit">{{ order.id }}</a></td>
-              <td><a href="/admin/order/{{ order.id }}/edit">{{ order.name }}</a></td>
-              <td><a href="/admin/order/{{ order.id }}/edit">{{ order.mage_num }}</a></td>
+              <td>{{ order.id }}</td>
+              <td>{{ order.body }}</td>
+              <td>{{ order.out_trade_no }}</td>
+              <td>{{ order.product_id }}</td>
+              <td>{{ order.total_fee }}</td >
+              <td>{{ order.get_from_pay_display }}</td>
+              <td>{{ order.cuser.name }}</td>
+              <td>{{ order.get_status_display }}</td>
               <td>
                 <a class="btn btn-danger btn-xs" href="/admin/order/{{ order.id }}/delete">删除</a>
               </td>

@@ -6,6 +6,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from .models import Cuser, Order, GoodId
 from wx_auth import web_webchat_check_login
+from shiling.models import Good
 
 from settings import UPLOAD_DIR, DOMAIN, WX_PAY_MCH_KEY
 from .constants import WX_APP_ID, WX_SECRET, WX_MCH_ID
@@ -34,6 +35,8 @@ def create_order(request):
         detail = request.POST.get('detail', '')
         total_fee = request.POST.get('total_fee', '')
         anonymous = request.POST.get('anonymous', '')
+        good_id = request.POST.get('good_id', '')
+        goodraise_id = request.POST.get('goodraise_id', '')
         total_fee = str(int(float(total_fee)*100))
         spbill_create_ip = request.session.get('cuser_ip', '')
         out_trade_no = get_out_trade_no()
@@ -43,7 +46,7 @@ def create_order(request):
         stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
-        order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous)
+        order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id)
         xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
                            <body>body_str</body>\
@@ -86,7 +89,7 @@ def create_order(request):
             stringB = "appId=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
-            wx_pay_json = {'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'prepay_id': prepay_id, 'paySign': signB}
+            wx_pay_json = {'order_id': order.id, 'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'prepay_id': prepay_id, 'paySign': signB}
             return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'wx_pay_json': wx_pay_json}, ensure_ascii=False))
         else:
             return HttpResponse(simplejson.dumps({'error': 1, 'msg': '下单失败'}, ensure_ascii=False))
@@ -95,17 +98,22 @@ def create_order(request):
 # 支付成功后微信回调地址
 def wx_callback_pay(request):
     if request.method == 'POST':
-        prepay_id = request.POST.get('prepay_id', '')
-        order = get_object_or_404(Order, id=prepay_id)
+        order_id = request.POST.get('order_id', '')
+        order = get_object_or_404(Order, id=order_id)
         order.status = 2
         order.save()
         return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
 
 
-def order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous):
+def order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id):
     cuser_id = request.session.get('cuser_id', 0)
     order = Order()
     order.cuser = get_object_or_404(Cuser, id=cuser_id)
+    if good_id:
+        good = get_object_or_404(Good, id=good_id)
+        order.good = good
+    if goodraise_id:
+        order.goodraise_id = goodraise_id
     order.out_trade_no = out_trade_no
     order.product_id = product_id
     order.body = body

@@ -90,22 +90,16 @@
                 <li {% if module == 'gooddeedday' %}class="active"{% endif %}><a href="/admin/gooddeedday"><i class="fa fa-circle-o"></i>日行一善</a></li>
                 <li {% if module == 'category' %}class="active"{% endif %}><a href="/admin/category"><i class="fa fa-circle-o"></i>分类管理</a></li>
                 <li {% if module == 'provide' %}class="active"{% endif %}><a href="/admin/provide"><i class="fa fa-circle-o"></i>供养管理</a></li>
-                <li {% if module == 'provide-pay' %}class="active"{% endif %}><a href="/admin/provide-pay"><i class="fa fa-circle-o"></i>支付管理</a></li>
               </ul>
             </li>
-           <li class="treeview {% if module == 'goodraise' or module == 'goodraise-pay' %}active{% endif %}" >
-              <a href="#"><span>善筹</span> <i class="fa fa-angle-left pull-right"></i></a>
-              <ul class="treeview-menu {% if module == 'goodraise' or module == 'goodraise-pay' %}menu-open{% endif %}">
-                <li {% if module == 'goodraise' %}class="active"{% endif %}><a href="/admin/goodraise"><i class="fa fa-circle-o"></i>善筹管理</a></li>
-                <li {% if module == 'goodraise-pay' %}class="active"{% endif %}><a href="/admin/goodraise-pay"><i class="fa fa-circle-o"></i>支付管理</a></li>
-              </ul>
-            </li>
+            <li {% if module == 'goodraise' %}class="active"{% endif %}><a href="/admin/goodraise">善筹</a></li>
             <li {% if module == 'activity' %}class="active"{% endif %}><a href="/admin/activity">活动</a></li>
             <li {% if module == 'news' %}class="active"{% endif %}><a href="/admin/news">新闻</a></li>
             <li {% if module == 'volunteer' %}class="active"{% endif %}><a href="/admin/volunteer">义工</a></li>
             <li {% if module == 'buddhismknowledge' %}class="active"{% endif %}><a href="/admin/buddhismknowledge">佛法知识</a>
             </li>
             <li {% if module == 'cuser' %}class="active"{% endif %}><a href="/admin/cuser">用户管理</a></li>
+            <li {% if module == 'wechat_pay' %}class="active"{% endif %}><a href="/admin/wechat_pay">支付管理</a></li>
             <li class="treeview {% if module == 'user' %}active{% endif %}" >
               <a href="#"><span>系统配置</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu {% if module == 'user' %}menu-open{% endif %}">

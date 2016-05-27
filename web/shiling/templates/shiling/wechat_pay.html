@@ -53,8 +53,8 @@
 			    success: function (res) {
 					if(res.errMsg == "chooseWXPay:ok" ) {
 				        // 支付成功后的回调函数
+				        $.post('{{DOMAIN}}/cuser/wx_callback_pay/',{order_id:wx_pay_json.order_id},function(data){})
 				        window.location.href = '{{redirect_uri}}';
-				        $.post('{{DOMAIN}}/cuser/wx_callback_pay/',{prepay_id:wx_pay_json.prepay_id},function(data){})
 					}else{
 						alert(res.errMsg);
 					}
