@@ -579,13 +579,23 @@ def provide_delete(request, provide_id):
 
 
 @login_required
-def provide_pay_list(request):
-    orders = Order.objects.filter(from_pay=0)
+def order_delete(request, order_id):
+    kwargs = {
+        'id': order_id,
+    }
+    order = get_object_or_404(Order, **kwargs)
+    order.delete()
+    return HttpResponseRedirect("/admin/wechat_pay")
+
+
+@login_required
+def wechat_pay_list(request):
+    orders = Order.objects.filter(from_pay=0, status=2)
     context = {
-        'module': 'provide-pay',
+        'module': 'wechat_pay',
         'orders': orders,
     }
-    template = loader.get_template('manage/super/provide-pay/list.html')
+    template = loader.get_template('manage/super/wechat_pay/list.html')
     return HttpResponse(template.render(context, request))
 
 
@@ -822,17 +832,6 @@ def goodraise_delete(request, goodraise_id):
     goodraise = get_object_or_404(GoodRaise, **kwargs)
     goodraise.delete()
     return HttpResponseRedirect("/admin/goodraise")
-
-
-@login_required
-def goodraise_pay_list(request):
-    orders = Order.objects.filter(from_pay=1)
-    context = {
-        'module': 'goodraise-pay',
-        'orders': orders,
-    }
-    template = loader.get_template('manage/super/goodraise-pay/list.html')
-    return HttpResponse(template.render(context, request))
 
 
 @login_required

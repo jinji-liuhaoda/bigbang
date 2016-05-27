@@ -156,19 +156,23 @@ def goodraise_detail(request, goodraise_id):
     goodraise = get_object_or_404(GoodRaise, id=goodraise_id)
     goods = Good.objects.filter(goodraise=goodraise)
     support_price_num = 0
+    goods = Good.objects.filter(goodraise=goodraise).order_by('-id')
     # 统计订单支付成功，总金额
     for good in goods:
+        # 统计每个商品支持数
         total_fee_json = Order.objects.filter(good=good, status=2).values('total_fee').annotate(dcount=Count('total_fee'))
+        simple_orders = Order.objects.filter(good=good, status=2)
         for x in total_fee_json:
             support_price_num = support_price_num + x.get('total_fee')
-
-    goods = Good.objects.filter(goodraise=goodraise).order_by('-id')
+        good.support_count = len(simple_orders)
+    orders = Order.objects.filter(goodraise_id=goodraise_id, status=2)
     context = {
         'title': '揭西石灵寺',
         'module': 'goodraise',
         'goodraise': goodraise,
         'support_price_num': support_price_num,
         'goods': goods,
+        'orders': orders,
         'redirect_uri': request.get_raw_uri(),
     }
     template = loader.get_template('shiling/goodraise_detail.html')

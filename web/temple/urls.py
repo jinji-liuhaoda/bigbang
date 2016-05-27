@@ -75,7 +75,7 @@ urlpatterns = [
     url(r'^admin/provide/(?P<provide_id>\d+)/edit$', admin_views.provide_edit),
     url(r'^admin/provide/(?P<provide_id>\d+)/delete$', admin_views.provide_delete),
 
-    url(r'^admin/provide-pay$', admin_views.provide_pay_list),
+    url(r'^admin/order/(?P<order_id>\d+)/delete$', admin_views.order_delete),
 
     # 善筹
     url(r'^admin/(?P<goodraise_id>\d+)/good$', admin_views.good_list),
@@ -86,8 +86,6 @@ urlpatterns = [
     url(r'^admin/goodraise/create$', admin_views.goodraise_create),
     url(r'^admin/goodraise/(?P<goodraise_id>\d+)/edit$', admin_views.goodraise_edit),
     url(r'^admin/goodraise/(?P<goodraise_id>\d+)/delete$', admin_views.goodraise_delete),
-
-    url(r'^admin/goodraise-pay$', admin_views.goodraise_pay_list),
 
     # 活动
     url(r'^admin/activity$', admin_views.activity_list),
@@ -122,6 +120,9 @@ urlpatterns = [
     url(r'^admin/cuser/create$', admin_views.cuser_create),
     url(r'^admin/cuser/(?P<cuser_id>\d+)/edit$', admin_views.cuser_edit),
     url(r'^admin/cuser/(?P<cuser_id>\d+)/delete$', admin_views.cuser_delete),
+
+    # 支付管理
+    url(r'^admin/wechat_pay$', admin_views.wechat_pay_list),
 
     # 管理员
     url(r'^admin/user$', admin_views.user_list),
