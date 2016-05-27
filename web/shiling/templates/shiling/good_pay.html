@@ -35,7 +35,8 @@
 					<input type="hidden" name="body" value="{{good.title}}"/>
 					<input type="hidden" name="detail" value="{{good.detail}}"/>
 					<input type="hidden" name="price" value="{{good.support_price}}"/>
-					<input type="radio"/>&nbsp;&nbsp;匿名支付，金额：{{good.support_price}}元
+					<input type="hidden" name="redirect_uri" value="{{redirect_uri}}"/>
+					<input type="radio" name="anonymous"/>&nbsp;&nbsp;匿名支付，金额：{{good.support_price}}元
 				</div>
 			</div>
 		</div>
