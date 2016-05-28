@@ -62,14 +62,16 @@ def login(request):
     if request.method == 'POST':
         phone = request.POST.get('phone', '')
         pwd = request.POST.get('pwd', '')
+        is_validation = 0
 
-        cuser = get_object_or_404(Cuser, phone=phone)
-        if cuser:
-            is_pwd = check_password(pwd, cuser.pwd)
-        if cuser and is_pwd:
-            is_validation = 1
-        else:
-            is_validation = 0
+        try:
+            cuser = get_object_or_404(Cuser, phone=phone)
+            if cuser:
+                is_pwd = check_password(pwd, cuser.pwd)
+                if is_pwd:
+                    is_validation = 1
+        except Exception, e:
+            print '-----login-error----', phone, pwd
 
         if is_validation:
             request.session['cuser_id'] = cuser.id
@@ -149,6 +151,9 @@ def register_do(request):
             request.session['cuser_ip'] = cuser_ip
             request.session['cuser_id'] = cuser.id
             return HttpResponseRedirect('/cuser/index')
+        else:
+            context['phone'] = phone
+            context['pwd'] = pwd
     template = loader.get_template('register.html')
     return HttpResponse(template.render(context, request))
 

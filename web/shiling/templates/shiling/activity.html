@@ -21,7 +21,7 @@
 		<ul>
 			{% for activity in activitys %}
 			<li>
-				<a id="views_count" idvar="{{activity.id}}">				
+				<a class="views_count" idvar="{{activity.id}}">				
 					<div class="news">
 						<div class="news-pic">
 							<img src="{{activity.cover_url}}" width="100%">
@@ -39,7 +39,7 @@
 										<span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
 									</li>
 									<li>
-										<img src="/static/images/clock.png" width="10">&nbsp;{{activity.end_time}}
+										<img src="/static/images/clock.png" width="10">&nbsp;{{activity.end_time|date:"Y年m月d日"}}
 									</li>
 								</ul>
 							</div>
@@ -70,7 +70,7 @@
 {% block script %}
 <script>
 	$(function(){
-		$("#views_count").on('click',function(){
+		$(".views_count").on('click',function(){
 			id =  $(this).attr("idvar")
 			$.ajax({
 				url:"{{DOMAIN}}/views_count/" + id,

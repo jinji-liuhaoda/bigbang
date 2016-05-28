@@ -1,0 +1,1 @@
+var time_config = {startOfWeek: 'monday',separator : '~',format: 'YYYY-MM-DD HH:mm',autoClose: false,time: {enabled: true}}
