@@ -61,7 +61,7 @@ def wechat_do_login(request):
     province = user_info_data.get('province', '').encode('utf-8')
     country = user_info_data.get('country', '').encode('utf-8')
     headimgurl = user_info_data.get('headimgurl', '').encode('utf-8')
-    register = request.session.get('register', 0).encode('utf-8')
+    register = request.session.get('register', 0)
     if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
         cuser.name = name
