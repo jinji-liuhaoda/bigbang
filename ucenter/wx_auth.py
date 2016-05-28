@@ -56,27 +56,27 @@ def wechat_do_login(request):
         return HttpResponseRedirect('/cuser/login')
     user_info_data = get_user_info(access_token, openid)
 
-    name = user_info_data.get('nickname', '')
-    city = user_info_data.get('city', '')
-    province = user_info_data.get('province', '')
-    country = user_info_data.get('country', '')
-    headimgurl = user_info_data.get('headimgurl', '')
-    register = request.session.get('register', 0)
+    name = user_info_data.get('nickname', '').encode('utf-8')
+    city = user_info_data.get('city', '').encode('utf-8')
+    province = user_info_data.get('province', '').encode('utf-8')
+    country = user_info_data.get('country', '').encode('utf-8')
+    headimgurl = user_info_data.get('headimgurl', '').encode('utf-8')
+    register = request.session.get('register', 0).encode('utf-8')
     if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
-        cuser.name = name.encode('utf-8')
-        cuser.city = city.encode('utf-8')
-        cuser.province = province.encode('utf-8')
-        cuser.country = country.encode('utf-8')
+        cuser.name = name
+        cuser.city = city
+        cuser.province = province
+        cuser.country = country
         cuser.headimgurl = headimgurl
         cuser.save()
         # 设置Session
         request.session['cuser_id'] = cuser.id
     else:
-        request.session['name'] = name.encode('utf-8')
-        request.session['city'] = city.encode('utf-8')
-        request.session['province'] = province.encode('utf-8')
-        request.session['country'] = country.encode('utf-8')
+        request.session['name'] = name
+        request.session['city'] = city
+        request.session['province'] = province
+        request.session['country'] = country
         request.session['headimgurl'] = headimgurl
         del request.session['register']
     print 'wechat_do_login', openid
