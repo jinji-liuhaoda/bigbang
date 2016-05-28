@@ -710,11 +710,10 @@ def goodraise_create(request):
         content = request.POST.get('content', '')
         daterange = request.POST.get('daterange', '')
 
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
         goodraise = GoodRaise()
@@ -772,11 +771,10 @@ def goodraise_edit(request, goodraise_id):
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
 
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
 
@@ -859,11 +857,10 @@ def activity_create(request):
         people_number = request.POST.get('people_number', '')
         daterange = request.POST.get('daterange', '')
 
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
 
@@ -927,11 +924,10 @@ def activity_edit(request, activity_id):
         people_number = request.POST.get('people_number', '')
         daterange = request.POST.get('daterange', '')
 
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
 
@@ -1059,11 +1055,10 @@ def news_create(request):
         content = request.POST.get('content', '')
         daterange = request.POST.get('daterange', '')
 
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
 
@@ -1115,11 +1110,10 @@ def news_edit(request, news_id):
         content = request.POST.get('content', '')
         daterange = request.POST.get('daterange', '')
 
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
 
@@ -1187,11 +1181,10 @@ def volunteer_detail(request):
         detail = request.POST.get('detail', '')
         content = request.POST.get('content', '')
         daterange = request.POST.get('daterange', '')
-        arr = [r.strip() for r in daterange.split('-')]
-
+        arr = [r.strip() for r in daterange.split('~')]
         try:
-            start_time = datetime.datetime.strptime(arr[0], '%m/%d/%Y').date()
-            end_time = datetime.datetime.strptime(arr[1], '%m/%d/%Y').date()
+            start_time = datetime.datetime.strptime(arr[0], '%Y-%m-%d %H:%M')
+            end_time = datetime.datetime.strptime(arr[1], '%Y-%m-%d %H:%M')
         except Exception, e:
             daterange = False
 

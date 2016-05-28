@@ -56,11 +56,11 @@ def wechat_do_login(request):
         return HttpResponseRedirect('/cuser/login')
     user_info_data = get_user_info(access_token, openid)
 
-    name = user_info_data.get('nickname', '').encode('utf-8')
-    city = user_info_data.get('city', '').encode('utf-8')
-    province = user_info_data.get('province', '').encode('utf-8')
-    country = user_info_data.get('country', '').encode('utf-8')
-    headimgurl = user_info_data.get('headimgurl', '').encode('utf-8')
+    name = user_info_data.get('nickname', '').decode('utf-8')
+    city = user_info_data.get('city', '').decode('utf-8')
+    province = user_info_data.get('province', '').decode('utf-8')
+    country = user_info_data.get('country', '').decode('utf-8')
+    headimgurl = user_info_data.get('headimgurl', '').decode('utf-8')
     register = request.session.get('register', 0)
     if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
