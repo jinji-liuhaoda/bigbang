@@ -64,19 +64,19 @@ def wechat_do_login(request):
     register = request.session.get('register', 0)
     if not register:
         cuser, _ = Cuser.objects.get_or_create(openid=openid)
-        cuser.name = name
-        cuser.city = city
-        cuser.province = province
-        cuser.country = country
+        cuser.name = name.encode('utf-8')
+        cuser.city = city.encode('utf-8')
+        cuser.province = province.encode('utf-8')
+        cuser.country = country.encode('utf-8')
         cuser.headimgurl = headimgurl
         cuser.save()
         # 设置Session
         request.session['cuser_id'] = cuser.id
     else:
-        request.session['name'] = name
-        request.session['city'] = city
-        request.session['province'] = province
-        request.session['country'] = country
+        request.session['name'] = name.encode('utf-8')
+        request.session['city'] = city.encode('utf-8')
+        request.session['province'] = province.encode('utf-8')
+        request.session['country'] = country.encode('utf-8')
         request.session['headimgurl'] = headimgurl
         del request.session['register']
     print 'wechat_do_login', openid

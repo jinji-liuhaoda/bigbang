@@ -97,11 +97,15 @@
 						<ul>
 							<li>
 								<div class="pray-bd-pic">
+								{% if order.cuser.headimgurl %}
+									<img src="{{order.cuser.headimgurl}}" width="52">
+								{% else %}
 									<img src="http://placehold.it/52x52">
+								{% endif %}
 								</div>
 							</li>
 							<li class="model4-info">
-								<h3>匿名</h3>
+								<h3>{% if order.anonymous %}匿名{% else %}{{order.cuser.name}}{% endif %}</h3>
 								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"YYYY-MM-DDTHH:MM:SS.mmmmmm"}}"'/>
 								<h5></h5>
 							</li>
