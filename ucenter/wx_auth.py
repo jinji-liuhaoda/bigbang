@@ -85,7 +85,7 @@ def wechat_do_login(request):
     request.session['openid'] = openid
     # 获取用户ip
     if 'HTTP_X_FORWARDED_FOR' in request.META:
-        cuser_ip = request.META['HTTP_X_FORWARDED_FOR']
+        cuser_ip = request.META['HTTP_X_FORWARDED_FOR'].split(',')[0]
     else:
         cuser_ip = request.META['REMOTE_ADDR']
     request.session['cuser_ip'] = cuser_ip
