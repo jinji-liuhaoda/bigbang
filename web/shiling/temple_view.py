@@ -194,6 +194,7 @@ def good_pay(request, good_id):
 def blessing_list(request):
     temples = Temple.objects.all()
     buddhismknowledge = BuddhismKnowledge.objects.all()
+    orders = Order.objects.filter(status=2, from_pay=0)
     if temples:
         temple = temples[0]
     else:
@@ -203,6 +204,7 @@ def blessing_list(request):
         'module': 'blessing',
         'temple': temple,
         'bknow': len(buddhismknowledge),
+        'orders': orders,
     }
     template = loader.get_template('shiling/blessing.html')
     return HttpResponse(template.render(context, request))

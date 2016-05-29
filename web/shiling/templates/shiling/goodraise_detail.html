@@ -109,7 +109,7 @@
 								</div>
 							</li>
 							<li class="model4-info">
-								<h3>{% if order.anonymous %}匿名{% else %}{{order.cuser.name}}{% endif %}</h3>
+								<h3>{% if order.anonymous %}{{order.get_anonymous_display}} {% else %}{{order.cuser.name}}{% endif %}</h3>
 								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"YYYY-MM-DDTHH:MM:SS.mmmmmm"}}"'/>
 								<h5></h5>
 							</li>
