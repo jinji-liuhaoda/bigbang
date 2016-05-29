@@ -37,6 +37,7 @@ def create_order(request):
         anonymous = request.POST.get('anonymous', '')
         good_id = request.POST.get('good_id', '')
         goodraise_id = request.POST.get('goodraise_id', '')
+        module = request.POST.get('module', '')
         total_fee = str(int(float(total_fee)*100))
         spbill_create_ip = request.session.get('cuser_ip', '')
         out_trade_no = get_out_trade_no()
@@ -46,7 +47,7 @@ def create_order(request):
         stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
-        order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id)
+        order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module)
         xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
                            <body>body_str</body>\
@@ -116,7 +117,7 @@ def wx_callback_pay(request):
         order.save()
 
 
-def order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id):
+def order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module):
     cuser_id = request.session.get('cuser_id', 0)
     order = Order()
     order.cuser = get_object_or_404(Cuser, id=cuser_id)
@@ -134,6 +135,8 @@ def order_insert(out_trade_no, product_id, body, detail, total_fee, request, ano
         anonymous = 1
     else:
         anonymous = 0
+    if module == 'goodraise':
+        order.from_pay = 1
     order.anonymous = anonymous
     order.status = 0
     order.save()
