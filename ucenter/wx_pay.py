@@ -42,7 +42,7 @@ def create_order(request):
         out_trade_no = get_out_trade_no()
         product_id = get_product_id()
         noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
-        stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
+        stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_callback_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
         stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
@@ -54,7 +54,7 @@ def create_order(request):
                            <device_info>WEB</device_info>\
                            <mch_id>" + WX_MCH_ID + "</mch_id>\
                            <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
-                           <notify_url><![CDATA[" + DOMAIN + "/cuser/wx_pay/]]></notify_url>\
+                           <notify_url><![CDATA[" + DOMAIN + "/cuser/wx_callback_pay/]]></notify_url>\
                            <openid><![CDATA[" + openid + "]]></openid>\
                            <out_trade_no><![CDATA[" + out_trade_no + "]]></out_trade_no>\
                            <product_id>" + product_id + "</product_id>\
@@ -97,13 +97,22 @@ def create_order(request):
 
 
 # 支付成功后微信回调地址
+@csrf_exempt
 def wx_callback_pay(request):
-    if request.method == 'POST':
-        order_id = request.POST.get('order_id', '')
-        order = get_object_or_404(Order, id=order_id)
+    xml_read = request.read()
+    root = ET.fromstring(xml_read)
+    # 解析xml内容
+    for child in root:
+        if child.tag == 'return_code':
+            return_code = child.text
+        if child.tag == 'result_code':
+            result_code = child.text
+        if child.tag == 'out_trade_no':
+            out_trade_no = child.text
+    if return_code == 'SUCCESS' and result_code == 'SUCCESS':
+        order = get_object_or_404(Order, out_trade_no=out_trade_no)
         order.status = 2
         order.save()
-        return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
 
 
 def order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id):

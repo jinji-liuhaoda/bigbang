@@ -63,7 +63,9 @@
  						<div class="activity-content">
  							{{activity.content|safe}}
  						</div>
-						<img src="{{activity.cover_url}}" width="100%">
+ 						{% if activity.cover %}
+							<img src="{{activity.cover_url}}" width="100%">
+						{% endif %}
 					</div>
 				</div>
 			</div>

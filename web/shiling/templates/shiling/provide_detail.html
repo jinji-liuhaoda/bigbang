@@ -25,7 +25,9 @@
 				</div>
 				<div class="provide-bd">
 					<div class="provide-pic">
+					{% if provide.banner_cover %}
 						<img src="{{provide.banner_cover_url}}" width="100%">
+					{% endif %}
 					</div>
 					<div class="provide-content">
 						<h1>￥{{provide.price}}元</h1>

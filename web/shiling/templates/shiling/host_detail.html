@@ -10,7 +10,9 @@
 					<div class="born">
 						{{mage.detail|safe}}
 					</div>
-					<img src="{{mage.cover_url}}" width="100%";>
+					{% if mage.cover %}
+						<img src="{{mage.cover_url}}" width="100%";>
+					{% endif %}
 					<h2>{{mage.mage_num}}</h2>
 					<h4>住持</h4>
 	 				<div class="mage-content">

@@ -23,7 +23,9 @@
 			<li>
 				<a href="/buddhismknowledge/{{buddhismknowledge.id}}">
 					<div class="pic">
+					{% if buddhismknowledge.cover %}
 						<img src="{{buddhismknowledge.cover_url}}">
+					{% endif %}
 					</div>
 				</a>
 				<h3>{{buddhismknowledge.title}}</h3>

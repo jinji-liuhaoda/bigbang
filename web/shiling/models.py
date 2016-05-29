@@ -146,12 +146,16 @@ class Good(models.Model):
 
     name = models.CharField(max_length=128, verbose_name="名称")
     detail = models.TextField(null=False, verbose_name="描述")
+    cover = models.CharField(max_length=128, default='', blank=False, verbose_name="封面图片")
     support_price = models.FloatField(default=0.0, verbose_name="支持金额")
     support_p_count = models.IntegerField(default=0, verbose_name="支持人数")
     goodraise = models.ForeignKey(GoodRaise, blank=True, null=True, verbose_name="所属善筹")
 
     def __unicode__(self):
         return self.name
+
+    def cover_url(self):
+        return url(BUCKET_NAME, self.cover)
 
 
 class Activity(models.Model):

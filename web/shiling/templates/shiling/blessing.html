@@ -43,7 +43,9 @@
 	<div class="abbot-index">
 		<div class="content">
 			<p>{{temple.mage.detail|safe}}</p>
-			<img src="{{temple.mage.cover_url}}" width="100%">
+			{% if temple.mage.cover %}
+				<img src="{{temple.mage.cover_url}}" width="100%">
+			{% endif%}
 			<div class="more" id = "mage">
 				<span>更多介绍</span>
 			</div>
@@ -54,7 +56,9 @@
 			<li>
 				<div class="model">
 					<div class="pray-bd-pic">
+						{% if temple.mage.cover %}
 						<img src="{{temple.mage.cover_url}}"  width="100%">
+						{% endif %}
 					</div>
 					<div class="pray-bd-content">
 						<h4>日行一善,随喜供养!虔诚供养共计1.00元功德无量</h4>

@@ -23,7 +23,11 @@
 				<h2>{{goodraise.title}}</h2>
 				<div><img src="/static/images/clock.png" width="10">&nbsp;<span>{{goodraise.end_time}}</span></div>
 			</div>
-			<div class="img-box"><img src="{{goodraise.cover_url}}" width="100%"></div>
+			<div class="img-box">
+			{% if goodraise.cover %}
+				<img src="{{goodraise.cover_url}}" width="100%">
+			{% endif %}
+			</div>
 			<div class="Progress">
 				<div class="Progress-bar">
 					<div class="Progress-accomplish"></div>

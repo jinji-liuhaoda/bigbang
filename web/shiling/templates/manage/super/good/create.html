@@ -21,7 +21,7 @@
 
     <form role="form" method="POST"
       {% if not good.id %}
-      action="/admin/good/{{ good.id }}/create"
+      action="/admin/good/{{ goodraise.id }}/create"
       {% else %}
       action="/admin/good/{{ good.id }}/edit"
       {% endif %}
@@ -40,6 +40,15 @@
       {% if good %}value="{{ good.name }}"{% endif %} />
       {{error.name_msg|safe}}
     </div>
+      <div class="form-group">
+        <label for="exampleInputFile">封面图片</label>
+        <input type="file" id="cover" name="cover" />
+        <p style="margin-top: 10px;">
+          {% if good.cover and good.id %}
+          <img src="{{ cover_url }}?imageView/2/w/375" />
+          {% endif %}
+        </p>
+      </div>
     <div class="form-group">
       <label for="exampleInputEmail1">支持金额</label>
       <input type="text" class="form-control" id="support_price" name="support_price" placeholder=""
