@@ -162,11 +162,13 @@ $(function(){
 			input3 = $("<input type='text'>").val(detail).attr('name','detail')
 			input4 = $("<input type='text'>").val(redirect_uri).attr('name','redirect_uri')
 			input5 = $("<input type='text'>").val('{{goodraise.id}}').attr('name','goodraise_id')
+			input6 = $("<input type='text'>").val('{{module}}').attr('name','module')
 			form.append(input1)
 			form.append(input2)
 			form.append(input3)
 			form.append(input4)
 			form.append(input5)
+			form.append(input6)
 			form.submit()
 		};
 	})

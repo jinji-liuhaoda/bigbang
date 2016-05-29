@@ -36,12 +36,14 @@
 					<p>{{good.detail}}</p>
 				</div>
 				<div class="thanks-pay">
-					<input type="hidden" name="body" value="{{good.title}}"/>
+					<input type="hidden" name="body" value="{{good.name}}"/>
 					<input type="hidden" name="detail" value="{{good.detail}}"/>
 					<input type="hidden" name="price" value="{{good.support_price}}"/>
 					<input type="hidden" name="redirect_uri" value="{{redirect_uri}}"/>
 					<input type="hidden" name="good_id" value="{{good.id}}"/>
 					<input type="hidden" name="goodraise_id" value="{{good.goodraise.id}}"/>
+					<input type="hidden" name="goodraise" value="{{goodraise}}"/>
+					<input type="hidden" name="module" value="{{module}}"/>
 					<input type="radio" name="anonymous"/>&nbsp;&nbsp;匿名支付，金额：{{good.support_price}}元
 				</div>
 			</div>

@@ -111,10 +111,11 @@ def wechat_pay(request):
         price = request.POST.get('price', '')
         redirect_uri = request.POST.get('redirect_uri', '')
         anonymous = request.POST.get('anonymous', '')
+        module = request.POST.get('module', '')
         context = {
             'wx_config': get_wx_config(request.get_raw_uri()),
             'title': '揭西石灵寺',
-            'module': 'provide',
+            'module': module,
             'DOMAIN': DOMAIN,
             'body': body,
             'detail': detail,
@@ -183,7 +184,7 @@ def good_pay(request, good_id):
     good = get_object_or_404(Good, id=good_id)
     context = {
         'title': '揭西石灵寺',
-        'module': 'goodraise',
+        'module': 'wechat_pay',
         'good': good,
         'redirect_uri': request.get_raw_uri(),
     }
