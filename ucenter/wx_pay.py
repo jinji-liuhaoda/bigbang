@@ -129,7 +129,7 @@ def order_insert(out_trade_no, product_id, body, detail, total_fee, request, ano
     order.product_id = product_id
     order.body = body
     order.detail = detail
-    order.total_fee = total_fee/100
+    order.total_fee = float(total_fee)/100
     if anonymous:
         anonymous = 1
     else:
