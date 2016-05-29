@@ -24,7 +24,9 @@
 				<a id="views_count_news" idvar="{{new.id}}">				
 					<div class="news">
 						<div class="news-pic">
+						{% if new.cover %}
 							<img src="{{new.cover_url}}" width="100%">
+						{% endif %}
 						</div>
 						<div class="news-content">
 							<div class="hd">

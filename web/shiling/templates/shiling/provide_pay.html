@@ -24,7 +24,9 @@
 					<h2>{{provide.detail}}</h2>
 				</div>
 				<div class="pic">
-					<img src="http://placehold.it/120x120">
+				{% if provide.cover %}
+					<img src="{{provide.cover_url}}" width="120">
+				{% endif %}
 				</div>
 				<h3>{{provide.title}}</h3>
 				<div class="thanks-pay">

@@ -635,6 +635,17 @@ def good_create(request, goodraise_id):
             error['support_price_msg'] = FILED_CHECK_MSG
         if flag:
             good.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'good_{}_{}.{}'.format(good.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                good.cover = key
+                if flag:
+                    good.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
             return HttpResponseRedirect('/admin/' + str(goodraise.id) + '/good')
     context = {
         'module': 'goodraise',
@@ -642,6 +653,8 @@ def good_create(request, goodraise_id):
         'good': good,
         'error': error
     }
+    if good:
+        context['cover_url'] = good.cover_url()
     template = loader.get_template('manage/super/good/create.html')
     return HttpResponse(template.render(context, request))
 
@@ -666,12 +679,25 @@ def good_edit(request, good_id):
             error['support_price_msg'] = FILED_CHECK_MSG
         if flag:
             good.save()
+        if request.FILES:
+            if request.FILES.get('cover', None):
+                ts = int(time.time())
+                ext = get_extension(request.FILES['cover'].name)
+                key = 'good_{}_{}.{}'.format(good.id, ts, ext)
+                handle_uploaded_file(request.FILES['cover'], key)
+                good.cover = key
+                if flag:
+                    good.save()
+                # 上传图片到qiniu
+                upload(BUCKET_NAME, key, os.path.join(UPLOAD_DIR, key))
             return HttpResponseRedirect('/admin/' + str(good.goodraise.id) + '/good')
     context = {
         'module': 'goodraise',
         'good': good,
         'error': error
     }
+    if good:
+        context['cover_url'] = good.cover_url()
     template = loader.get_template('manage/super/good/create.html')
     return HttpResponse(template.render(context, request))
 

@@ -25,7 +25,9 @@
 					<a href="/goodraise/{{goodraise.id}}">
 						<div class="financing-pic">
 							<div class="img-box">
+							{% if goodraise.cover %}
 								<img src="{{goodraise.cover_url}}" width="100%">
+							{% endif %}
 							</div>
 						</div>
 						<div class="financing-content">

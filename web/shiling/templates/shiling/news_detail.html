@@ -35,7 +35,9 @@
 			</div>
 		</div>
 		<div class="news-pic">
-			<img src="{{new.cover_url}}" width="100%">
+			{% if new.cover %}
+				<img src="{{new.cover_url}}" width="100%">
+			{% endif %}
 			<div class="new-content">
 				{{new.content|safe}}
 			</div>

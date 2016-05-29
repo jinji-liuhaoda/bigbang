@@ -46,7 +46,9 @@
 				<div class="born">
 					{{temple.mage.detail|safe}}
 				</div>
-				<img src="{{temple.mage.cover_url}}" width="100%";>
+				{% if temple.mage.cover %}
+					<img src="{{temple.mage.cover_url}}" width="100%";>
+				{% endif %}
 				<h2>{{temple.mage.mage_num}}</h2>
 				<h4>住持</h4>
  				<div class="mage-content">

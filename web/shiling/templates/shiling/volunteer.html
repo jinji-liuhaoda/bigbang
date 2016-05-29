@@ -62,7 +62,9 @@
  						<div class="volunteer-content">
  							{{volunteer.content|safe}}
  						</div>
+ 						{% if volunteer.cover %}
 						<img src="{{volunteer.cover_url}}" width="100%">
+						{% endif %}
 					</div>
 				</div>
 			</div>

@@ -51,12 +51,14 @@
 			    signType: wx_pay_json.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 			    paySign: wx_pay_json.paySign, // 支付签名
 			    success: function (res) {
-					if(res.errMsg == "chooseWXPay:ok" ) {
+			    	res = JSON.parse(res)
+					if(res.errmsg == "ok" ) {
 				        // 支付成功后的回调函数
-				        $.post('{{DOMAIN}}/cuser/wx_callback_pay/',{'order_id':wx_pay_json.order_id},function(data){})
-				        window.location.href = '{{redirect_uri}}';
+				        $.post('{{DOMAIN}}/cuser/wx_callback_pay/',{'order_id':wx_pay_json.order_id},function(data){
+				        	window.location.href = '{{redirect_uri}}';
+				        })
 					}else{
-						alert(res.errMsg);
+						alert(res.errmsg);
 					}
 			    },
 			    cancel:function(res){
