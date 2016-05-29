@@ -53,33 +53,40 @@
 	</div>
 	<div class="pray-bd">
 		<ul>
+		{% for order in orders %}
 			<li>
 				<div class="model">
 					<div class="pray-bd-pic">
-						{% if temple.mage.cover %}
-						<img src="{{temple.mage.cover_url}}"  width="100%">
+						{% if order.cuser.headimgurl %}
+						<img src="{{order.cuser.headimgurl}}"  width="100%">
 						{% endif %}
 					</div>
 					<div class="pray-bd-content">
-						<h4>日行一善,随喜供养!虔诚供养共计1.00元功德无量</h4>
+						<h4>日行一善,随喜供养!虔诚供养共计{{order.total_fee}}元功德无量</h4>
 						<div class="data">
 							<div class="left">
-								<h5>上海市&nbsp匿名</h5>
+								<h5>{{order.cuser.city}}&nbsp;{% if order.anonymous %} {{order.get_anonymous_display}} {% else %} {{order.cuser.name}} {% endif %}</h5>
 							</div>
 							<div class="right">
-								<h5>大约3小时前</h5>
+								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"YYYY-MM-DDTHH:MM:SS.mmmmmm"}}"'/>
+								<h5></h5>
 							</div>
 						</div>
 						<div class="clear"></div>
 					</div>
 				</div>
 			</li>
+		{% endfor %}
 		</ul>
 	</div>
 {% endblock %}
 {% block script %}
 <script>
 	$(function(){
+		$('.time_ago').each(function(){
+		    var timer = $(this).val()
+		    $(this).parent().find('h5').html(moment(timer, "YYYY-MM-DDTHH:MM:SS.mmmmmm").fromNow())
+		})
 		$(".abbot-index").hide();
 		$(".pray-bd").show();
 		$('#bless').addClass('select');

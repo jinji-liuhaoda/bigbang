@@ -25,7 +25,11 @@
 			</div>
 			<div class="thanks-financing-bd">
 				<div class="thanks-financing">
-					<div class="img-box"><img src="http://placehold.it/335x132" width="100%"></div>
+					<div class="img-box">
+						{% if good.cover %}
+						<img src="{{good.cover_url}}" width="100%">
+						{% endif %}
+					</div>
 				</div>
 				<div class="provide-content">
 					<h1>￥{{good.support_price}}元</h1>

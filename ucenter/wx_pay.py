@@ -90,7 +90,7 @@ def create_order(request):
             stringB = "appId=" + WX_APP_ID + "&nonceStr=" + noncestr + "&package=prepay_id=" + prepay_id + "&signType=MD5&timeStamp=" + timestamp
             stringSignTempB = stringB + "&key=" + WX_PAY_MCH_KEY
             signB = hashlib.md5(stringSignTempB.encode('utf-8')).hexdigest().upper()
-            wx_pay_json = {'order_id': order.id, 'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'prepay_id': prepay_id, 'paySign': signB}
+            wx_pay_json = {'order_id': order.id, 'timestamp': timestamp, 'nonceStr': noncestr, 'signType': 'MD5', 'prepay_id': prepay_id, 'paySign': signB, 'out_trade_no': out_trade_no}
             return HttpResponse(simplejson.dumps({'error': 0, 'msg': '下单成功', 'wx_pay_json': wx_pay_json}, ensure_ascii=False))
         else:
             return HttpResponse(simplejson.dumps({'error': 1, 'msg': '下单失败'}, ensure_ascii=False))
@@ -99,6 +99,7 @@ def create_order(request):
 # 支付成功后微信回调地址
 @csrf_exempt
 def wx_callback_pay(request):
+    out_trade_no = request.POST.get('out_trade_no', '')
     xml_read = request.read()
     root = ET.fromstring(xml_read)
     # 解析xml内容
@@ -109,7 +110,7 @@ def wx_callback_pay(request):
             result_code = child.text
         if child.tag == 'out_trade_no':
             out_trade_no = child.text
-    if return_code == 'SUCCESS' and result_code == 'SUCCESS':
+    if return_code == 'SUCCESS' and result_code == 'SUCCESS' or out_trade_no:
         order = get_object_or_404(Order, out_trade_no=out_trade_no)
         order.status = 2
         order.save()
@@ -128,7 +129,7 @@ def order_insert(out_trade_no, product_id, body, detail, total_fee, request, ano
     order.product_id = product_id
     order.body = body
     order.detail = detail
-    order.total_fee = total_fee
+    order.total_fee = total_fee/100
     if anonymous:
         anonymous = 1
     else:
