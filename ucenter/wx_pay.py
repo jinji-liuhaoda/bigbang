@@ -115,6 +115,9 @@ def wx_callback_pay(request):
         order = get_object_or_404(Order, out_trade_no=out_trade_no)
         order.status = 2
         order.save()
+        return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
+    else:
+        return HttpResponse(simplejson.dumps({'error': 1, 'msg': ''}, ensure_ascii=False))
 
 
 def order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module):

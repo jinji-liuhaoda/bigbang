@@ -184,7 +184,7 @@ def good_pay(request, good_id):
     good = get_object_or_404(Good, id=good_id)
     context = {
         'title': '揭西石灵寺',
-        'module': 'wechat_pay',
+        'module': 'goodraise',
         'good': good,
         'redirect_uri': request.get_raw_uri(),
     }
