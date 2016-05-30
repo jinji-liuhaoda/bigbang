@@ -43,15 +43,15 @@ def create_order(request):
         out_trade_no = get_out_trade_no()
         product_id = get_product_id()
         noncestr = ''.join(map(lambda xx: (hex(ord(xx))[2:]), os.urandom(8)))
-        stringA = "appid=" + WX_APP_ID + "&body=body_str&detail=detail_str&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_callback_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
+        stringA = "appid=" + WX_APP_ID + "&body=" + body + "&detail=" + detail +  "&device_info=WEB&mch_id=" + WX_MCH_ID + "&nonce_str=" + noncestr + "&notify_url=" + DOMAIN + "/cuser/wx_callback_pay/&openid=" +openid + "&out_trade_no=" + out_trade_no + "&product_id=" + product_id + "&spbill_create_ip=" + spbill_create_ip + "&total_fee=" + total_fee + "&trade_type=JSAPI"
         stringSignTemp = stringA + "&key=" + WX_PAY_MCH_KEY
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module)
         xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
-                           <body>" + body.decode('utf-8') + "</body>\
-                           <detail>" + detail.decode('utf-8') + "</detail>\
+                           <body>" + body + "</body>\
+                           <detail>" + detail + "</detail>\
                            <device_info>WEB</device_info>\
                            <mch_id>" + WX_MCH_ID + "</mch_id>\
                            <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
@@ -66,8 +66,7 @@ def create_order(request):
                         </xml>"
         logging.error(xml_request)
         logging.error('-----------------------------pay----------------------------------------')
-        headers = {'Content-Type': 'application/xml;charset=utf-8;'}
-        r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
+        r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request.encode('utf-8'))
         if r.encoding is None or r.encoding == 'ISO-8859-1':
             r.encoding = r.apparent_encoding
         logging.error(r.text)
