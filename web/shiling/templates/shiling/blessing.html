@@ -60,15 +60,20 @@
 						{% if order.cuser.headimgurl %}
 						<img src="{{order.cuser.headimgurl}}"  width="100%">
 						{% endif %}
+						{% if not order.anonymous %} 
+						<div class="pray-name">
+							<h5>{{order.cuser.name}}</h5>
+						</div>
+						{% endif %}
 					</div>
 					<div class="pray-bd-content">
 						<h4>日行一善,随喜供养!虔诚供养共计{{order.total_fee}}元功德无量</h4>
 						<div class="data">
 							<div class="left">
-								<h5>{{order.cuser.city}}&nbsp;{% if order.anonymous %} {{order.get_anonymous_display}} {% else %} {{order.cuser.name}} {% endif %}</h5>
+								<h5>{{order.cuser.city}}&nbsp;{% if order.anonymous %} {{order.get_anonymous_display}} {% endif %}</h5>
 							</div>
 							<div class="right">
-								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"YYYY-MM-DDTHH:MM:SS.mmmmmm"}}"'/>
+								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"Y-m-d H:i"}}"'/>
 								<h5></h5>
 							</div>
 						</div>
@@ -84,10 +89,29 @@
 <script src="/static/js/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="/static/js/moment.min.js"></script>
 <script>
+  moment.locale('cn', {
+      relativeTime : {
+          future: "在%s",
+          past:   "%s前",
+          s:  "秒",
+          m:  "1分钟",
+          mm: "%d分钟",
+          h:  "1小时",
+          hh: "%d小时",
+          d:  "天",
+          dd: "%d天",
+          M:  "1个月",
+          MM: "%d个月",
+          y:  "1年",
+          yy: "%d年"
+      }
+  });
+</script>
+<script>
 	$(function(){
 		$('.time_ago').each(function(){
 		    var timer = $(this).val()
-		    $(this).parent().find('h5').html(moment(timer, "YYYY-MM-DDTHH:MM:SS.mmmmmm").fromNow())
+		    $(this).parent().find('h5').html(moment(timer, 'YYYY-MM-DD h:mm').endOf('seconds').fromNow())
 		})
 		$(".abbot-index").hide();
 		$(".pray-bd").show();

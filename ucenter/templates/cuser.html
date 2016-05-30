@@ -112,14 +112,21 @@
 		</div>
 		<div class="form">
 			<table cellspacing="0" cellpadding="0">
+			{% for order in orders %}
 				<tr>
     				<td class="title">时间</td>
-   					<td class="title-bd">2016-04-16 10:29:30</td>
+   					<td class="title-bd">{{order.pay_success_time|date:"Y-m-d H:i"}}</td>
 				</tr>
  				<tr class="bless">
-					<td class="title">祈福</td>
-					<td class="title-bd">日行一善，随喜供养！完成供养共计1.00元<br>功德无量！</td>
+ 					{% if not order.from_pay %}
+						<td class="title">祈福</td>
+						<td class="title-bd">日行一善，随喜供养！完成供养共计{{order.total_fee}}元 功德无量！</td>
+					{% else %}
+						<td class="title">善筹</td>
+						<td class="title-bd">日行一善，随喜善筹！完成善筹共计{{order.total_fee}}元 功德无量！</td>
+					{% endif %}
 				</tr>
+			{% endfor %}
 			</table>
 		</div>
 	</div>
@@ -136,7 +143,7 @@
 					</tr>
 	 				<tr>
 						<td class="title">状态</td>
-						<td class="title-bd">未开启</td>
+						<td class="title-bd">{{activity_attendee.status_str}}</td>
 					</tr>
 					<tr>
 						<td class="title">时间</td>

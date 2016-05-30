@@ -60,7 +60,7 @@ class Order(models.Model):
 
     out_trade_no = models.CharField(max_length=128, verbose_name="订单号")
     product_id = models.CharField(max_length=128, verbose_name="商品id")
-    trade_type = models.CharField(max_length=128, default='', verbose_name="支付类型")
+    trade_type = models.CharField(max_length=128, default='公众号', verbose_name="支付类型")
     prepay_id = models.CharField(max_length=300, default='', verbose_name="订单id")
     goodraise_id = models.CharField(max_length=300, default='', verbose_name="善筹id")
     body = models.CharField(max_length=128, verbose_name="描述")

@@ -30,6 +30,7 @@
             <th>来源</th>
             <th>用户</th>
             <th>匿名</th>
+            <th>支付时间</th>
             <th>状态</th>
             <th>操作</th>
           </tr>
@@ -43,6 +44,7 @@
               <td>{{ order.get_from_pay_display }}</td>
               <td>{{ order.cuser.name }}</td>
               <td>{{ order.get_anonymous_display }}</td>
+              <td>{{ order.pay_success_time|date:"Y-m-d H:i" }}</td>
               <td>{{ order.get_status_display }}</td>
               <td>
                 <a class="btn btn-danger btn-xs" href="/admin/order/{{ order.id }}/delete">删除</a>

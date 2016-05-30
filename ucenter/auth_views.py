@@ -20,7 +20,7 @@ from shiling.models import (
     VolunteerUser,
     BuddhismKnowledge,
 )
-from .models import Cuser
+from .models import Cuser, Order
 from wx_auth import web_webchat_check_login
 from settings import UPLOAD_DIR, DOMAIN, SMS_ACCOUNT_SID, SMS_ACCOUNT_TOKEN, SMS_SUB_ACCOUNT_SID, SMS_TEMPLATE_ID, SMS_SUB_ACCOUNT_TOKEN, SMS_APP_ID
 import random
@@ -37,12 +37,21 @@ def index(request):
         cuser = Cuser.objects.get(id=request.session.get('cuser_id', 0))
     except Exception, e:
         return HttpResponseRedirect('/cuser/login')
-
+    cur_time = datetime.datetime.now()
     activity_attendees = ActivityAttendee.objects.filter(mobile_phone=cuser.phone)
     request.session['cuser_id'] = cuser.id
+    orders = Order.objects.filter(cuser=cuser, status=2)
+    for activity_attendee in activity_attendees:
+        if cur_time < activity_attendee.activity.start_time:
+            activity_attendee.status_str = '未开启'
+        elif cur_time >= activity_attendee.activity.start_time and cur_time <= activity_attendee.activity.end_time:
+            activity_attendee.status_str = '开启'
+        else:
+            activity_attendee.status_str = '已结束'
     context = {
         'title': '揭西石灵寺',
         'cuser': cuser,
+        'orders': orders,
         'activity_attendees': activity_attendees,
     }
     template = loader.get_template('cuser.html')
