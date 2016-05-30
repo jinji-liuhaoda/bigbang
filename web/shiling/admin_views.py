@@ -963,8 +963,6 @@ def activity_edit(request, activity_id):
         activity.content = content
         activity.address = address
         activity.people_number = people_number
-        activity.start_time = start_time
-        activity.end_time = end_time
         if not len(name):
             flag = False
             error['name_msg'] = FILED_CHECK_MSG
