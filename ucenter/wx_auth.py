@@ -23,7 +23,8 @@ def get_user_info(access_token, openid):
     r = requests.get(WX_USER_INFO_URL.format(
         access_token, openid
     ))
-    r.encoding = r.apparent_encoding
+    if r.encoding is None or r.encoding == 'ISO-8859-1':
+        r.encoding = r.apparent_encoding
     data = r.json()
     return data
 
