@@ -108,7 +108,7 @@ li.last{ width: 100%; }
 .pray-bd .pray-bd-content h5{letter-spacing: 0;}
 .pray-bd .pray-bd-content .left{float: left;}
 .pray-bd .pray-bd-content .right{float: right;}
-
+.pray-name h5{letter-spacing: 0; padding-top: 4px;}
 .abbot-index{background: #f7f7f7; padding:0 20px 71px; }
 .abbot-index .address{padding: 17px 0; border-bottom: #eee solid 1px;}
 .abbot-index .address h4{text-align: left; color: #767676;}
