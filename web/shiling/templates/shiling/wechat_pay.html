@@ -67,7 +67,7 @@
 		$.ajax({
 			url:"{{DOMAIN}}/cuser/wx_create_order/",
 			method:'POST',
-			data:{ body:'{{body}}', detail:'{{detail|safe}}', goodraise_id:'{{goodraise_id}}', total_fee:'{{price}}', anonymous:'{{anonymous}}', module:'{{module}}'},
+			data:{ body:'{{body}}', detail:'{{detail|safe}}', goodraise_id:'{{goodraise_id}}', good_id:'{{good_id}}', total_fee:'{{price}}', anonymous:'{{anonymous}}', module:'{{module}}'},
 			success:function(jsonobj){
 				jsonobj = JSON.parse(jsonobj);
 				if (jsonobj.error == 0) {
