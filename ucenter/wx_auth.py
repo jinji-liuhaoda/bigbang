@@ -23,7 +23,7 @@ def get_user_info(access_token, openid):
     r = requests.get(WX_USER_INFO_URL.format(
         access_token, openid
     ))
-
+    r.encoding = r.apparent_encoding
     data = r.json()
     return data
 
