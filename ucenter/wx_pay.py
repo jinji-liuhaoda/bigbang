@@ -48,10 +48,10 @@ def create_order(request):
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module)
-        xml_request = "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>\
+        xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
-                           <body>" + body + "</body>\
-                           <detail>" + detail + "</detail>\
+                           <body>" + body.decode('utf-8') + "</body>\
+                           <detail>" + detail.decode('utf-8') + "</detail>\
                            <device_info>WEB</device_info>\
                            <mch_id>" + WX_MCH_ID + "</mch_id>\
                            <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
