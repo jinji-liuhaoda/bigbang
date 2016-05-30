@@ -50,8 +50,8 @@ def create_order(request):
         order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module)
         xml_request = "<xml>\
                            <appid>" + WX_APP_ID + "</appid>\
-                           <body>body_str</body>\
-                           <detail>detail_str</detail>\
+                           <body>" + body + "</body>\
+                           <detail>" + detail + "</detail>\
                            <device_info>WEB</device_info>\
                            <mch_id>" + WX_MCH_ID + "</mch_id>\
                            <nonce_str><![CDATA[" + noncestr + "]]></nonce_str>\
