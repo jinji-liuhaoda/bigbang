@@ -8,10 +8,11 @@ from ucenter.models import (
 
 
 def update_wechat_user_info():
-    cusers = Cuser.objects.all()
-    for cuser in cusers:
-        if cuser.openid:
-            user_manager.update_wechat_user_info(cuser.openid)
+    # cusers = Cuser.objects.all()
+    # for cuser in cusers:
+    #     if cuser.openid:
+            # user_manager.update_wechat_user_info(cuser.openid)
+    return True
 
 
 if __name__ == '__main__':
