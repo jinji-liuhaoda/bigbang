@@ -113,8 +113,9 @@ def wx_callback_pay(request):
             out_trade_no = child.text
     if return_code == 'SUCCESS' and result_code == 'SUCCESS' or out_trade_no:
         order = get_object_or_404(Order, out_trade_no=out_trade_no)
-        order.status = 2
-        order.save()
+        if order.status != 2:
+            order.status = 2
+            order.save()
         return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
     else:
         return HttpResponse(simplejson.dumps({'error': 1, 'msg': ''}, ensure_ascii=False))

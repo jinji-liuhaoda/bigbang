@@ -590,7 +590,7 @@ def order_delete(request, order_id):
 
 @login_required
 def wechat_pay_list(request):
-    orders = Order.objects.filter(from_pay=0, status=2)
+    orders = Order.objects.filter(status=2)
     context = {
         'module': 'wechat_pay',
         'orders': orders,
