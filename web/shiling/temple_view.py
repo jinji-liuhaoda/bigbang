@@ -112,6 +112,7 @@ def wechat_pay(request):
         redirect_uri = request.POST.get('redirect_uri', '')
         anonymous = request.POST.get('anonymous', '')
         goodraise_id = request.POST.get('goodraise_id', '')
+        good_id = request.POST.get('good_id', '')
         module = request.POST.get('module', '')
         context = {
             'wx_config': get_wx_config(request.get_raw_uri()),
@@ -121,6 +122,7 @@ def wechat_pay(request):
             'body': body,
             'detail': detail,
             'price': price,
+            'good_id': good_id,
             'goodraise_id': goodraise_id,
             'redirect_uri': redirect_uri,
             'anonymous': anonymous,
