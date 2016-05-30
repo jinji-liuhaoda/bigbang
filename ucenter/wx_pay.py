@@ -68,6 +68,7 @@ def create_order(request):
         logging.error('-----------------------------pay----------------------------------------')
         headers = {'Content-Type': 'application/xml;charset=utf-8;'}
         r = requests.post('https://api.mch.weixin.qq.com/pay/unifiedorder', data=xml_request, headers=headers)
+        r.encoding = r.apparent_encoding
         logging.error(r.text)
         root = ET.fromstring(r.text)
         # 解析xml内容

@@ -42,7 +42,7 @@ class AccessTokenManager(object):
             'expired': int(time.time()) + obj['expires_in'],
         }
 
-        self.redis_conn.set('wechat_access_token', simplejson.dumps(obj))
+        self.redis_conn.set('temple_wechat_access_token', simplejson.dumps(obj))
 
     def get_token(self):
         obj = self._get_token()
@@ -56,7 +56,7 @@ class AccessTokenManager(object):
         return obj['access_token']
 
     def _get_token(self):
-        data = self.redis_conn.get('wechat_access_token')
+        data = self.redis_conn.get('temple_wechat_access_token')
         if not data:
             return None
 
