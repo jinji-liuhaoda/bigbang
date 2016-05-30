@@ -58,7 +58,7 @@
           <i class="fa fa-calendar"></i>
         </div>
         <input type="text" class="form-control" id="daterange" name="daterange"
-        value="{% if volunteer %}{{ volunteer.start_time|date:"Y-m-d H:i" }} - {{ volunteer.end_time|date:"Y-m-d H:i" }}{% endif %}" />
+        value="{% if volunteer %}{{ volunteer.start_time|date:"Y-m-d H:i" }} ~ {{ volunteer.end_time|date:"Y-m-d H:i" }}{% endif %}" />
       </div>
       {{error.daterange_msg|safe}}
     </div>

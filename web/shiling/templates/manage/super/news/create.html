@@ -53,7 +53,7 @@
           <i class="fa fa-calendar"></i>
         </div>
         <input type="text" class="form-control" id="daterange" name="daterange"
-        value="{% if news %}{{ news.start_time|date:"Y-m-d H:i" }} - {{ news.end_time|date:"Y-m-d H:i" }}{% endif %}" />
+        value="{% if news %}{{ news.start_time|date:"Y-m-d H:i" }} ~ {{ news.end_time|date:"Y-m-d H:i" }}{% endif %}" />
       </div>
       {{error.daterange_msg|safe}}
     </div>
