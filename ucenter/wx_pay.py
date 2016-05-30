@@ -48,7 +48,7 @@ def create_order(request):
         sign = hashlib.md5(stringSignTemp.encode('utf-8')).hexdigest().upper()
         # 生成订单
         order_insert(out_trade_no, product_id, body, detail, total_fee, request, anonymous, good_id, goodraise_id, module)
-        xml_request = "<xml>\
+        xml_request = "<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>\
                            <appid>" + WX_APP_ID + "</appid>\
                            <body>" + body + "</body>\
                            <detail>" + detail + "</detail>\
