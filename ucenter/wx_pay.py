@@ -115,6 +115,7 @@ def wx_callback_pay(request):
         order = get_object_or_404(Order, out_trade_no=out_trade_no)
         if order.status != 2:
             order.status = 2
+            order.pay_success_time = datetime.datetime.now
             order.save()
         return HttpResponse(simplejson.dumps({'error': 0, 'msg': ''}, ensure_ascii=False))
     else:

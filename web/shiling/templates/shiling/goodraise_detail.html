@@ -111,7 +111,7 @@
 							</li>
 							<li class="model4-info">
 								<h3>{% if order.anonymous %}{{order.get_anonymous_display}} {% else %}{{order.cuser.name}}{% endif %}</h3>
-								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"YYYY-MM-DDTHH:MM:SS.mmmmmm"}}"'/>
+								<input type='hidden' class="time_ago" value='{{order.pay_success_time|date:"Y-m-d H:i"}}'/>
 								<h5></h5>
 							</li>
 							<li class="right">
@@ -151,7 +151,7 @@
 $(function(){
 	$('.time_ago').each(function(){
 	    var timer = $(this).val()
-	    $(this).parent().find('h5').html(moment(timer, "YYYY-MM-DDTHH:MM:SS.mmmmmm").fromNow())
+	    $(this).parent().find('h5').html(moment(timer, 'YYYY-MM-DD h:mm').endOf('seconds').fromNow())
 	})
 	$('.wechat_pay').on('click',function(){
 		var price = $(this).parent().find('#money').val()
