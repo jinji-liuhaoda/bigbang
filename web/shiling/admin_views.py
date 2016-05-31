@@ -1561,26 +1561,26 @@ def user_delete(request, user_id):
 
 
 def sort_category(sort_type, category_id):
-    categorys = Category.objects.all().order_by('-order_no')
+    categories = Category.objects.all().order_by('-order_no')
     try:
         order_no_now = get_object_or_404(Category, id=category_id).order_no
-        for index, category in enumerate(categorys):
+        for index, category in enumerate(categories):
             if category.order_no == order_no_now:
-                categorys = list(categorys)
-                temp = categorys[index]
-                del categorys[index]
+                categories = list(categories)
+                temp = categories[index]
+                del categories[index]
                 # 区分不同操作类型
                 if sort_type == 'top':
-                    categorys.insert(0, temp)
+                    categories.insert(0, temp)
                 elif sort_type == 'move_up':
-                    categorys.insert(index-1, temp)
+                    categories.insert(index-1, temp)
                 elif sort_type == 'move_down':
-                    categorys.insert(index+1, temp)
+                    categories.insert(index+1, temp)
                 elif sort_type == 'bottom':
-                    categorys.insert(len(categorys), temp)
+                    categories.insert(len(categories), temp)
                 break
-        for index, category in enumerate(categorys):
-            category.order_no = len(categorys)-index
+        for index, category in enumerate(categories):
+            category.order_no = len(categories)-index
             category.save()
         return True
     except Exception, e:
