@@ -226,7 +226,7 @@ def retrieve_pwd(request):
             cuser = get_object_or_404(Cuser, phone=phone)
             cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
             cuser.save()
-            return HttpResponseRedirect('/cuser/index')
+            return HttpResponseRedirect('/cuser/login')
         except Exception, e:
             return HttpResponseRedirect('/cuser/login')
     context = {
