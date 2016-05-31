@@ -1,0 +1,52 @@
+{% extends 'shiling/base.html' %}
+{% block mainbody %}
+<div class="detail">
+	<form role="form" method="POST" id="formid" action="/cuser/retrieve_pwd/">
+		{% csrf_token %}
+		<div class="retrieve-password">
+			<div class="retrieve-password-hd">
+				<h5>密码确认</h5>
+			</div>
+			<div class="retrieve-password-bd">
+				<div class="sign-in-info">
+					<div class="sign-in-info-box sign-in-info-bottom">
+						<input type="text" name="pwd1" id="pwd1" placeholder="输入密码"/>
+					</div>
+					<div class="sign-in-info-box">
+						<input type="text" name="pwd2" id="pwd2" placeholder="确认密码"/>
+						<input type="hidden" name="phone" id="phone" value="{{phone}}" placeholder="确认密码"/>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="provide-btn">
+			<div class="button01">
+				<a id="submit"><h3>确定</h3></a>
+			</div>
+		</div>
+	</form>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+	$(function(){
+		$("#submit").on('click',function(){
+			var pwd1 = $("#pwd1").val();
+			var pwd2 = $("#pwd2").val();
+			if (!pwd1 || !pwd2) {
+				alert("请输入新密码");
+				return false;
+			}
+			if (pwd1 != pwd2) {
+				alert("两次输入密码不一致");
+				return false;
+			}
+			if (pwd1.length<6) {
+				alert("密码至少6位");
+				return false;
+			}
+			$("#formid").submit();
+		})
+	})
+</script>
+{% endblock %}
