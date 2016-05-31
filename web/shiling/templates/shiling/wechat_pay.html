@@ -52,10 +52,7 @@
 			    paySign: wx_pay_json.paySign, // 支付签名
 			    success: function (res) {
 			    	alert("start------------")
-			    	alert(res)
-			    	res = JSON.parse(res)
-			    	alert(res)
-			    	alert(res.errmsg)
+			    	alert(JSON.stringify(res))
 					if(res.errmsg == "ok" ) {
 				        // 支付成功后的回调函数
 				        window.location.href = '{{redirect_uri}}';
