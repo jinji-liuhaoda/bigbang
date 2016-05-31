@@ -25,6 +25,7 @@ from .models import (
 )
 from ucenter.models import Order, Cuser
 from imagestore.qiniu_manager import upload, url, get_extension, handle_uploaded_file, BUCKET_NAME
+from django.db.models import Max, Min
 from settings import UPLOAD_DIR
 import os
 import datetime
@@ -343,7 +344,7 @@ def gooddeedday_detail(request):
 
 @login_required
 def category_list(request):
-    categorys = Category.objects.all()
+    categorys = Category.objects.all().order_by('-order_no')
     context = {
         'module': 'category',
         'categorys': categorys,
@@ -367,6 +368,9 @@ def category_create(request):
             flag = False
             error['name_msg'] = FILED_CHECK_MSG
         if flag:
+            category.save()
+            order_no_max = Category.objects.all().aggregate(Max('order_no'))['order_no__max']
+            category.order_no = order_no_max + 1
             category.save()
             return HttpResponseRedirect('/admin/category')
     context = {
@@ -410,6 +414,30 @@ def category_delete(request, category_id):
     }
     category = get_object_or_404(Category, **kwargs)
     category.delete()
+    return HttpResponseRedirect("/admin/category")
+
+
+@login_required
+def category_top(request, category_id):
+    sort_category('top', category_id)
+    return HttpResponseRedirect("/admin/category")
+
+
+@login_required
+def category_move_up(request, category_id):
+    sort_category('move_up', category_id)
+    return HttpResponseRedirect("/admin/category")
+
+
+@login_required
+def category_move_down(request, category_id):
+    sort_category('move_down', category_id)
+    return HttpResponseRedirect("/admin/category")
+
+
+@login_required
+def category_bottom(request, category_id):
+    sort_category('bottom', category_id)
     return HttpResponseRedirect("/admin/category")
 
 
@@ -1530,6 +1558,33 @@ def user_delete(request, user_id):
     user = get_object_or_404(DjangoUser, **kwargs)
     user.delete()
     return HttpResponseRedirect("/admin/user")
+
+
+def sort_category(sort_type, category_id):
+    categorys = Category.objects.all().order_by('-order_no')
+    try:
+        order_no_now = get_object_or_404(Category, id=category_id).order_no
+        for index, category in enumerate(categorys):
+            if category.order_no == order_no_now:
+                categorys = list(categorys)
+                temp = categorys[index]
+                del categorys[index]
+                # 区分不同操作类型
+                if sort_type == 'top':
+                    categorys.insert(0, temp)
+                elif sort_type == 'move_up':
+                    categorys.insert(index-1, temp)
+                elif sort_type == 'move_down':
+                    categorys.insert(index+1, temp)
+                elif sort_type == 'bottom':
+                    categorys.insert(len(categorys), temp)
+                break
+        for index, category in enumerate(categorys):
+            category.order_no = len(categorys)-index
+            category.save()
+        return True
+    except Exception, e:
+        return False
 
 
 @csrf_exempt

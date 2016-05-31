@@ -48,7 +48,7 @@ def index(request):
 
 @web_webchat_check_login
 def provide_list(request):
-    categories = Category.objects.order_by('-id')
+    categories = Category.objects.order_by('-order_no')
     gooddeeddays = GoodDeedDay.objects.all()
     if gooddeeddays:
         gooddeedday = gooddeeddays[0]

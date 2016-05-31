@@ -69,6 +69,10 @@ urlpatterns = [
     url(r'^admin/category/create$', admin_views.category_create),
     url(r'^admin/category/(?P<category_id>\d+)/edit$', admin_views.category_edit),
     url(r'^admin/category/(?P<category_id>\d+)/delete$', admin_views.category_delete),
+    url(r'^admin/category/(?P<category_id>\d+)/top$', admin_views.category_top),
+    url(r'^admin/category/(?P<category_id>\d+)/move_up$', admin_views.category_move_up),
+    url(r'^admin/category/(?P<category_id>\d+)/move_down$', admin_views.category_move_down),
+    url(r'^admin/category/(?P<category_id>\d+)/bottom$', admin_views.category_bottom),
 
     url(r'^admin/provide$', admin_views.provide_list),
     url(r'^admin/provide/create$', admin_views.provide_create),
