@@ -110,24 +110,27 @@
 		<div class="contribute-hd">	
 			<h5>供养和善筹的纪录</h5>
 		</div>
-		<div class="form">
-			<table cellspacing="0" cellpadding="0">
-			{% for order in orders %}
-				<tr>
-    				<td class="title">时间</td>
-   					<td class="title-bd">{{order.pay_success_time|date:"Y-m-d H:i"}}</td>
-				</tr>
- 				<tr class="bless">
- 					{% if not order.from_pay %}
-						<td class="title">祈福</td>
-						<td class="title-bd">日行一善，随喜供养！完成供养共计{{order.total_fee}}元 功德无量！</td>
-					{% else %}
-						<td class="title">善筹</td>
-						<td class="title-bd">日行一善，随喜善筹！完成善筹共计{{order.total_fee}}元 功德无量！</td>
-					{% endif %}
-				</tr><br>
-			{% endfor %}
-			</table>
+		<div class="contribute-bd">
+			<div class="contribute-form">
+				<table cellspacing="0" cellpadding="0">
+					<tbody>
+					<tr class="contribute-form-con">
+						<td class="item">项目</td>
+						<td class="time">时间</td>
+						<td class="money">金额</td>
+						<td class="state">状态</td>
+					</tr>
+					{% for order in orders %}
+					<tr class="contribute-form-detail">
+						<td class="item">{{order.body}}</td>
+						<td class="time">{{order.pay_success_time|date:"Y-m-d H:i"}}</td>
+						<td class="money">{{order.total_fee}}</td>
+						<td class="state">{{order.status|safe}}</td>
+					</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	<div class="contribute activity">
