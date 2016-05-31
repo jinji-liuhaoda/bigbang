@@ -57,6 +57,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=128, verbose_name="名称")
     detail = models.TextField(null=False, verbose_name="描述")
+    order_no = models.IntegerField(default=0, verbose_name="排序号")
 
     def __unicode__(self):
         return self.name

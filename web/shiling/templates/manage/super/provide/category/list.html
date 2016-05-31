@@ -31,6 +31,10 @@
               <td><a href="/admin/category/{{ category.id }}/edit">{{ category.id }}</a></td>
               <td><a href="/admin/category/{{ category.id }}/edit">{{ category.name }}</a></td>
               <td>
+                <a class="btn btn-info btn-xs" href="/admin/category/{{ category.id }}/top">置顶</a>
+                <a class="btn btn-info btn-xs" href="/admin/category/{{ category.id }}/move_up">上移</a>
+                <a class="btn btn-info btn-xs" href="/admin/category/{{ category.id }}/move_down">下移</a>
+                <a class="btn btn-info btn-xs" href="/admin/category/{{ category.id }}/bottom">置底</a>
                 <a class="btn btn-danger btn-xs" href="/admin/category/{{ category.id }}/delete">删除</a>
               </td>
             </tr>
