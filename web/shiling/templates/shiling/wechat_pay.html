@@ -51,7 +51,11 @@
 			    signType: wx_pay_json.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
 			    paySign: wx_pay_json.paySign, // 支付签名
 			    success: function (res) {
+			    	alert("start------------")
+			    	alert(res)
 			    	res = JSON.parse(res)
+			    	alert(res)
+			    	alert(res.errmsg)
 					if(res.errmsg == "ok" ) {
 				        // 支付成功后的回调函数
 				        window.location.href = '{{redirect_uri}}';
