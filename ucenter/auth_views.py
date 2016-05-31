@@ -104,6 +104,33 @@ def login(request):
     return HttpResponse(template.render(context, request))
 
 
+def retrieve(request):
+    context = {
+        'title': '揭西石灵寺',
+    }
+    if request.method == 'POST':
+        phone = request.POST.get('phone', '')
+        v_code = request.POST.get('v_code', '')
+        vc_code_json = request.session.get('vc_code_json', '{}')
+        vc_code_json = simplejson.loads(vc_code_json)
+        if vc_code_json:
+            diff_v_time = int(time.time())-int(vc_code_json['send_time'])
+        if vc_code_json and (vc_code_json['vc_code'] == v_code) and diff_v_time < 120:
+            error_msg = {'error': 0, 'msg': ''}
+        elif vc_code_json and (vc_code_json['vc_code'] == v_code) and diff_v_time > 120:
+            error_msg = {'error': 1, 'msg': '验证码失效'}
+        else:
+            error_msg = {'error': 2, 'msg': '验证码错误'}
+        context['error_msg'] = simplejson.dumps(error_msg, ensure_ascii=False)
+        if not error_msg['error']:
+            context['phone'] = phone
+            template = loader.get_template('retrieve_pwd.html')
+            return HttpResponse(template.render(context, request))
+
+    template = loader.get_template('retrieve.html')
+    return HttpResponse(template.render(context, request))
+
+
 def login_out(request):
     request.session.clear()
     return HttpResponseRedirect('/cuser/login')
@@ -187,6 +214,25 @@ def pwd_update(request):
         'title': '揭西石灵寺',
     }
     template = loader.get_template('pwd_update.html')
+    return HttpResponse(template.render(context, request))
+
+
+@csrf_exempt
+def retrieve_pwd(request):
+    if request.method == 'POST':
+        pwd = request.POST.get('pwd1', '')
+        phone = request.POST.get('phone', '')
+        try:
+            cuser = get_object_or_404(Cuser, phone=phone)
+            cuser.pwd = make_password(pwd, None, 'pbkdf2_sha256')
+            cuser.save()
+            return HttpResponseRedirect('/cuser/index')
+        except Exception, e:
+            return HttpResponseRedirect('/cuser/login')
+    context = {
+        'title': '揭西石灵寺',
+    }
+    template = loader.get_template('retrieve_pwd.html')
     return HttpResponse(template.render(context, request))
 
 
