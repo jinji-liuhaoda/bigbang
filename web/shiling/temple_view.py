@@ -144,7 +144,7 @@ def goodraise_list(request):
             total_fees = Order.objects.filter(Q(good=good, status=2)).values('good').annotate(Sum('total_fee'))
             if total_fees:
                 support_price_num = total_fees[0]['total_fee__sum']
-        total_fees_other = Order.objects.filter(Q(goodraise_id=goodraise.id)).values('good').annotate(Sum('total_fee'))
+        total_fees_other = Order.objects.filter(Q(goodraise_id=goodraise.id, status=2)).values('good').annotate(Sum('total_fee'))
         if total_fees_other:
             support_price_num = support_price_num + total_fees_other[0]['total_fee__sum']
         goodraise.support_price_num = support_price_num
@@ -171,7 +171,7 @@ def goodraise_detail(request, goodraise_id):
             support_price_num = total_fees[0]['total_fee__sum']
         # 统计每个商品支持数
         good.support_count = len(simple_orders)
-    total_fees_other = Order.objects.filter(Q(goodraise_id=goodraise_id)).values('good').annotate(Sum('total_fee'))
+    total_fees_other = Order.objects.filter(Q(goodraise_id=goodraise_id, status=2)).values('good').annotate(Sum('total_fee'))
     if total_fees_other:
         support_price_num = support_price_num + total_fees_other[0]['total_fee__sum']
     orders = Order.objects.filter(goodraise_id=goodraise_id, status=2)
