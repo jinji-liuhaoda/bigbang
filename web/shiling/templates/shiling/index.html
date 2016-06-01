@@ -22,7 +22,7 @@
 			<img src="/static/images/logo.png" width="142">
 		</div>
 		<a href="">
-			<div class="about">
+			<div class="about" id="about">
 				<span>关于寺院</span>
 			</div>
 		</a>
@@ -64,6 +64,10 @@
 {% block script %}
 <script>
 	$(function(){
+		$("#about").on('click',function(){
+			var w_height = $(window).height();
+			$("body").scrollTop(w_height);
+		})
 		$("#mage").on('click',function(){
 			$.ajax({
 				url:"{{DOMAIN}}/sentiment/{{temple.mage.id}}",
