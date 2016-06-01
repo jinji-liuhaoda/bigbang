@@ -4,8 +4,7 @@ from django.shortcuts import render, get_object_or_404
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
-from django.db.models import Sum
-from django.db.models import Count
+from django.db.models import Sum, Q
 from ucenter.wx_config import get_wx_config
 from ucenter.models import Cuser, Order
 from ucenter.wx_auth import web_webchat_check_login
@@ -142,10 +141,9 @@ def goodraise_list(request):
         # 统计订单支付成功，总金额
         support_price_num = 0
         for good in goods:
-            total_fees = Order.objects.filter(good=good, status=2).values('good').annotate(Sum('total_fee'))
+            total_fees = Order.objects.filter(Q(good=good, status=2) | Q(goodraise_id=goodraise.id)).values('good').annotate(Sum('total_fee'))
             if total_fees:
                 support_price_num = total_fees[0]['total_fee__sum']
-
         goodraise.support_price_num = support_price_num
     context = {
         'title': '揭西石灵寺',
@@ -162,13 +160,13 @@ def goodraise_detail(request, goodraise_id):
     goods = Good.objects.filter(goodraise=goodraise)
     support_price_num = 0
     goods = Good.objects.filter(goodraise=goodraise).order_by('-id')
-    # 统计订单支付成功，总金额
     for good in goods:
-        # 统计每个商品支持数
-        total_fees = Order.objects.filter(good=good, status=2).values('good').annotate(Sum('total_fee'))
+        # 统计订单支付成功，总金额
+        total_fees = Order.objects.filter(Q(good=good, status=2) | Q(goodraise_id=goodraise_id)).values('good').annotate(Sum('total_fee'))
         simple_orders = Order.objects.filter(good=good, status=2)
         if total_fees:
             support_price_num = total_fees[0]['total_fee__sum']
+        # 统计每个商品支持数
         good.support_count = len(simple_orders)
     orders = Order.objects.filter(goodraise_id=goodraise_id, status=2)
     context = {
