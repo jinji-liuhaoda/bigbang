@@ -148,6 +148,8 @@ def goodraise_list(request):
         if total_fees_other:
             support_price_num = support_price_num + total_fees_other[0]['total_fee__sum']
         goodraise.support_price_num = support_price_num
+        goodraise.percentage = support_price_num / goodraise.total_price
+
     context = {
         'title': '揭西石灵寺',
         'module': 'goodraise',
@@ -174,12 +176,14 @@ def goodraise_detail(request, goodraise_id):
     total_fees_other = Order.objects.filter(Q(goodraise_id=goodraise_id, status=2)).values('good').annotate(Sum('total_fee'))
     if total_fees_other:
         support_price_num = support_price_num + total_fees_other[0]['total_fee__sum']
+    percentage = support_price_num / goodraise.total_price
     orders = Order.objects.filter(goodraise_id=goodraise_id, status=2)
     context = {
         'title': '揭西石灵寺',
         'module': 'goodraise',
         'goodraise': goodraise,
         'support_price_num': support_price_num,
+        'percentage': percentage,
         'goods': goods,
         'orders': orders,
         'redirect_uri': request.get_raw_uri(),
