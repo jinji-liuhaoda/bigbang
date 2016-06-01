@@ -37,12 +37,13 @@ class AccessTokenManager(object):
         if obj.get('errcode', None):
             raise Exception('Failed to get the access token, code:{}'.format(obj.get('errcode')))
 
+        expires_in = obj['expires_in']
         obj = {
             'access_token': obj['access_token'],
-            'expired': int(time.time()) + obj['expires_in'],
+            'expired': int(time.time()) + expires_in,
         }
 
-        self.redis_conn.set('temple_wechat_access_token', simplejson.dumps(obj))
+        self.redis_conn.set('temple_wechat_access_token', simplejson.dumps(obj), ex=expires_in)
 
     def get_token(self):
         obj = self._get_token()
