@@ -66,7 +66,7 @@
 	$(function(){
 		$("#about").on('click',function(){
 			var w_height = $(window).height();
-			$("body").scrollTop(w_height);
+			$(document.body).animate({'scrollTop':w_height},500);
 		})
 		$("#mage").on('click',function(){
 			$.ajax({
