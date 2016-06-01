@@ -37,6 +37,7 @@
 							<div class="Progress">	
 								<div class="Progress-bar">
 									<div class="Progress-accomplish"></div>
+									<input type="hidden" id="percentage"  value="{{goodraise.percentage}}" />
 									<h5>{{goodraise.support_price_num}}/{{goodraise.total_price}}</h5>
 								</div>
 							</div>
@@ -51,4 +52,15 @@
 			</ul>	
 		</div>
 	</div>
+{% endblock %}
+{% block script %}
+<script>
+	$(function(){
+ 		$('.Progress-bar').each(function(){
+ 			var pWidth = $(this).width()
+ 			var percentage = $(this).find('#percentage').val()
+ 			$(this).find('.Progress-accomplish').width(pWidth*percentage)
+ 		})
+	})
+</script>
 {% endblock %}

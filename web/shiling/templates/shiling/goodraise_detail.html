@@ -32,6 +32,7 @@
 			<div class="Progress">
 				<div class="Progress-bar">
 					<div class="Progress-accomplish"></div>
+					<input type="hidden" id="percentage"  value="{{percentage}}" />
 					<h5>{{support_price_num}}/{{goodraise.total_price}}</h5>
 				</div>	
 			</div>
@@ -149,6 +150,11 @@
 </script>
 <script>
 $(function(){
+	$('.Progress-bar').each(function(){
+		var pWidth = $(this).width()
+		var percentage = $(this).find('#percentage').val()
+		$(this).find('.Progress-accomplish').width(pWidth*percentage)
+	})
 	$('.time_ago').each(function(){
 	    var timer = $(this).val()
 	    $(this).parent().find('h5').html(moment(timer, 'YYYY-MM-DD h:mm').endOf('seconds').fromNow())
