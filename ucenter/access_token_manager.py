@@ -44,6 +44,7 @@ class AccessTokenManager(object):
         }
 
         self.redis_conn.set('temple_wechat_access_token', simplejson.dumps(obj), ex=expires_in)
+        return obj
 
     def get_token(self):
         obj = self._get_token()
